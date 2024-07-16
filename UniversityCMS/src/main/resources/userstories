@@ -1,0 +1,52 @@
+User Stories
+
+Teacher can view own schedule flow:
+Given user is logged on as Teacher
+User can see and navigate to My Schedule menu
+User should see own Teacher schedule according with selected date/range filter
+
+Teacher can create new schedule and add courses related to them:
+Given user is logged on as Teacher
+User can see and navigate to My Schedules menu
+User can click on Create New Schedule
+User can fill in the schedule details (course, beginDT, endDT, classroom, lessonType, etc.)
+User can select from courses they are assigned to
+User can save the new schedule
+System updates the Schedule list with the new schedule
+
+Student can enroll in a course flow:
+Given user is logged on as Student
+User can see and navigate to Courses menu
+User can browse available courses
+User can select a course to view details
+User can enroll in the selected course
+System updates the CourseEnrollment with the student's enrollment
+
+Admin can add a new course flow:
+Given user is logged on as Admin
+User can see and navigate to Manage Courses menu
+User can click on Add New Course
+User can fill in the course details (courseName, courseDescription, etc.)
+User can assign teachers to the course
+User can save the new course
+System updates the Course list with the new course
+
+Admin can create a new schedule flow:
+Given user is logged on as Admin
+User can see and navigate to Manage Schedules menu
+User can click on Create New Schedule
+User can fill in the schedule details (course, teacher, beginDT, endDT, classroom, lessonType, etc.)
+User can save the new schedule
+System updates the Schedule list with the new schedule
+
+Teacher can view students enrolled in their course flow:
+Given user is logged on as Teacher
+User can see and navigate to My Courses menu
+User can select a course they are teaching
+User can see the list of enrolled students
+User can view details of each student
+
+Student can view their schedule flow:
+Given user is logged on as Student
+User can see and navigate to My Schedule menu
+User should see their own schedule according to the selected date/range filter
