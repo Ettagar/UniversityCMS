@@ -17,6 +17,6 @@ public class RoleInitService {
 		roleService.addRole(new Role("ADMIN", "Admnistrator"));
 		roleService.addRole(new Role("GUEST", "Guest"));
 		roleService.addRole(new Role("STUDENT", "Student"));
-		roleService.addRole(new Role("TEACHER", "Teacher"));		
+		roleService.addRole(new Role("TEACHER", "Teacher"));
 	}
 }

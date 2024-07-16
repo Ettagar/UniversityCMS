@@ -18,10 +18,10 @@ public class LessonType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "lesson_type_id")
 	private Long lessonTypeId;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "rated")
 	private boolean rated;
 }

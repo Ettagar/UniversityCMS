@@ -8,7 +8,7 @@ import ua.foxminded.universitycms.entity.Course;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer>{
-	
+
 	@Query("SELECT COUNT(c) = 0 FROM Course c")
 	boolean checkIfEmptyTable();
 }

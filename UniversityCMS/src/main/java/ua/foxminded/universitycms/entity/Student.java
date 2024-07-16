@@ -1,9 +1,5 @@
 package ua.foxminded.universitycms.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import jakarta.persistence.ManyToOne;
-
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -12,6 +8,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

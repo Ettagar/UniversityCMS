@@ -41,7 +41,7 @@ public class StudentsGeneratorService {
 	private final TeacherRepository teacherRepository;
 	private final ToolsService toolsService;
 
-	public StudentsGeneratorService(StudentRepository studentRepository, 
+	public StudentsGeneratorService(StudentRepository studentRepository,
 			CourseRepository courseRepository, GroupRepository groupRepository,
 			PersonRepository personRepository, RoleRepository roleRepository,
 			TeacherRepository teacherRepository, ToolsService passwordGenerator) {
@@ -63,14 +63,14 @@ public class StudentsGeneratorService {
 			Student student = new Student();
 			student.setPerson(person);
 			student.setEnabled(true);
-			student.setUsername(person.getEmail());			
+			student.setUsername(person.getEmail());
 			student.setPassword(toolsService.generateRandomPassword());
 			student.addRole(roleRepository.findByName("STUDENT"));
 			student.setGroup(groupRepository.findByName("NONE"));
 			enrollToRandomCourses(student);
 			studentRepository.save(student);
 			log.info("Student {} {} was generated and added to DB", person.getFirstName(), person.getLastName());
-		}		
+		}
 		assignRandomGroups();
 		log.info("Students were generated");
 		System.out.println("Students were created");
@@ -90,7 +90,7 @@ public class StudentsGeneratorService {
 			List<Student> allStudents = studentRepository.findAll();
 			log.info("Found {} students", allStudents.size());
 			int nextMemberCount = randomMembersCount.nextInt();
-			
+
 			while (allStudents.size() > nextMemberCount && !allGroups.isEmpty()) {
 				List<Student> randomStudents = toolsService.getRandomNElements(allStudents,
 						nextMemberCount);

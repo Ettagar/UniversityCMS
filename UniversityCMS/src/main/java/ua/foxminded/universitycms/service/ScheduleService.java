@@ -17,7 +17,6 @@ import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.LessonTypeRepository;
 import ua.foxminded.universitycms.repository.ScheduleRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
-import ua.foxminded.universitycms.repository.UserRepository;
 
 @Service
 public class ScheduleService {
@@ -28,12 +27,11 @@ public class ScheduleService {
     private final ClassroomRepository classroomRepository;
     private final LessonTypeRepository lessonTypeRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository, 
-                           CourseRepository courseRepository, 
-                           TeacherRepository teacherRepository, 
-                           ClassroomRepository classroomRepository, 
-                           LessonTypeRepository lessonTypeRepository, 
-                           UserRepository userRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository,
+                           CourseRepository courseRepository,
+                           TeacherRepository teacherRepository,
+                           ClassroomRepository classroomRepository,
+                           LessonTypeRepository lessonTypeRepository) {
         this.scheduleRepository = scheduleRepository;
         this.courseRepository = courseRepository;
         this.teacherRepository = teacherRepository;
@@ -42,17 +40,17 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule createSchedule(int courseId, int teacherId, int classroomId, 
+    public Schedule createSchedule(int courseId, int teacherId, int classroomId,
     		int lessonTypeId, LocalDateTime start, LocalDateTime end) throws ServiceException {
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> 
+        Course course = courseRepository.findById(courseId).orElseThrow(() ->
         	new ServiceException("Course not found"));
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> 
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() ->
         	new ServiceException("Teacher not found"));
-        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> 
+        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() ->
         	new ServiceException("Classroom not found"));
-        LessonType lessonType = lessonTypeRepository.findById(lessonTypeId).orElseThrow(() -> 
+        LessonType lessonType = lessonTypeRepository.findById(lessonTypeId).orElseThrow(() ->
         	new ServiceException("LessonType not found"));
-        
+
         Set<Student> students = course.getStudents();
 
         Schedule schedule = new Schedule();
@@ -65,7 +63,7 @@ public class ScheduleService {
         schedule.setStudents(students);
         return scheduleRepository.save(schedule);
     }
-    
+
     @Transactional
 	public void deleteSchedule(int scheduleId) throws ServiceException {
 		Schedule schedule = scheduleRepository.findById(scheduleId)
@@ -76,7 +74,7 @@ public class ScheduleService {
 	public Set<Schedule> findSchedulesByStudent(int studentId, LocalDateTime start, LocalDateTime end) {
         return scheduleRepository.findByStudentIdAndLessonStartBetween(studentId, start, end);
     }
-	
+
 	public Set<Schedule> findSchedulesByTeacher(int teacherId, LocalDateTime start, LocalDateTime end) {
 		return scheduleRepository.findByTeacherIdAndLessonStartBetween(teacherId, start, end);
 	}

@@ -14,12 +14,12 @@ import ua.foxminded.universitycms.entity.Schedule;
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     @Query("SELECT s FROM Schedule s JOIN s.students st WHERE st.id = :studentId AND s.lessonStart BETWEEN :start AND :end")
-    Set<Schedule> findByStudentIdAndLessonStartBetween(@Param("studentId") int studentId, 
-                                                       @Param("start") LocalDateTime start, 
+    Set<Schedule> findByStudentIdAndLessonStartBetween(@Param("studentId") int studentId,
+                                                       @Param("start") LocalDateTime start,
                                                        @Param("end") LocalDateTime end);
 
     @Query("SELECT s FROM Schedule s WHERE s.teacher.id = :teacherId AND s.lessonStart BETWEEN :start AND :end")
-    Set<Schedule> findByTeacherIdAndLessonStartBetween(@Param("teacherId") int teacherId, 
-                                                       @Param("start") LocalDateTime start, 
+    Set<Schedule> findByTeacherIdAndLessonStartBetween(@Param("teacherId") int teacherId,
+                                                       @Param("start") LocalDateTime start,
                                                        @Param("end") LocalDateTime end);
 }

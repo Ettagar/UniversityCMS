@@ -29,18 +29,18 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
 	private Long roleId;
-	
+
 	@Column(name = "name")
 	@NonNull
 	private String name;
-	
+
 	@Column(name = "description")
 	@NonNull
 	private String description;
-	
-	@ManyToMany(mappedBy = "roles", 
-				fetch = FetchType.LAZY, 
+
+	@ManyToMany(mappedBy = "roles",
+				fetch = FetchType.LAZY,
 				cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	    private Set<User> users = new HashSet<>();
-	
+
 }

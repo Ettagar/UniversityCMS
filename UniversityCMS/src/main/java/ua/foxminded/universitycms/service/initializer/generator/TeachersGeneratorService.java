@@ -8,9 +8,9 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -37,16 +37,16 @@ public class TeachersGeneratorService {
 	private final RoleRepository roleRepository;
 	private final PersonRepository personRepository;
 	private final ToolsService toolsService;
-	
+
 	public TeachersGeneratorService(CourseRepository courseRepository,
-			TeacherRepository teacherRepository, RoleRepository roleRepository, 
+			TeacherRepository teacherRepository, RoleRepository roleRepository,
 			PersonRepository personRepository, ToolsService toolsService) {
 		this.courseRepository = courseRepository;
 		this.teacherRepository = teacherRepository;
 		this.roleRepository = roleRepository;
 		this.personRepository = personRepository;
 		this.toolsService = toolsService;
-		
+
 	}
 	@Transactional
 	public void generate() {
@@ -59,7 +59,7 @@ public class TeachersGeneratorService {
 			Teacher teacher = new Teacher();
 			teacher.setPerson(person);
 			teacher.setEnabled(true);
-			teacher.setUsername(person.getEmail());			
+			teacher.setUsername(person.getEmail());
 			teacher.setPassword(toolsService.generateRandomPassword());
 			teacher.addRole(roleRepository.findByName("TEACHER"));
 			assignRandomCourses(teacher);
@@ -69,7 +69,7 @@ public class TeachersGeneratorService {
 		log.info("Teachers generation completed");
 		System.out.println("Teachers were created");
 	}
-	
+
 	 private void assignRandomCourses(Teacher teacher) {
 	        int courseCount = randomCourseCount.nextInt();
 	        List<Course> allCourses = courseRepository.findAll();

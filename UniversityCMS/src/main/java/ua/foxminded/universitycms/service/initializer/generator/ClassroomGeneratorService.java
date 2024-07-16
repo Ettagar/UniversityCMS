@@ -13,12 +13,12 @@ public class ClassroomGeneratorService {
 	private final ClassroomRepository classroomRepository;
 	private static final int FLOORS_COUNT = 3;
 	private static final int CLASSROOMS_PER_FLOOR = 10;
-	
-	
+
+
 	public ClassroomGeneratorService(ClassroomRepository classroomRepository) {
 		this.classroomRepository = classroomRepository;
 	}
-	
+
 	public void generate() {
 		for (int i = 1; i <= FLOORS_COUNT; i++) {
 			for (int j = 1; j <= CLASSROOMS_PER_FLOOR; j++) {

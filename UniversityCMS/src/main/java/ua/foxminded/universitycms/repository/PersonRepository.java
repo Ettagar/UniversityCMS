@@ -14,10 +14,10 @@ import ua.foxminded.universitycms.entity.Person;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-	
+
 	@Query("SELECT p FROM Person p WHERE p.dateOfBirth < :date")
     Page<Person> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
-	
+
 	@Query("SELECT COUNT(p) = 0 FROM Person p")
 	boolean checkIfEmptyTable();
 }

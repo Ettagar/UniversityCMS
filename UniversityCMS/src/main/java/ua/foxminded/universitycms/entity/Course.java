@@ -35,7 +35,7 @@ public class Course {
     @Column(name = "course_description")
     private String courseDescription;
 
-    @ManyToMany(fetch = FetchType.LAZY, 
+    @ManyToMany(fetch = FetchType.LAZY,
     			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
         name = "course_teacher",
@@ -44,7 +44,7 @@ public class Course {
     )
     private Set<Teacher> teachers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, 
+    @ManyToMany(fetch = FetchType.LAZY,
     			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
         name = "course_student",

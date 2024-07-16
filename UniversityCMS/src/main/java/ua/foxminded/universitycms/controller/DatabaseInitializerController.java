@@ -9,7 +9,7 @@ import ua.foxminded.universitycms.service.initializer.DatabaseInitializerService
 @Controller
 public class DatabaseInitializerController implements ApplicationRunner{
 	public final DatabaseInitializerService databaseInitializerService;
-	
+
 	public DatabaseInitializerController(DatabaseInitializerService databaseInitializerService) {
 		this.databaseInitializerService = databaseInitializerService;
 	}
@@ -17,7 +17,7 @@ public class DatabaseInitializerController implements ApplicationRunner{
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		databaseInitializerService.run();
-		
+
 	}
 
 }

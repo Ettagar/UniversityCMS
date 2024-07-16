@@ -14,11 +14,11 @@ import ua.foxminded.universitycms.repository.LessonTypeRepository;
 public class LessonTypeInitService {
 	private static final Logger log = LogManager.getLogger(LessonTypeInitService.class.getName());
 	private final LessonTypeRepository lessonTypeRepository;
-	
+
 	public LessonTypeInitService(LessonTypeRepository lessonTypeRepository) {
 		this.lessonTypeRepository = lessonTypeRepository;
 	}
-	
+
 	public void init() {
 		Map <String, Boolean> lectureTypes = new HashMap<>();
 		lectureTypes.put("Lecture", false);

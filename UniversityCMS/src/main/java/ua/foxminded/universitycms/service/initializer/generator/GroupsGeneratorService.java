@@ -44,7 +44,7 @@ public class GroupsGeneratorService {
 			    groupRepository.save(newGroup);
 			    log.info("Group {} was generated", newGroup.getGroupName());
 			}
-			
+
 			List <Group> allGroups = groupRepository.findAll();
 			allGroups.forEach(g -> log.info("Group {} is present in DB", g.getGroupName()));
 			System.out.println("Groups were created");

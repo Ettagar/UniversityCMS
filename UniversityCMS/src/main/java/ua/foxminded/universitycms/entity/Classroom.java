@@ -19,10 +19,10 @@ public class Classroom {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "classroom_id")
 	private Long classroomId;
-	
+
 	@Column(name = "floor")
 	private int floor;
-	
+
 	@Column(name = "number")
 	private String number;
 }

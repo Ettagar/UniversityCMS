@@ -12,7 +12,7 @@ public class ToolsService {
 	private static final int PASSWORD_LENGTH = 8;
 	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+<>?";
 	private static final SecureRandom random = new SecureRandom();
-	
+
 	public String generateRandomPassword() {
 		StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
@@ -22,14 +22,14 @@ public class ToolsService {
 
 		return password.toString();
 	}
-	
-    public <T> List<T> getRandomNElements(List<T> list, int N) {
-        if (N > list.size()) {
+
+    public <T> List<T> getRandomNElements(List<T> list, int n) {
+        if (n > list.size()) {
             throw new IllegalArgumentException("N cannot be larger than the size of the list");
         }
 
         List<T> copy = new ArrayList<>(list);
         Collections.shuffle(copy);
-        return copy.subList(0, N);
+        return copy.subList(0, n);
     }
 }

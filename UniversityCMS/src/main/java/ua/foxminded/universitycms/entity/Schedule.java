@@ -51,7 +51,7 @@ public class Schedule {
     @JoinColumn(name = "lesson_type_id", nullable = false)
     private LessonType lessonType;
 
-    @ManyToMany(fetch = FetchType.LAZY, 
+    @ManyToMany(fetch = FetchType.LAZY,
     			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
         name = "schedule_student",
