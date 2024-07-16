@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Log
+*.log
+/logs/
+
+#UML
+*.uml
+*.umlcd
