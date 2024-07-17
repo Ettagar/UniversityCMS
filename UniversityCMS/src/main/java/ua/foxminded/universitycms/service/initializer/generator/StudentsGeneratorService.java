@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Course;
 import ua.foxminded.universitycms.entity.Group;
 import ua.foxminded.universitycms.entity.Person;
@@ -22,8 +23,9 @@ import ua.foxminded.universitycms.repository.StudentRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
 
 @Service
+@RequiredArgsConstructor
 public class StudentsGeneratorService {
-	private static final Logger log = LogManager.getLogger(StudentsGeneratorService.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(StudentsGeneratorService.class.getName());
 	private static final int MIN_GROUP_MEMBERS = 10;
 	private static final int MAX_GROUP_MEMBERS = 30;
 	private static final int MIN_COURSE_COUNT = 1;
@@ -40,19 +42,6 @@ public class StudentsGeneratorService {
 	private final RoleRepository roleRepository;
 	private final TeacherRepository teacherRepository;
 	private final ToolsService toolsService;
-
-	public StudentsGeneratorService(StudentRepository studentRepository,
-			CourseRepository courseRepository, GroupRepository groupRepository,
-			PersonRepository personRepository, RoleRepository roleRepository,
-			TeacherRepository teacherRepository, ToolsService passwordGenerator) {
-		this.studentRepository = studentRepository;
-		this.courseRepository = courseRepository;
-		this.groupRepository = groupRepository;
-		this.personRepository = personRepository;
-		this.roleRepository = roleRepository;
-		this.teacherRepository = teacherRepository;
-		this.toolsService = passwordGenerator;
-	}
 
 	@Transactional
 	public void generate() {

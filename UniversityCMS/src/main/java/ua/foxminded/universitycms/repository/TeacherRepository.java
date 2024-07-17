@@ -11,5 +11,4 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer>{
 
 	@Query("SELECT COUNT(t) = 0 FROM Teacher t")
 	boolean checkIfEmptyTable();
-
 }

@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Course;
 import ua.foxminded.universitycms.entity.Person;
 import ua.foxminded.universitycms.entity.Teacher;
@@ -23,8 +24,9 @@ import ua.foxminded.universitycms.repository.RoleRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
 
 @Service
+@RequiredArgsConstructor
 public class TeachersGeneratorService {
-	private static final Logger log = LogManager.getLogger(TeachersGeneratorService.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(TeachersGeneratorService.class.getName());
 	private static final int TEACHERS_COUNT = 40;
 	private static final int MIN_AGE = 35;
 	private static final int MIN_COURSE_COUNT = 1;
@@ -38,16 +40,6 @@ public class TeachersGeneratorService {
 	private final PersonRepository personRepository;
 	private final ToolsService toolsService;
 
-	public TeachersGeneratorService(CourseRepository courseRepository,
-			TeacherRepository teacherRepository, RoleRepository roleRepository,
-			PersonRepository personRepository, ToolsService toolsService) {
-		this.courseRepository = courseRepository;
-		this.teacherRepository = teacherRepository;
-		this.roleRepository = roleRepository;
-		this.personRepository = personRepository;
-		this.toolsService = toolsService;
-
-	}
 	@Transactional
 	public void generate() {
 		LocalDate minYearsAgo = LocalDate.now().minus(Period.ofYears(MIN_AGE));

@@ -1,4 +1,4 @@
-package ua.foxminded.universitycms.repository;
+package ua.foxminded.universitycms.exception;
 
 @SuppressWarnings("serial")
 public class RepositoryException extends Exception {

@@ -5,37 +5,34 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Person;
+import ua.foxminded.universitycms.exception.RepositoryException;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.repository.PersonRepository;
-import ua.foxminded.universitycms.repository.PersonXmlRepository;
-import ua.foxminded.universitycms.repository.RepositoryException;
-import ua.foxminded.universitycms.service.ServiceException;
+import ua.foxminded.universitycms.repository.PersonJsonRepository;
 
 @Service
+@RequiredArgsConstructor
 public class PersonsGeneratorService {
-    private static final Logger log = LogManager.getLogger(PersonsGeneratorService.class);
-    private static final String PERSONS_FILE = "generated/persons.xml";
+    private static final Logger log = LoggerFactory.getLogger(PersonsGeneratorService.class);
+    private static final String PERSONS_FILE = "generated/persons.json";
     private static final int PERSONS_COUNT = 400;
     private static final int MIN_AGE = 18;
     private static final int MAX_AGE = 60;
     private static final Random random = new Random();
     private final PersonRepository personRepository;
-    private final PersonXmlRepository personXmlRepository;
-
-    public PersonsGeneratorService(PersonRepository personRepository, PersonXmlRepository personXmlRepository) {
-        this.personRepository = personRepository;
-        this.personXmlRepository = personXmlRepository;
-    }
+    private final PersonJsonRepository personJsonRepository;
 
     @Transactional
     public void generate() throws ServiceException {
         try {
-            List<Person> persons = personXmlRepository.parsePersonsFromXml(PERSONS_FILE);
+            List<Person> persons = personJsonRepository.parsePersonsFromJson(PERSONS_FILE);
 
             log.info("Generating persons...");
             System.out.println("Generating persons...");
@@ -49,8 +46,8 @@ public class PersonsGeneratorService {
                     person.setDateOfBirth(randomDateOfBirth());
                     person.setEmail(person.getFirstName().toLowerCase()
                             + "." + person.getLastName().toLowerCase()
-                            + random.nextInt(100)
-                            + (person.getDateOfBirth().getYear() % 100)
+                            + random.nextInt(100 + random.nextInt(900))
+                            + "_" + (person.getDateOfBirth().getYear() % 100)
                             + "@example.com");
                     person.setPhoneNumber("+380" + (100000000 + random.nextInt(900000000)));
 

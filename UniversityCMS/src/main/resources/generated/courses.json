@@ -1,0 +1,44 @@
+{
+  "courses": [
+    {
+      "name": "Archaeology",
+      "description": "The study of human history through artifacts and sites."
+    },
+    {
+      "name": "Biology",
+      "description": "Scientific study of living organisms and their interactions."
+    },
+    {
+      "name": "Chemistry",
+      "description": "Deals with the properties and behavior of matter."
+    },
+    {
+      "name": "IT",
+      "description": "Study of computers and computational systems."
+    },
+    {
+      "name": "Geology",
+      "description": "Study of the Earth's materials and processes."
+    },
+    {
+      "name": "Engineering",
+      "description": "Application of scientific principles to design and build structures."
+    },
+    {
+      "name": "English",
+      "description": "Study of literature, linguistics, and languages."
+    },
+    {
+      "name": "Geography",
+      "description": "Study of the Earth's surface and spatial relationships."
+    },
+    {
+      "name": "History",
+      "description": "Study of past events, societies, and civilizations."
+    },
+    {
+      "name": "Law",
+      "description": "System of rules established by institutions for justice."
+    }
+  ]
+}

@@ -2,39 +2,36 @@ package ua.foxminded.universitycms.service.initializer.generator;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Course;
+import ua.foxminded.universitycms.exception.RepositoryException;
 import ua.foxminded.universitycms.repository.CourseRepository;
-import ua.foxminded.universitycms.repository.CoursesXmlRepository;
-import ua.foxminded.universitycms.repository.RepositoryException;
+import ua.foxminded.universitycms.repository.CoursesJsonRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CoursesGeneratorService {
-	private static final Logger log = LogManager.getLogger(CoursesGeneratorService.class);
-	private static final String COURSES_FILE = "generated/courses.xml";
+	private static final Logger log = LoggerFactory.getLogger(CoursesGeneratorService.class);
+	private static final String COURSES_FILE = "generated/courses.json";
 	private final CourseRepository courseRepository;
-	private final CoursesXmlRepository coursesXmlRepository;
-
-	public CoursesGeneratorService(CourseRepository courseRepository, CoursesXmlRepository coursesXmlRepository) {
-		this.courseRepository = courseRepository;
-		this.coursesXmlRepository = coursesXmlRepository;
-	}
+	private final CoursesJsonRepository coursesJsonRepository;
 
 	@Transactional
 	public void generate() throws ServiceException {
-		if (!courseRepository.checkIfEmptyTable()) {
+		if (!courseRepository.isEmptyTable()) {
 			System.out.println("Courses already exist");
 			log.info("Courses already exist");
 			return;
 		}
 		try {
 			log.info("Starting to generate courses...");
-			Map<String, String> courses = coursesXmlRepository.parseCoursesFromXml(COURSES_FILE);
+			Map<String, String> courses = coursesJsonRepository.parseCoursesFromJson(COURSES_FILE);
 			courses.forEach((name, description) -> {
 				Course course = new Course();
 				course.setCourseName(name);

@@ -16,7 +16,6 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Student extends User {
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,

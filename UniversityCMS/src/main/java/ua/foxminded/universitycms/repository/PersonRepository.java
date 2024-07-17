@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import ua.foxminded.universitycms.entity.Person;
 
-
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 

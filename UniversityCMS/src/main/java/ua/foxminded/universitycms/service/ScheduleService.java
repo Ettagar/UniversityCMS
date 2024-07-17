@@ -6,12 +6,14 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Classroom;
 import ua.foxminded.universitycms.entity.Course;
 import ua.foxminded.universitycms.entity.LessonType;
 import ua.foxminded.universitycms.entity.Schedule;
 import ua.foxminded.universitycms.entity.Student;
 import ua.foxminded.universitycms.entity.Teacher;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.repository.ClassroomRepository;
 import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.LessonTypeRepository;
@@ -19,25 +21,13 @@ import ua.foxminded.universitycms.repository.ScheduleRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
-
     private final ScheduleRepository scheduleRepository;
     private final CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;
     private final ClassroomRepository classroomRepository;
     private final LessonTypeRepository lessonTypeRepository;
-
-    public ScheduleService(ScheduleRepository scheduleRepository,
-                           CourseRepository courseRepository,
-                           TeacherRepository teacherRepository,
-                           ClassroomRepository classroomRepository,
-                           LessonTypeRepository lessonTypeRepository) {
-        this.scheduleRepository = scheduleRepository;
-        this.courseRepository = courseRepository;
-        this.teacherRepository = teacherRepository;
-        this.classroomRepository = classroomRepository;
-        this.lessonTypeRepository = lessonTypeRepository;
-    }
 
     @Transactional
     public Schedule createSchedule(int courseId, int teacherId, int classroomId,

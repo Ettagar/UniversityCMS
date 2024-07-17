@@ -42,5 +42,4 @@ public class Role {
 				fetch = FetchType.LAZY,
 				cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	    private Set<User> users = new HashSet<>();
-
 }

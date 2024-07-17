@@ -1,11 +1,12 @@
 package ua.foxminded.universitycms.service.initializer;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.service.initializer.generator.ClassroomGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.CoursesGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.GroupsGeneratorService;
@@ -15,8 +16,9 @@ import ua.foxminded.universitycms.service.initializer.generator.TeachersGenerato
 
 @Service
 @Profile("!test")
+@RequiredArgsConstructor
 public class DatabaseInitializerService {
-	private static final Logger log = LogManager.getLogger(DatabaseInitializerService.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(DatabaseInitializerService.class);
 	private final CoursesGeneratorService coursesGeneratorService;
 	private final GroupsGeneratorService groupsGeneratorService;
 	private final PersonsGeneratorService personsGeneratorService;
@@ -28,22 +30,6 @@ public class DatabaseInitializerService {
 
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_GREEN = "\u001B[32m";
-
-	public DatabaseInitializerService(CoursesGeneratorService coursesGeneratorService,
-			GroupsGeneratorService groupsGeneratorService, PersonsGeneratorService personsGeneratorService,
-			StudentsGeneratorService studentsGeneratorService, TeachersGeneratorService teachersGeneratorService,
-			RoleInitService roleInitService, ClassroomGeneratorService classroomGeneratorService,
-			LessonTypeInitService lessonTypeInitService) {
-		this.coursesGeneratorService = coursesGeneratorService;
-		this.groupsGeneratorService = groupsGeneratorService;
-		this.personsGeneratorService = personsGeneratorService;
-		this.studentsGeneratorService = studentsGeneratorService;
-		this.teachersGeneratorService = teachersGeneratorService;
-		this.roleInitService = roleInitService;
-		this.classroomGeneratorService = classroomGeneratorService;
-		this.lessonTypeInitService = lessonTypeInitService;
-
-	}
 
 	public void run() {
 		try {

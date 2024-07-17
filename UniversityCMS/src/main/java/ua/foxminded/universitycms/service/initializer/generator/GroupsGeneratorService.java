@@ -3,29 +3,27 @@ package ua.foxminded.universitycms.service.initializer.generator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Group;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.repository.GroupRepository;
-import ua.foxminded.universitycms.service.ServiceException;
 
 @Service
+@RequiredArgsConstructor
 public class GroupsGeneratorService {
-	private static final Logger log = LogManager.getLogger(GroupsGeneratorService.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(GroupsGeneratorService.class.getName());
 	private static final int GROUPS_COUNT = 10;
 	private static final int GROUPS_PARTS_LENGTH = 2;
 	private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String NUMBERS = "0123456789";
 	private static final Random random = new Random();
 	private final GroupRepository groupRepository;
-
-	public GroupsGeneratorService(GroupRepository groupRepository) {
-		this.groupRepository = groupRepository;
-	}
-
+	
 	@Transactional
 	public void generate() throws ServiceException {
 		if (!groupRepository.checkIfEmptyTable()) {

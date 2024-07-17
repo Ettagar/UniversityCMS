@@ -1,4 +1,4 @@
-package ua.foxminded.universitycms.service;
+package ua.foxminded.universitycms.exception;
 
 @SuppressWarnings("serial")
 public class ServiceException extends Exception {

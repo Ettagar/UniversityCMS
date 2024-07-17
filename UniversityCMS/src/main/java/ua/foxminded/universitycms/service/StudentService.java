@@ -5,20 +5,18 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.Course;
 import ua.foxminded.universitycms.entity.Student;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.StudentRepository;
 
 @Service
+@RequiredArgsConstructor
 public class StudentService {
 	private final StudentRepository studentRepository;
 	private final CourseRepository courseRepository;
-
-	public StudentService(StudentRepository studentRepository, CourseRepository courseRepository) {
-		this.studentRepository = studentRepository;
-		this.courseRepository = courseRepository;
-	}
 
 	@Transactional
 	public void addStudent(Student student) {

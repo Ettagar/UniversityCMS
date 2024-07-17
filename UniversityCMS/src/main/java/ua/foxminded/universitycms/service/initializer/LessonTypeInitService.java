@@ -1,41 +1,28 @@
 package ua.foxminded.universitycms.service.initializer;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.entity.LessonType;
+import ua.foxminded.universitycms.entity.LessonTypeEnum;
 import ua.foxminded.universitycms.repository.LessonTypeRepository;
 
 @Service
+@RequiredArgsConstructor
 public class LessonTypeInitService {
-	private static final Logger log = LogManager.getLogger(LessonTypeInitService.class.getName());
-	private final LessonTypeRepository lessonTypeRepository;
+	private static final Logger log = LoggerFactory.getLogger(LessonTypeInitService.class.getName());
+    private final LessonTypeRepository lessonTypeRepository;
 
-	public LessonTypeInitService(LessonTypeRepository lessonTypeRepository) {
-		this.lessonTypeRepository = lessonTypeRepository;
-	}
-
-	public void init() {
-		Map <String, Boolean> lectureTypes = new HashMap<>();
-		lectureTypes.put("Lecture", false);
-		lectureTypes.put("Practice", true);
-		lectureTypes.put("Laboratory", true);
-        lectureTypes.put("Consultation", false);
-        lectureTypes.put("Exam", true);
-        lectureTypes.put("Test", true);
-
-		lectureTypes.forEach((k, v) -> {
-			LessonType lessonType = new LessonType();
-			lessonType.setName(k);
-			lessonType.setRated(v);
-			lessonTypeRepository.save(lessonType);
-			log.info("Lesson type {} was generated and saved to DB", lessonType.getName());
-		});
-		log.info("Lesson types were generated");
-		System.out.println("Lesson types were created");
-	}
+    @Transactional
+    public void init() {
+        List<LessonType> lessonTypes = LessonTypeEnum.toLessonTypeList();
+        lessonTypeRepository.saveAll(lessonTypes);
+        log.info("Lesson types were created");
+        System.out.println("Lesson types were created");
+    }
 }
