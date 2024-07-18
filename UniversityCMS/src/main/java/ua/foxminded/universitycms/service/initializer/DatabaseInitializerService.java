@@ -1,12 +1,10 @@
 package ua.foxminded.universitycms.service.initializer;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.universitycms.service.initializer.generator.ClassroomGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.CoursesGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.GroupsGeneratorService;
@@ -14,11 +12,11 @@ import ua.foxminded.universitycms.service.initializer.generator.PersonsGenerator
 import ua.foxminded.universitycms.service.initializer.generator.StudentsGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.TeachersGeneratorService;
 
+@Slf4j
 @Service
 @Profile("!test")
 @RequiredArgsConstructor
 public class DatabaseInitializerService {
-	private static final Logger log = LoggerFactory.getLogger(DatabaseInitializerService.class);
 	private final CoursesGeneratorService coursesGeneratorService;
 	private final GroupsGeneratorService groupsGeneratorService;
 	private final PersonsGeneratorService personsGeneratorService;

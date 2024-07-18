@@ -1,8 +1,14 @@
-package ua.foxminded.universitycms.entity;
+package ua.foxminded.universitycms.model.enums;
 
 import java.util.List;
 import java.util.stream.Stream;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import ua.foxminded.universitycms.model.LessonType;
+
+@Getter
+@AllArgsConstructor
 public enum LessonTypeEnum {
     LECTURE("Lecture", false),
     PRACTICE("Practice", true),
@@ -13,19 +19,6 @@ public enum LessonTypeEnum {
 
     private final String name;
     private final boolean rated;
-
-    LessonTypeEnum(String name, boolean rated) {
-        this.name = name;
-        this.rated = rated;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isRated() {
-        return rated;
-    }
 
     public LessonType toLessonType() {
         LessonType lessonType = new LessonType();

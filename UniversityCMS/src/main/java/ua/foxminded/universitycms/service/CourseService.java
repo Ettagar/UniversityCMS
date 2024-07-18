@@ -6,10 +6,10 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Course;
-import ua.foxminded.universitycms.entity.Student;
-import ua.foxminded.universitycms.entity.Teacher;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.model.Course;
+import ua.foxminded.universitycms.model.Student;
+import ua.foxminded.universitycms.model.Teacher;
 import ua.foxminded.universitycms.repository.CourseRepository;
 
 @Service

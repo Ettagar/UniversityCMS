@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.User;
+import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.repository.UserRepository;
 
 @Service

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Course;
-import ua.foxminded.universitycms.entity.Student;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.model.Course;
+import ua.foxminded.universitycms.model.Student;
 import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.StudentRepository;
 

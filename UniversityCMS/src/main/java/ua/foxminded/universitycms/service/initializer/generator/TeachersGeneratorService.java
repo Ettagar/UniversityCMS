@@ -2,12 +2,11 @@ package ua.foxminded.universitycms.service.initializer.generator;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,18 +14,20 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Course;
-import ua.foxminded.universitycms.entity.Person;
-import ua.foxminded.universitycms.entity.Teacher;
+import lombok.extern.slf4j.Slf4j;
+import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.model.Course;
+import ua.foxminded.universitycms.model.Person;
+import ua.foxminded.universitycms.model.Teacher;
 import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.PersonRepository;
 import ua.foxminded.universitycms.repository.RoleRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeachersGeneratorService {
-	private static final Logger log = LoggerFactory.getLogger(TeachersGeneratorService.class.getName());
 	private static final int TEACHERS_COUNT = 40;
 	private static final int MIN_AGE = 35;
 	private static final int MIN_COURSE_COUNT = 1;
@@ -41,11 +42,13 @@ public class TeachersGeneratorService {
 	private final ToolsService toolsService;
 
 	@Transactional
-	public void generate() {
+	public void generate() throws Exception {
 		LocalDate minYearsAgo = LocalDate.now().minus(Period.ofYears(MIN_AGE));
 		Pageable pageable = PageRequest.of(0, TEACHERS_COUNT);
-		Page <Person> personsPage = personRepository.findUsersOlderThan(minYearsAgo, pageable);
+		Page<Person> personsPage = personRepository.findUsersOlderThan(minYearsAgo, pageable);
 		List<Person> persons = personsPage.getContent();
+		List<Teacher> teachers = new ArrayList<>();
+
 		log.info("Generating teachers...");
 		persons.forEach(person -> {
 			Teacher teacher = new Teacher();
@@ -55,10 +58,18 @@ public class TeachersGeneratorService {
 			teacher.setPassword(toolsService.generateRandomPassword());
 			teacher.addRole(roleRepository.findByName("TEACHER"));
 			assignRandomCourses(teacher);
-			teacherRepository.save(teacher);
+			teachers.add(teacher);
 			log.info("Teacher {} {} was generated", person.getFirstName(), person.getLastName());
 		});
-		log.info("Teachers generation completed");
+
+		try {
+			teacherRepository.saveAll(teachers);
+		} catch (Exception e) {
+			log.error("Error generating teachers", e);
+			throw new ServiceException("Error generating teachers", e);
+		}
+
+		log.info("Teachers generation completed and added to DB");
 		System.out.println("Teachers were created");
 	}
 

@@ -3,8 +3,8 @@ package ua.foxminded.universitycms.service;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Role;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.model.Role;
 import ua.foxminded.universitycms.repository.RoleRepository;
 
 @Service

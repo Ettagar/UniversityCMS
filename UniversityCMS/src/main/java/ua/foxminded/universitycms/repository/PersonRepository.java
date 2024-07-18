@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import ua.foxminded.universitycms.entity.Person;
+import ua.foxminded.universitycms.model.Person;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
+	@Query("SELECT COUNT(p) = 0 FROM Person p")
+	boolean isEmptyTable();
+
 	@Query("SELECT p FROM Person p WHERE p.dateOfBirth < :date")
     Page<Person> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
-
-	@Query("SELECT COUNT(p) = 0 FROM Person p")
-	boolean checkIfEmptyTable();
 }

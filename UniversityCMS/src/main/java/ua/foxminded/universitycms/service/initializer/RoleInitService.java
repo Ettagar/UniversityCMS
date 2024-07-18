@@ -2,19 +2,18 @@ package ua.foxminded.universitycms.service.initializer;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Role;
-import ua.foxminded.universitycms.entity.RoleEnum;
+import lombok.extern.slf4j.Slf4j;
+import ua.foxminded.universitycms.model.Role;
+import ua.foxminded.universitycms.model.enums.RoleEnum;
 import ua.foxminded.universitycms.service.RoleService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RoleInitService {
-	private static final Logger log = LoggerFactory.getLogger(RoleInitService.class.getName());
 	private final RoleService roleService;
 
 	public void init() {

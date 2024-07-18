@@ -1,8 +1,14 @@
-package ua.foxminded.universitycms.entity;
+package ua.foxminded.universitycms.model.enums;
 
 import java.util.List;
 import java.util.stream.Stream;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import ua.foxminded.universitycms.model.Role;
+
+@Getter
+@AllArgsConstructor
 public enum RoleEnum {
     ADMIN("ADMIN", "Administrator"),
     GUEST("GUEST", "Guest"),
@@ -11,19 +17,6 @@ public enum RoleEnum {
 
     private final String name;
     private final String description;
-
-    RoleEnum(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
     public Role toRole() {
         return new Role(this.getName(), this.getDescription());

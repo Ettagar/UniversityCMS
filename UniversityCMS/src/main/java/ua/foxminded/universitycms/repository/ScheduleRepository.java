@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import ua.foxminded.universitycms.entity.Schedule;
+import ua.foxminded.universitycms.model.Schedule;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {

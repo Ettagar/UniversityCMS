@@ -1,20 +1,21 @@
 package ua.foxminded.universitycms.service.initializer.generator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Course;
-import ua.foxminded.universitycms.entity.Group;
-import ua.foxminded.universitycms.entity.Person;
-import ua.foxminded.universitycms.entity.Student;
-import ua.foxminded.universitycms.entity.Teacher;
+import lombok.extern.slf4j.Slf4j;
+import ua.foxminded.universitycms.model.Course;
+import ua.foxminded.universitycms.model.Group;
+import ua.foxminded.universitycms.model.Person;
+import ua.foxminded.universitycms.model.Student;
+import ua.foxminded.universitycms.model.Teacher;
 import ua.foxminded.universitycms.repository.CourseRepository;
 import ua.foxminded.universitycms.repository.GroupRepository;
 import ua.foxminded.universitycms.repository.PersonRepository;
@@ -22,10 +23,10 @@ import ua.foxminded.universitycms.repository.RoleRepository;
 import ua.foxminded.universitycms.repository.StudentRepository;
 import ua.foxminded.universitycms.repository.TeacherRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentsGeneratorService {
-	private static final Logger log = LoggerFactory.getLogger(StudentsGeneratorService.class.getName());
 	private static final int MIN_GROUP_MEMBERS = 10;
 	private static final int MAX_GROUP_MEMBERS = 30;
 	private static final int MIN_COURSE_COUNT = 1;
@@ -44,9 +45,17 @@ public class StudentsGeneratorService {
 	private final ToolsService toolsService;
 
 	@Transactional
-	public void generate() {
+	public void generate() throws ServiceException {
+		if (!studentRepository.isEmptyTable()) {
+			System.out.println("Students already exist");
+			log.info("Students already exist");
+			return;
+		}
+
 		List<Person> teachersPersons = teacherRepository.findAll().stream().map(Teacher::getPerson).toList();
 		List<Person> allPersons = personRepository.findAll();
+		List<Student> students = new ArrayList<>();
+
 		allPersons.removeAll(teachersPersons);
 		for (Person person : allPersons) {
 			Student student = new Student();
@@ -57,9 +66,18 @@ public class StudentsGeneratorService {
 			student.addRole(roleRepository.findByName("STUDENT"));
 			student.setGroup(groupRepository.findByName("NONE"));
 			enrollToRandomCourses(student);
-			studentRepository.save(student);
+			students.add(student);
 			log.info("Student {} {} was generated and added to DB", person.getFirstName(), person.getLastName());
 		}
+
+		try {
+            studentRepository.saveAll(students);
+        } catch (Exception e) {
+            log.error("Error generating students", e);
+            throw new ServiceException("Error generating students", e);
+        }
+		log.info("Students generation completed and added to DB");
+
 		assignRandomGroups();
 		log.info("Students were generated");
 		System.out.println("Students were created");

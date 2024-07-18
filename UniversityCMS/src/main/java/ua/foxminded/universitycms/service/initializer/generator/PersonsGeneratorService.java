@@ -1,26 +1,25 @@
 package ua.foxminded.universitycms.service.initializer.generator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.Person;
-import ua.foxminded.universitycms.exception.RepositoryException;
+import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.universitycms.exception.ServiceException;
-import ua.foxminded.universitycms.repository.PersonRepository;
+import ua.foxminded.universitycms.model.Person;
 import ua.foxminded.universitycms.repository.PersonJsonRepository;
+import ua.foxminded.universitycms.repository.PersonRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PersonsGeneratorService {
-    private static final Logger log = LoggerFactory.getLogger(PersonsGeneratorService.class);
     private static final String PERSONS_FILE = "generated/persons.json";
     private static final int PERSONS_COUNT = 400;
     private static final int MIN_AGE = 18;
@@ -31,7 +30,14 @@ public class PersonsGeneratorService {
 
     @Transactional
     public void generate() throws ServiceException {
+    	if (!personRepository.isEmptyTable()) {
+            System.out.println("Persons already exist");
+            log.info("Persons already exist");
+            return;
+            }
+
         try {
+        	List<Person> allPersons = new ArrayList<>();
             List<Person> persons = personJsonRepository.parsePersonsFromJson(PERSONS_FILE);
 
             log.info("Generating persons...");
@@ -50,9 +56,7 @@ public class PersonsGeneratorService {
                             + "_" + (person.getDateOfBirth().getYear() % 100)
                             + "@example.com");
                     person.setPhoneNumber("+380" + (100000000 + random.nextInt(900000000)));
-
-                    personRepository.save(person);
-
+                    allPersons.add(person);
                     log.info("Person {} {} {} {} was generated", person.getFirstName(),
                     		person.getLastName(), person.getDateOfBirth(), person.getEmail());
                 } else {
@@ -60,7 +64,10 @@ public class PersonsGeneratorService {
                     throw new ServiceException("Error generating persons");
                 }
             }
-        } catch (RepositoryException e) {
+
+            personRepository.saveAll(allPersons);
+
+        } catch (Exception e) {
             log.error("Error generating persons", e);
             throw new ServiceException("Error generating persons", e);
         }

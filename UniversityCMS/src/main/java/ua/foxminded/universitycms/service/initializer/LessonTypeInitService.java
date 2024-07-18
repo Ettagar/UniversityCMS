@@ -2,20 +2,19 @@ package ua.foxminded.universitycms.service.initializer;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ua.foxminded.universitycms.entity.LessonType;
-import ua.foxminded.universitycms.entity.LessonTypeEnum;
+import lombok.extern.slf4j.Slf4j;
+import ua.foxminded.universitycms.model.LessonType;
+import ua.foxminded.universitycms.model.enums.LessonTypeEnum;
 import ua.foxminded.universitycms.repository.LessonTypeRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LessonTypeInitService {
-	private static final Logger log = LoggerFactory.getLogger(LessonTypeInitService.class.getName());
     private final LessonTypeRepository lessonTypeRepository;
 
     @Transactional

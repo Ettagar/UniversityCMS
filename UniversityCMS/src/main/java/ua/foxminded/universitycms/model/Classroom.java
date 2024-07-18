@@ -1,4 +1,4 @@
-package ua.foxminded.universitycms.entity;
+package ua.foxminded.universitycms.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
