@@ -50,6 +50,7 @@ public class TeachersGeneratorService {
 		List<Teacher> teachers = new ArrayList<>();
 
 		log.info("Generating teachers...");
+		System.out.println("Generating teachers...");
 		persons.forEach(person -> {
 			Teacher teacher = new Teacher();
 			teacher.setPerson(person);
@@ -69,8 +70,8 @@ public class TeachersGeneratorService {
 			throw new ServiceException("Error generating teachers", e);
 		}
 
-		log.info("Teachers generation completed and added to DB");
-		System.out.println("Teachers were created");
+		log.info("Teachers were generated and added to DB");
+		System.out.println("Teachers were generated and added to DB");
 	}
 
 	 private void assignRandomCourses(Teacher teacher) {

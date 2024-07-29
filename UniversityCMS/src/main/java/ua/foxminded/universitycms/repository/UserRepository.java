@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT u FROM User u WHERE u.person.dateOfBirth < :date")
     Page<User> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);

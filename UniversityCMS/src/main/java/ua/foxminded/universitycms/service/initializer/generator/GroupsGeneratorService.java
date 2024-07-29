@@ -33,6 +33,7 @@ public class GroupsGeneratorService {
 		}
 
 		try {
+			System.out.println("Generating groups...");
 			Group group = new Group();
 			group.setGroupName("NONE");
 			groupRepository.save(group);
@@ -46,8 +47,8 @@ public class GroupsGeneratorService {
 			}
 
 			groupRepository.saveAll(groups);
-			System.out.println("Groups were created");
-			log.info("Groups were generated");
+			System.out.println("Groups were generated and added to DB");
+			log.info("Groups were generated and added to DB");
 		} catch (Exception e) {
 			log.error("Error generating groups", e);
 			throw new ServiceException("Error generating groups", e);

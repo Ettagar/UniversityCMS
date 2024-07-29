@@ -1,6 +1,7 @@
 package ua.foxminded.universitycms.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -56,5 +57,14 @@ public class Course {
 	public void addStudent(Student student) {
 		students.add(student);
     }
-}
 
+	public void addStudent(List<Student> student) {
+		students.addAll(student);
+	}
+
+	public Course(long id, String name, String description) {
+		this.courseId = id;
+        this.courseName = name;
+        this.courseDescription = description;
+	}
+}

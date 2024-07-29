@@ -24,7 +24,7 @@ public class StudentService {
 	}
 
 	@Transactional
-	public Student enrollToCourse(int studentId, int courseId) throws ServiceException {
+	public Student enrollToCourse(Long studentId, Long courseId) throws ServiceException {
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new ServiceException("Student not found"));
 		Course course = courseRepository.findById(courseId)
@@ -38,7 +38,7 @@ public class StudentService {
 		return student;
 	}
 
-	public List<Course> getAvailableCourses(int studentId) throws ServiceException {
+	public List<Course> getAvailableCourses(Long studentId) throws ServiceException {
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new ServiceException("Student not found"));
 		List<Course> courses = courseRepository.findAll();
@@ -46,9 +46,17 @@ public class StudentService {
 		return courses;
 	}
 
-	public List<Course> getCourses(int studentId) throws ServiceException {
+	public List<Course> getCourses(Long studentId) throws ServiceException {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new ServiceException("Student not found"))
                 .getCourses();
     }
+
+	public Student findById(Long id) throws ServiceException {
+		return studentRepository.findById(id).orElseThrow(() -> new ServiceException("Student not found"));
+	}
+
+	public List<Student> findAll() {
+		return studentRepository.findAll();
+	}
 }

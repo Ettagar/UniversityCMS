@@ -71,8 +71,8 @@ public class PersonsGeneratorService {
             log.error("Error generating persons", e);
             throw new ServiceException("Error generating persons", e);
         }
-        System.out.println("Persons were created");
-        log.info("Persons were generated");
+        System.out.println("Persons were generated and added to DB");
+        log.info("Persons were generated and added to DB");
     }
 
     private LocalDate randomDateOfBirth() {

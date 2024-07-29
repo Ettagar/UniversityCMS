@@ -36,7 +36,7 @@ public class Group {
     })
     private List<Student> students = new ArrayList<>();
 
-    public void addStudent(Student student) {
+	public void addStudent(Student student) {
         students.add(student);
         student.setGroup(this);
     }

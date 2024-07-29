@@ -52,6 +52,8 @@ public class StudentsGeneratorService {
 			return;
 		}
 
+		log.info("Generating students...");
+		System.out.println("Generating students...");
 		List<Person> teachersPersons = teacherRepository.findAll().stream().map(Teacher::getPerson).toList();
 		List<Person> allPersons = personRepository.findAll();
 		List<Student> students = new ArrayList<>();
@@ -79,8 +81,8 @@ public class StudentsGeneratorService {
 		log.info("Students generation completed and added to DB");
 
 		assignRandomGroups();
-		log.info("Students were generated");
-		System.out.println("Students were created");
+		log.info("Students were generated and added to DB");
+		System.out.println("Students were generated and added to DB");
 	}
 
 	private void enrollToRandomCourses(Student student) {

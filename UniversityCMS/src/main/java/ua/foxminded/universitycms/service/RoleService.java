@@ -16,7 +16,7 @@ public class RoleService{
 		roleRepository.save(role);
 	}
 
-	public Role getRoleById(int id) throws ServiceException {
+	public Role getRoleById(Long id) throws ServiceException {
 		try {
 		return roleRepository.findById(id).orElseThrow(() -> new ServiceException("Role not found"));
 		} catch (IllegalArgumentException e) {

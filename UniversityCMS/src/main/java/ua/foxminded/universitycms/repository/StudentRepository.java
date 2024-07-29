@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.Student;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Long> {
 
 	@Query("SELECT COUNT(s) = 0 FROM Student s")
 	boolean isEmptyTable();

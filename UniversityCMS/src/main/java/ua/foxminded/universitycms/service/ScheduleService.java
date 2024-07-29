@@ -30,8 +30,8 @@ public class ScheduleService {
     private final LessonTypeRepository lessonTypeRepository;
 
     @Transactional
-    public Schedule createSchedule(int courseId, int teacherId, int classroomId,
-    		int lessonTypeId, LocalDateTime start, LocalDateTime end) throws ServiceException {
+    public Schedule createSchedule(Long courseId, Long teacherId, Long classroomId,
+    		Long lessonTypeId, LocalDateTime start, LocalDateTime end) throws ServiceException {
         Course course = courseRepository.findById(courseId).orElseThrow(() ->
         	new ServiceException("Course not found"));
         Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() ->

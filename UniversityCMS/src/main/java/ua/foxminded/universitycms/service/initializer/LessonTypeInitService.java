@@ -19,9 +19,11 @@ public class LessonTypeInitService {
 
     @Transactional
     public void init() {
+    	log.info("Creating lesson types...");
+    	System.out.println("Creating lesson types...");
         List<LessonType> lessonTypes = LessonTypeEnum.toLessonTypeList();
         lessonTypeRepository.saveAll(lessonTypes);
-        log.info("Lesson types were created");
-        System.out.println("Lesson types were created");
+        log.info("Lesson types were created and added to DB");
+        System.out.println("Lesson types were created and added to DB");
     }
 }

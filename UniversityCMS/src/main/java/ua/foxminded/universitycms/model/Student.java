@@ -10,11 +10,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@RequiredArgsConstructor
 public class Student extends User {
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,

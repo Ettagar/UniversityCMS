@@ -40,7 +40,8 @@ public class DatabaseInitializerService {
 				classroomGeneratorService.generate();
 				lessonTypeInitService.init();
 
-		System.out.println(ANSI_GREEN + "Database check and generation completed" + ANSI_RESET);
+		System.out.println(ANSI_GREEN + "Database check and generation completed");
+		System.out.println("Open http://localhost:8081/ in your browser to see the application" + ANSI_RESET);
 		} catch (Exception e) {
             log.error("Database initialization failed", e);
         }

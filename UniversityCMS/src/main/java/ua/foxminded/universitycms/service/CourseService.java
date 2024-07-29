@@ -17,8 +17,12 @@ import ua.foxminded.universitycms.repository.CourseRepository;
 public class CourseService {
 	private final CourseRepository courseRepository;
 
-	public List<Course> getAllCourses() {
+	public List<Course> findAll() {
 		return courseRepository.findAll();
+	}
+
+	public Course findById(Long id) throws ServiceException {
+		return courseRepository.findById(id).orElseThrow(() -> new ServiceException("Course not found"));
 	}
 
 	public void addCourse(Course course) {
@@ -32,13 +36,13 @@ public class CourseService {
 		courseRepository.save(course);
 	}
 
-	public void addTeacherToCourse(int courseId, Teacher teacher) throws ServiceException {
+	public void addTeacherToCourse(Long courseId, Teacher teacher) throws ServiceException {
 		Course course = courseRepository.findById(courseId).orElseThrow(() -> new ServiceException("Course not found"));
 		course.getTeachers().add(teacher);
 		courseRepository.save(course);
 	}
 
-	public Set<Student> getEnrolledStudents(int courseId) throws ServiceException {
+	public Set<Student> getEnrolledStudents(Long courseId) throws ServiceException {
 		try {
 			Course course = courseRepository.findById(courseId)
 					.orElseThrow(() -> new ServiceException("Course not found"));
@@ -48,7 +52,7 @@ public class CourseService {
 		}
 	}
 
-	public Set<Teacher> getAssignedTeachers(int courseId) throws ServiceException {
+	public Set<Teacher> getAssignedTeachers(Long courseId) throws ServiceException {
 		try {
 			Course course = courseRepository.findById(courseId)
 					.orElseThrow(() -> new ServiceException("Course not found"));

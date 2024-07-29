@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.LessonType;
 
 @Repository
-public interface LessonTypeRepository extends JpaRepository<LessonType, Integer>{
+public interface LessonTypeRepository extends JpaRepository<LessonType, Long>{
 
 }

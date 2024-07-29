@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.Person;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Integer> {
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
 	@Query("SELECT COUNT(p) = 0 FROM Person p")
 	boolean isEmptyTable();

@@ -21,6 +21,8 @@ public class ClassroomGeneratorService {
 	public void generate() {
 		List<Classroom> classrooms = new ArrayList<>();
 
+		log.info("Generating classrooms...");
+		System.out.println("Generating classrooms...");
 		for (int i = 1; i <= FLOORS_COUNT; i++) {
 			for (int j = 1; j <= CLASSROOMS_PER_FLOOR; j++) {
 				Classroom classroom = new Classroom();
@@ -33,6 +35,6 @@ public class ClassroomGeneratorService {
 
 		classroomRepository.saveAll(classrooms);
 		log.info("Classrooms were generated and added to DB");
-		System.out.println("Classrooms were created");
+		System.out.println("Classrooms were generated and added to DB");
 	}
 }

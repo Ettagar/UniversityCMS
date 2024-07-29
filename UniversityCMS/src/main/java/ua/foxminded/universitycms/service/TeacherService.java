@@ -17,11 +17,19 @@ public class TeacherService {
 	private final TeacherRepository teacherRepository;
 	private final CourseRepository courseRepository;
 
-	public List<Course> getAvailableCourses(int teacherId) throws ServiceException {
+	public List<Course> getAvailableCourses(Long teacherId) throws ServiceException {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new ServiceException("Teacher not found"));
         List<Course> courses = courseRepository.findAll();
 		courses.removeAll(teacher.getCourses());
 		return courses;
     }
+
+	public List<Teacher> findAll() {
+		return teacherRepository.findAll();
+	}
+
+	public Teacher findById(Long id) throws ServiceException {
+		return teacherRepository.findById(id).orElseThrow(() -> new ServiceException("Teacher not found"));
+	}
 }

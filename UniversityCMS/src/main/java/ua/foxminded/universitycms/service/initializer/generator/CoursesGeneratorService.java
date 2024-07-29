@@ -31,7 +31,8 @@ public class CoursesGeneratorService {
 		}
 
 		try {
-			log.info("Starting to generate courses...");
+			log.info("Creating courses...");
+			System.out.println("Creating courses...");
 			List<Course> allCourses = new ArrayList<>();
 			Map<String, String> courses = coursesJsonRepository.parseCoursesFromJson(COURSES_FILE);
 
@@ -49,7 +50,7 @@ public class CoursesGeneratorService {
 			throw new ServiceException("Error generating courses", e);
 		}
 
-		System.out.println("Courses were created");
-		log.info("Courses were generated");
+		System.out.println("Courses were created and added to DB");
+		log.info("Courses were created and added to DB");
 	}
 }

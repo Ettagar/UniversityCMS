@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main}">
+<head>
+    <title>View Student</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <h1 class="mt-5" th:text="${student.person.firstName} + ' ' + ${student.person.lastName}">First Name Last Name</h1>
+        
+        <button class="btn btn-secondary mb-3" onclick="window.history.back()">Back</button>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Username</h6>
+                <p class="card-text" th:text="${student.username}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Password</h6>
+                <p class="card-text" th:text="${student.password}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Date of Birth</h6>
+                <p class="card-text" th:text="${#temporals.format(student.person.dateOfBirth, 'yyyy-MM-dd')}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Email</h6>
+                <p class="card-text" th:text="${student.person.email}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Phone Number</h6>
+                <p class="card-text" th:text="${student.person.phoneNumber}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Courses</h6>
+                <ul>
+                    <li th:each="course : ${student.courses}" th:text="${course.courseName}"></li>
+                </ul>
+                <h6 class="card-subtitle mb-2 text-muted">Group</h6>
+                <p class="card-text" th:text="${student.group.groupName}"></p>
+                <h6 class="card-subtitle mb-2 text-muted">Roles</h6>
+                <ul>
+                    <li th:each="role : ${student.roles}" th:text="${role.name}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
