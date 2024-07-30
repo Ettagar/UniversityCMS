@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.Group;
 
 @Repository
-public interface GroupRepository extends JpaRepository<Group, Long>{
+public interface GroupRepository extends JpaRepository<Group, Long> {
 
 	@Query("SELECT COUNT(g) = 0 FROM Group g")
 	boolean isEmptyTable();

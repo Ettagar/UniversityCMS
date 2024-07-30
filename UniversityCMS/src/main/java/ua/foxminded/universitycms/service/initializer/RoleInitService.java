@@ -18,9 +18,9 @@ public class RoleInitService {
 
 	public void init() {
 		System.out.println("Creating roles...");
-        List<Role> roles = RoleEnum.toRoleList();
-        roles.forEach(roleService::addRole);
-        log.info("Roles were created and added to DB");
-        System.out.println("Roles were created and added to DB");
-    }
+		List<Role> roles = RoleEnum.toRoleList();
+		roles.forEach(roleService::addRole);
+		log.info("Roles were created and added to DB");
+		System.out.println("Roles were created and added to DB");
+	}
 }

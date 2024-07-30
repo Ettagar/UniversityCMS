@@ -29,7 +29,7 @@ public class CourseController {
 	}
 
 	@GetMapping("/{id}")
-	public String viewCourse(@PathVariable Long id, Model model,  HttpServletResponse response) throws ServiceException {
+	public String viewCourse(@PathVariable Long id, Model model, HttpServletResponse response) throws ServiceException {
 		try {
 			Course course = courseService.findById(id);
 			model.addAttribute("course", course);

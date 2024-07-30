@@ -20,48 +20,42 @@ import ua.foxminded.universitycms.util.StudentTestData;
 @WebMvcTest(StudentController.class)
 class StudentControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockBean
-    private StudentService studentService;
+	@MockBean
+	private StudentService studentService;
 
-    private StudentTestData studentTestData;
+	private StudentTestData studentTestData;
 
-    @BeforeEach
-    void setup() {
-    	studentTestData = new StudentTestData();
-    	studentTestData.setUp();
-    }
+	@BeforeEach
+	void setup() {
+		studentTestData = new StudentTestData();
+		studentTestData.setUp();
+	}
 
-    @Test
-    void testListStudents() throws Exception {
-        when(studentService.findAll()).thenReturn(studentTestData.students);
+	@Test
+	void testListStudents() throws Exception {
+		when(studentService.findAll()).thenReturn(studentTestData.students);
 
-        mockMvc.perform(get("/students"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("students/students"))
-               .andExpect(model().attributeExists("students"))
-               .andExpect(model().attribute("students", studentTestData.students));
-    }
+		mockMvc.perform(get("/students")).andExpect(status().isOk()).andExpect(view().name("students/students"))
+				.andExpect(model().attributeExists("students"))
+				.andExpect(model().attribute("students", studentTestData.students));
+	}
 
-    @Test
-    void testViewStudent() throws Exception {
-        when(studentService.findById(1L)).thenReturn(studentTestData.students.get(0));
+	@Test
+	void testViewStudent() throws Exception {
+		when(studentService.findById(1L)).thenReturn(studentTestData.students.get(0));
 
-        mockMvc.perform(get("/students/1"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("students/student-detail"))
-               .andExpect(model().attributeExists("student"))
-               .andExpect(model().attribute("student", studentTestData.students.get(0)));
-    }
+		mockMvc.perform(get("/students/1")).andExpect(status().isOk()).andExpect(view().name("students/student-detail"))
+				.andExpect(model().attributeExists("student"))
+				.andExpect(model().attribute("student", studentTestData.students.get(0)));
+	}
 
-    @Test
-    void testViewStudentNotFound() throws Exception {
-        when(studentService.findById(1L)).thenThrow(new ServiceException("Student not found"));
+	@Test
+	void testViewStudentNotFound() throws Exception {
+		when(studentService.findById(1L)).thenThrow(new ServiceException("Student not found"));
 
-        mockMvc.perform(get("/students/1"))
-               .andExpect(status().isNotFound())
-               .andExpect(view().name("error/404"));
-    }
+		mockMvc.perform(get("/students/1")).andExpect(status().isNotFound()).andExpect(view().name("error/404"));
+	}
 }

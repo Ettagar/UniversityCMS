@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long>{
+public interface RoleRepository extends JpaRepository<Role, Long> {
 
 	Role findByName(String roleName);
 }

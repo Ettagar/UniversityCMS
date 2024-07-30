@@ -23,13 +23,13 @@ public class ToolsService {
 		return password.toString();
 	}
 
-    public <T> List<T> getRandomNElements(List<T> list, int n) {
-        if (n > list.size()) {
-            throw new IllegalArgumentException("N cannot be larger than the size of the list");
-        }
+	public <T> List<T> getRandomNElements(List<T> list, int n) {
+		if (n > list.size()) {
+			throw new IllegalArgumentException("N cannot be larger than the size of the list");
+		}
 
-        List<T> copy = new ArrayList<>(list);
-        Collections.shuffle(copy);
-        return copy.subList(0, n);
-    }
+		List<T> copy = new ArrayList<>(list);
+		Collections.shuffle(copy);
+		return copy.subList(0, n);
+	}
 }

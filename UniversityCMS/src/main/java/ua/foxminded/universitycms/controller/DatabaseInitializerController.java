@@ -11,7 +11,7 @@ import ua.foxminded.universitycms.service.initializer.DatabaseInitializerService
 @Controller
 @Profile("!test")
 @RequiredArgsConstructor
-public class DatabaseInitializerController implements ApplicationRunner{
+public class DatabaseInitializerController implements ApplicationRunner {
 	public final DatabaseInitializerService databaseInitializerService;
 
 	@Override

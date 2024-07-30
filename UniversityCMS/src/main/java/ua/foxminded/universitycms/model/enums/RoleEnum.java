@@ -10,21 +10,17 @@ import ua.foxminded.universitycms.model.Role;
 @Getter
 @AllArgsConstructor
 public enum RoleEnum {
-    ADMIN("ADMIN", "Administrator"),
-    GUEST("GUEST", "Guest"),
-    STUDENT("STUDENT", "Student"),
-    TEACHER("TEACHER", "Teacher");
+	ADMIN("ADMIN", "Administrator"), GUEST("GUEST", "Guest"), STUDENT("STUDENT", "Student"),
+	TEACHER("TEACHER", "Teacher");
 
-    private final String name;
-    private final String description;
+	private final String name;
+	private final String description;
 
-    public Role toRole() {
-        return new Role(this.getName(), this.getDescription());
-    }
+	public Role toRole() {
+		return new Role(this.getName(), this.getDescription());
+	}
 
-    public static List<Role> toRoleList() {
-        return Stream.of(RoleEnum.values())
-            .map(RoleEnum::toRole)
-            .toList();
-    }
+	public static List<Role> toRoleList() {
+		return Stream.of(RoleEnum.values()).map(RoleEnum::toRole).toList();
+	}
 }

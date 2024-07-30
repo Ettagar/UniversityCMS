@@ -17,54 +17,45 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "courses")
 public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id")
-    private Long courseId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "course_id")
+	private Long courseId;
 
-    @Column(name = "course_name")
-    private String courseName;
+	@Column(name = "course_name")
+	@NonNull
+	private String courseName;
 
-    @Column(name = "course_description")
-    private String courseDescription;
+	@Column(name = "course_description")
+	@NonNull
+	private String courseDescription;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-    			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-        name = "course_teacher",
-        joinColumns = @JoinColumn(name = "course_id"),
-        inverseJoinColumns = @JoinColumn(name = "teacher_id")
-    )
-    private Set<Teacher> teachers = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	@JoinTable(name = "course_teacher", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
+	private Set<Teacher> teachers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-    			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-        name = "course_student",
-        joinColumns = @JoinColumn(name = "course_id"),
-        inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private Set<Student> students = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	@JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+	private Set<Student> students = new HashSet<>();
 
 	public void addStudent(Student student) {
 		students.add(student);
-    }
+	}
 
 	public void addStudent(List<Student> student) {
 		students.addAll(student);
-	}
-
-	public Course(long id, String name, String description) {
-		this.courseId = id;
-        this.courseName = name;
-        this.courseDescription = description;
 	}
 }

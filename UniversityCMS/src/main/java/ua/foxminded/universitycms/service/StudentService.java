@@ -27,8 +27,7 @@ public class StudentService {
 	public Student enrollToCourse(Long studentId, Long courseId) throws ServiceException {
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new ServiceException("Student not found"));
-		Course course = courseRepository.findById(courseId)
-				.orElseThrow(() -> new ServiceException("Course not found"));
+		Course course = courseRepository.findById(courseId).orElseThrow(() -> new ServiceException("Course not found"));
 		if (!student.getCourses().contains(course)) {
 			student.getCourses().add(course);
 			studentRepository.save(student);
@@ -47,10 +46,9 @@ public class StudentService {
 	}
 
 	public List<Course> getCourses(Long studentId) throws ServiceException {
-        return studentRepository.findById(studentId)
-                .orElseThrow(() -> new ServiceException("Student not found"))
-                .getCourses();
-    }
+		return studentRepository.findById(studentId).orElseThrow(() -> new ServiceException("Student not found"))
+				.getCourses();
+	}
 
 	public Student findById(Long id) throws ServiceException {
 		return studentRepository.findById(id).orElseThrow(() -> new ServiceException("Student not found"));

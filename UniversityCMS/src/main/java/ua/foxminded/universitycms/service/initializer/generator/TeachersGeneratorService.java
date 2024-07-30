@@ -74,10 +74,10 @@ public class TeachersGeneratorService {
 		System.out.println("Teachers were generated and added to DB");
 	}
 
-	 private void assignRandomCourses(Teacher teacher) {
-	        int courseCount = randomCourseCount.nextInt();
-	        List<Course> allCourses = courseRepository.findAll();
-	        List<Course> randomCourses = toolsService.getRandomNElements(allCourses, courseCount);
-	        teacher.setCourses(randomCourses);
-	    }
+	private void assignRandomCourses(Teacher teacher) {
+		int courseCount = randomCourseCount.nextInt();
+		List<Course> allCourses = courseRepository.findAll();
+		List<Course> randomCourses = toolsService.getRandomNElements(allCourses, courseCount);
+		teacher.setCourses(randomCourses);
+	}
 }

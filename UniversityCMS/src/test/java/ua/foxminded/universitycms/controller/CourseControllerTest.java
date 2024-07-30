@@ -19,39 +19,35 @@ import ua.foxminded.universitycms.util.CourseTestData;
 @WebMvcTest(CourseController.class)
 class CourseControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockBean
-    private CourseService courseService;
+	@MockBean
+	private CourseService courseService;
 
-    private CourseTestData courseTestData;
+	private CourseTestData courseTestData;
 
-    @BeforeEach
-    void setup() {
+	@BeforeEach
+	void setup() {
 		courseTestData = new CourseTestData();
 		courseTestData.setUp();
 	}
 
-    @Test
-    void testListCourses() throws Exception {
-        when(courseService.findAll()).thenReturn(courseTestData.courses);
+	@Test
+	void testListCourses() throws Exception {
+		when(courseService.findAll()).thenReturn(courseTestData.courses);
 
-        mockMvc.perform(get("/courses"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("courses/courses"))
-               .andExpect(model().attributeExists("courses"))
-               .andExpect(model().attribute("courses", courseTestData.courses));
-    }
+		mockMvc.perform(get("/courses")).andExpect(status().isOk()).andExpect(view().name("courses/courses"))
+				.andExpect(model().attributeExists("courses"))
+				.andExpect(model().attribute("courses", courseTestData.courses));
+	}
 
-    @Test
-    void testViewCourse() throws Exception {
-        when(courseService.findById(1L)).thenReturn(courseTestData.courses.get(0));
+	@Test
+	void testViewCourse() throws Exception {
+		when(courseService.findById(1L)).thenReturn(courseTestData.courses.get(0));
 
-        mockMvc.perform(get("/courses/1"))
-               .andExpect(status().isOk())
-               .andExpect(view().name("courses/course-detail"))
-               .andExpect(model().attributeExists("course"))
-               .andExpect(model().attribute("course", courseTestData.courses.get(0)));
-    }
+		mockMvc.perform(get("/courses/1")).andExpect(status().isOk()).andExpect(view().name("courses/course-detail"))
+				.andExpect(model().attributeExists("course"))
+				.andExpect(model().attribute("course", courseTestData.courses.get(0)));
+	}
 }

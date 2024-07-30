@@ -18,5 +18,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 	boolean isEmptyTable();
 
 	@Query("SELECT p FROM Person p WHERE p.dateOfBirth < :date")
-    Page<Person> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
+	Page<Person> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
 }

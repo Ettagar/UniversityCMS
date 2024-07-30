@@ -17,34 +17,34 @@ import ua.foxminded.universitycms.exception.RepositoryException;
 @Repository
 @RequiredArgsConstructor
 public class CoursesJsonRepository {
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    public Map<String, String> parseCoursesFromJson(String filename) throws RepositoryException {
-        Map<String, String> courses = new HashMap<>();
+	public Map<String, String> parseCoursesFromJson(String filename) throws RepositoryException {
+		Map<String, String> courses = new HashMap<>();
 
-        try (InputStream inputStream = ClassLoader.getSystemResourceAsStream(filename)) {
-            if (inputStream == null) {
-                throw new RepositoryException("File not found: " + filename);
-            }
-            JsonNode rootNode = objectMapper.readTree(inputStream);
-            JsonNode coursesNode = rootNode.path("courses");
+		try (InputStream inputStream = ClassLoader.getSystemResourceAsStream(filename)) {
+			if (inputStream == null) {
+				throw new RepositoryException("File not found: " + filename);
+			}
+			JsonNode rootNode = objectMapper.readTree(inputStream);
+			JsonNode coursesNode = rootNode.path("courses");
 
-            log.info("Parsing courses from file: {}", filename);
+			log.info("Parsing courses from file: {}", filename);
 
-            if (coursesNode.isArray()) {
-                for (JsonNode courseNode : coursesNode) {
-                    String courseName = courseNode.path("name").asText();
-                    String courseDescription = courseNode.path("description").asText();
-                    courses.put(courseName, courseDescription);
-                }
-            }
+			if (coursesNode.isArray()) {
+				for (JsonNode courseNode : coursesNode) {
+					String courseName = courseNode.path("name").asText();
+					String courseDescription = courseNode.path("description").asText();
+					courses.put(courseName, courseDescription);
+				}
+			}
 
-            log.info("Courses were parsed");
-        } catch (Exception e) {
-            log.error("Error parsing courses from file: {}", filename, e);
-            throw new RepositoryException("Error parsing courses from file: " + filename, e);
-        }
+			log.info("Courses were parsed");
+		} catch (Exception e) {
+			log.error("Error parsing courses from file: {}", filename, e);
+			throw new RepositoryException("Error parsing courses from file: " + filename, e);
+		}
 
-        return courses;
-    }
+		return courses;
+	}
 }

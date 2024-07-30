@@ -18,12 +18,12 @@ public class TeacherService {
 	private final CourseRepository courseRepository;
 
 	public List<Course> getAvailableCourses(Long teacherId) throws ServiceException {
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new ServiceException("Teacher not found"));
-        List<Course> courses = courseRepository.findAll();
+		Teacher teacher = teacherRepository.findById(teacherId)
+				.orElseThrow(() -> new ServiceException("Teacher not found"));
+		List<Course> courses = courseRepository.findAll();
 		courses.removeAll(teacher.getCourses());
 		return courses;
-    }
+	}
 
 	public List<Teacher> findAll() {
 		return teacherRepository.findAll();

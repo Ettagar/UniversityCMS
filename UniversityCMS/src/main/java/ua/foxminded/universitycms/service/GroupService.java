@@ -28,6 +28,6 @@ public class GroupService {
 	}
 
 	public List<Group> findAll() {
-        return groupRepository.findAll();
-    }
+		return groupRepository.findAll();
+	}
 }

@@ -38,8 +38,7 @@ public class Role {
 	@NonNull
 	private String description;
 
-	@ManyToMany(mappedBy = "roles",
-				fetch = FetchType.LAZY,
-				cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	    private Set<User> users = new HashSet<>();
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH })
+	private Set<User> users = new HashSet<>();
 }

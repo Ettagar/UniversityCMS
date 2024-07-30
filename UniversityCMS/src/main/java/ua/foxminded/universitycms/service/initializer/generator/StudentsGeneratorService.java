@@ -73,11 +73,11 @@ public class StudentsGeneratorService {
 		}
 
 		try {
-            studentRepository.saveAll(students);
-        } catch (Exception e) {
-            log.error("Error generating students", e);
-            throw new ServiceException("Error generating students", e);
-        }
+			studentRepository.saveAll(students);
+		} catch (Exception e) {
+			log.error("Error generating students", e);
+			throw new ServiceException("Error generating students", e);
+		}
 		log.info("Students generation completed and added to DB");
 
 		assignRandomGroups();
@@ -89,29 +89,28 @@ public class StudentsGeneratorService {
 		int courseCount = randomCourseCount.nextInt();
 		List<Course> allCourses = courseRepository.findAll();
 		List<Course> randomCourses = toolsService.getRandomNElements(allCourses, courseCount);
-        student.setCourses(randomCourses);
+		student.setCourses(randomCourses);
 
 	}
 
 	private void assignRandomGroups() {
-			List<Group> allGroups = groupRepository.findAll();
-			log.info("Found {} groups", allGroups.size());
-			List<Student> allStudents = studentRepository.findAll();
-			log.info("Found {} students", allStudents.size());
-			int nextMemberCount = randomMembersCount.nextInt();
+		List<Group> allGroups = groupRepository.findAll();
+		log.info("Found {} groups", allGroups.size());
+		List<Student> allStudents = studentRepository.findAll();
+		log.info("Found {} students", allStudents.size());
+		int nextMemberCount = randomMembersCount.nextInt();
 
-			while (allStudents.size() > nextMemberCount && !allGroups.isEmpty()) {
-				List<Student> randomStudents = toolsService.getRandomNElements(allStudents,
-						nextMemberCount);
-				Group randomGroup = toolsService.getRandomNElements(allGroups, 1).get(0);
-				log.info("Assigning {} students to group {}", randomStudents.size(), randomGroup.getGroupName());
-				randomStudents.forEach(student -> {
-					student.setGroup(randomGroup);
-					studentRepository.save(student);
-				});
-				allStudents.removeAll(randomStudents);
-				allGroups.remove(randomGroup);
-				nextMemberCount = randomMembersCount.nextInt();
-			}
+		while (allStudents.size() > nextMemberCount && !allGroups.isEmpty()) {
+			List<Student> randomStudents = toolsService.getRandomNElements(allStudents, nextMemberCount);
+			Group randomGroup = toolsService.getRandomNElements(allGroups, 1).get(0);
+			log.info("Assigning {} students to group {}", randomStudents.size(), randomGroup.getGroupName());
+			randomStudents.forEach(student -> {
+				student.setGroup(randomGroup);
+				studentRepository.save(student);
+			});
+			allStudents.removeAll(randomStudents);
+			allGroups.remove(randomGroup);
+			nextMemberCount = randomMembersCount.nextInt();
 		}
+	}
 }

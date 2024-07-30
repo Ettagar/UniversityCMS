@@ -24,39 +24,35 @@ import lombok.Setter;
 @Entity
 @Table(name = "schedules")
 public class Schedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "schedule_id")
-    private Long scheduleId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "schedule_id")
+	private Long scheduleId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course_id", nullable = false)
+	private Course course;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "teacher_id", nullable = false)
+	private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "classroom_id", nullable = false)
-    private Classroom classroom;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "classroom_id", nullable = false)
+	private Classroom classroom;
 
-    @Column(name = "lesson_start", nullable = false)
-    private LocalDateTime lessonStart;
+	@Column(name = "lesson_start", nullable = false)
+	private LocalDateTime lessonStart;
 
-    @Column(name = "lesson_end", nullable = false)
-    private LocalDateTime lessonEnd;
+	@Column(name = "lesson_end", nullable = false)
+	private LocalDateTime lessonEnd;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_type_id", nullable = false)
-    private LessonType lessonType;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lesson_type_id", nullable = false)
+	private LessonType lessonType;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-    			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-        name = "schedule_student",
-        joinColumns = @JoinColumn(name = "schedule_id"),
-        inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private Set<Student> students = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH })
+	@JoinTable(name = "schedule_student", joinColumns = @JoinColumn(name = "schedule_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+	private Set<Student> students = new HashSet<>();
 }

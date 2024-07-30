@@ -18,25 +18,25 @@ import ua.foxminded.universitycms.service.TeacherService;
 @RequestMapping("/teachers")
 @RequiredArgsConstructor
 public class TeacherController {
-    private final TeacherService teacherService;
+	private final TeacherService teacherService;
 
-    @GetMapping
-    public String listTeachers(Model model) {
-        List<Teacher> teachers = teacherService.findAll();
-        model.addAttribute("teachers", teachers);
-        return ("teachers/teachers");
-    }
+	@GetMapping
+	public String listTeachers(Model model) {
+		List<Teacher> teachers = teacherService.findAll();
+		model.addAttribute("teachers", teachers);
+		return ("teachers/teachers");
+	}
 
-    @GetMapping("/{id}")
-    public String viewTeacher(@PathVariable Long id, Model model, HttpServletResponse response) {
-        try {
-            Teacher teacher = teacherService.findById(id);
-            model.addAttribute("teacher", teacher);
-            return ("teachers/teacher-detail");
-        } catch (ServiceException e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            model.addAttribute("errorMessage", e.getMessage());
-            return ("error/404");
-        }
-    }
+	@GetMapping("/{id}")
+	public String viewTeacher(@PathVariable Long id, Model model, HttpServletResponse response) {
+		try {
+			Teacher teacher = teacherService.findById(id);
+			model.addAttribute("teacher", teacher);
+			return ("teachers/teacher-detail");
+		} catch (ServiceException e) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			model.addAttribute("errorMessage", e.getMessage());
+			return ("error/404");
+		}
+	}
 }

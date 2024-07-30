@@ -43,7 +43,7 @@ public class GroupsGeneratorService {
 				Group newGroup = new Group();
 				newGroup.setGroupName(generateGroupName());
 				groups.add(newGroup);
-			    log.info("Group {} was generated", newGroup.getGroupName());
+				log.info("Group {} was generated", newGroup.getGroupName());
 			}
 
 			groupRepository.saveAll(groups);

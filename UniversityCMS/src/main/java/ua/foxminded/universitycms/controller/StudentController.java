@@ -19,26 +19,26 @@ import ua.foxminded.universitycms.service.StudentService;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+	private final StudentService studentService;
 
-    @GetMapping
-    public String listStudents(Model model) {
-        List<Student> students = studentService.findAll();
-        model.addAttribute("students", students);
-        return ("students/students");
-    }
+	@GetMapping
+	public String listStudents(Model model) {
+		List<Student> students = studentService.findAll();
+		model.addAttribute("students", students);
+		return ("students/students");
+	}
 
-    @GetMapping("/{id}")
-    public String viewStudent(@PathVariable Long id, Model model, HttpServletResponse response) {
-        try {
-        	Student student = studentService.findById(id);
-        	model.addAttribute("student", student);
-        	return ("students/student-detail");
+	@GetMapping("/{id}")
+	public String viewStudent(@PathVariable Long id, Model model, HttpServletResponse response) {
+		try {
+			Student student = studentService.findById(id);
+			model.addAttribute("student", student);
+			return ("students/student-detail");
 		} catch (ServiceException e) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			model.addAttribute("errorMessage", e.getMessage());
 			return ("error/404");
 		}
-    }
+	}
 
 }

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 import ua.foxminded.universitycms.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT u FROM User u WHERE u.person.dateOfBirth < :date")
-    Page<User> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
+	Page<User> findUsersOlderThan(@Param("date") LocalDate date, Pageable pageable);
 
 	@Query("SELECT COUNT(u) = 0 FROM User u")
 	boolean checkIfEmptyTable();

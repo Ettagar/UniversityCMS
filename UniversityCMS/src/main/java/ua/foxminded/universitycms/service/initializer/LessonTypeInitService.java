@@ -15,15 +15,15 @@ import ua.foxminded.universitycms.repository.LessonTypeRepository;
 @Service
 @RequiredArgsConstructor
 public class LessonTypeInitService {
-    private final LessonTypeRepository lessonTypeRepository;
+	private final LessonTypeRepository lessonTypeRepository;
 
-    @Transactional
-    public void init() {
-    	log.info("Creating lesson types...");
-    	System.out.println("Creating lesson types...");
-        List<LessonType> lessonTypes = LessonTypeEnum.toLessonTypeList();
-        lessonTypeRepository.saveAll(lessonTypes);
-        log.info("Lesson types were created and added to DB");
-        System.out.println("Lesson types were created and added to DB");
-    }
+	@Transactional
+	public void init() {
+		log.info("Creating lesson types...");
+		System.out.println("Creating lesson types...");
+		List<LessonType> lessonTypes = LessonTypeEnum.toLessonTypeList();
+		lessonTypeRepository.saveAll(lessonTypes);
+		log.info("Lesson types were created and added to DB");
+		System.out.println("Lesson types were created and added to DB");
+	}
 }

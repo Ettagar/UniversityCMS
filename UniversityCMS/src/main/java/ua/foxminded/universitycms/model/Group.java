@@ -20,29 +20,25 @@ import lombok.Setter;
 @Entity
 @Table(name = "groups")
 public class Group {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_id")
-    private Long groupId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "group_id")
+	private Long groupId;
 
-    @Column(name = "group_name")
-    private String groupName;
+	@Column(name = "group_name")
+	private String groupName;
 
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    private List<Student> students = new ArrayList<>();
+	@OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH })
+	private List<Student> students = new ArrayList<>();
 
 	public void addStudent(Student student) {
-        students.add(student);
-        student.setGroup(this);
-    }
+		students.add(student);
+		student.setGroup(this);
+	}
 
-    public void removeStudent(Student student) {
-        students.remove(student);
-        student.setGroup(null);
-    }
+	public void removeStudent(Student student) {
+		students.remove(student);
+		student.setGroup(null);
+	}
 }

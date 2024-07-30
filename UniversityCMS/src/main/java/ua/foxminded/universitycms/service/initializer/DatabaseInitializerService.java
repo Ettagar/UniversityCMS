@@ -31,19 +31,19 @@ public class DatabaseInitializerService {
 
 	public void run() {
 		try {
-			    roleInitService.init();
-				personsGeneratorService.generate();
-				groupsGeneratorService.generate();
-				coursesGeneratorService.generate();
-				teachersGeneratorService.generate();
-				studentsGeneratorService.generate();
-				classroomGeneratorService.generate();
-				lessonTypeInitService.init();
+			roleInitService.init();
+			personsGeneratorService.generate();
+			groupsGeneratorService.generate();
+			coursesGeneratorService.generate();
+			teachersGeneratorService.generate();
+			studentsGeneratorService.generate();
+			classroomGeneratorService.generate();
+			lessonTypeInitService.init();
 
-		System.out.println(ANSI_GREEN + "Database check and generation completed");
-		System.out.println("Open http://localhost:8081/ in your browser to see the application" + ANSI_RESET);
+			System.out.println(ANSI_GREEN + "Database check and generation completed");
+			System.out.println("Open http://localhost:8081/ in your browser to see the application" + ANSI_RESET);
 		} catch (Exception e) {
-            log.error("Database initialization failed", e);
-        }
+			log.error("Database initialization failed", e);
+		}
 	}
 }
