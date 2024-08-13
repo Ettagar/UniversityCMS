@@ -14,16 +14,16 @@ import ua.foxminded.universitycms.repository.UserRepository;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
-	
+
 	@Override
 	 public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        
+
 		return new org.springframework.security.core.userdetails.User(
-				user.getUsername(), 
+				user.getUsername(),
 				user.getPassword(),
-				user.isEnabled(), 
+				user.isEnabled(),
 				true, // accountNonExpired
 				true, // credentialsNonExpired
 				true, // accountNonLocked

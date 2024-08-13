@@ -28,7 +28,7 @@ public class GroupMapper {
 					.map(studentMapper::toDto)
 					.toList());
 	}
-	
+
 	public List<GroupDto> toDto(List<Group> groups) {
 		return groups.stream()
 				.map(this::toDto)
@@ -50,7 +50,7 @@ public class GroupMapper {
 	private Group createNewGroup(GroupDto groupDto) {
 		return new Group(groupDto.getGroupName());
 	}
-	
+
 	public List<Group> toModel(List<GroupDto> groupsDto) {
 		return groupsDto.stream()
 			.map(groupDto -> {

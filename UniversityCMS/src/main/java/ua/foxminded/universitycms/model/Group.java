@@ -29,7 +29,7 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "group_id")
 	private Long groupId;
-	
+
 	@NonNull
 	@Column(name = "group_name")
 	private String groupName;

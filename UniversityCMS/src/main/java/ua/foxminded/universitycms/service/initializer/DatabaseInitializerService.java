@@ -40,7 +40,7 @@ public class DatabaseInitializerService {
 			coursesGeneratorService.generate();
 			teachersGeneratorService.generate();
 			studentsGeneratorService.generate();
-			classroomGeneratorService.generate();			
+			classroomGeneratorService.generate();
 			lessonTypeInitService.init();
 
 			System.out.println(ANSI_GREEN + "Database check and generation completed");

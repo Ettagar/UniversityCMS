@@ -15,26 +15,26 @@ import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
     @Bean
     SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
-       
+
     @Bean
-    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, 
+    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
     		PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
-    
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

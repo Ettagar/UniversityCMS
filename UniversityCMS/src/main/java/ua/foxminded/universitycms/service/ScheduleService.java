@@ -29,18 +29,18 @@ public class ScheduleService {
 	private final TeacherRepository teacherRepository;
 	private final ClassroomRepository classroomRepository;
 	private final LessonTypeRepository lessonTypeRepository;
-	
-	
+
+
 	public Schedule createSchedule(Schedule schedule) throws ServiceException {
 		return createSchedule(
-				schedule.getCourse().getCourseId(), 
+				schedule.getCourse().getCourseId(),
 				schedule.getTeacher().getUserId(),
-				schedule.getClassroom().getClassroomId(), 
+				schedule.getClassroom().getClassroomId(),
 				schedule.getLessonType().getLessonTypeId(),
-				schedule.getLessonStart(), 
+				schedule.getLessonStart(),
 				schedule.getLessonEnd());
 	}
-	
+
 	@Transactional
 	public Schedule createSchedule(Long courseId, Long teacherId, Long classroomId, Long lessonTypeId,
 	                               LocalDateTime start, LocalDateTime end) throws ServiceException {
@@ -65,7 +65,7 @@ public class ScheduleService {
 	    schedule.setStudents(students);
 	    return scheduleRepository.save(schedule);
 	}
-	
+
 	public Set<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
         Set<Schedule> schedules = new HashSet<>(scheduleRepository.findAllByLessonStartBetween(startDate, endDate));
 

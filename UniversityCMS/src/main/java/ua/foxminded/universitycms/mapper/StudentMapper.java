@@ -15,25 +15,25 @@ import ua.foxminded.universitycms.service.StudentService;
 @Component
 @RequiredArgsConstructor
 public class StudentMapper {
-	
+
 	public StudentDto toDto(Student student) {
 		return new StudentDto(
-				student.getUserId(), 
+				student.getUserId(),
 				student.getPerson().getFirstName(),
-				student.getPerson().getLastName(), 
+				student.getPerson().getLastName(),
                 student.getGroup().getGroupName(),
 				student.getCourses().stream()
                     .map(Course::getCourseName)
                     .toList());
 	}
-	
+
 	public List<StudentDto> toDto(List<Student> students) {
 		return students.stream()
                 .map(this :: toDto)
                 .collect(Collectors.toList());
 	}
-	
+
 	public Student toModel(StudentDto studentDto, StudentService studentService) throws ServiceException {
 		return studentService.findById(studentDto.getUserId());
-	}	
+	}
 }

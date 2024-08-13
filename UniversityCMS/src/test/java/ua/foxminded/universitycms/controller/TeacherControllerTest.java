@@ -24,12 +24,12 @@ import ua.foxminded.universitycms.util.TeacherTestData;
 @WebMvcTest(TeacherController.class)
 class TeacherControllerTest {
 
-	@Autowired	
+	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private TeacherService teacherService;
-	
+
 	@MockBean
 	private TeacherMapper teacherMapper;
 
@@ -40,19 +40,19 @@ class TeacherControllerTest {
 		teacherTestData = new TeacherTestData();
 		teacherTestData.setUp();
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testListTeachers() throws Exception {
 		when(teacherService.findAll()).thenReturn(teacherTestData.teachers);
-		
+
 		mockMvc.perform(get("/teachers"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("teachers/teachers"))
 				.andExpect(model().attributeExists("teachers"))
 				.andExpect(model().attribute("teachers", teacherMapper.toDto(teacherTestData.teachers)));
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testViewTeacher() throws Exception {
@@ -64,7 +64,7 @@ class TeacherControllerTest {
 				.andExpect(model().attributeExists("teacher"))
 				.andExpect(model().attribute("teacher", teacherTestData.teachers.get(0)));
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testViewTeacherNotFound() throws Exception {

@@ -16,9 +16,9 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class GroupDto {
 	private Long groupId;
-	
+
 	@NonNull
 	private String groupName;
-	
+
 	private List<StudentDto> students;
 }

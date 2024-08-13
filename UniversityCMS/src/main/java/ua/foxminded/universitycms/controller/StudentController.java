@@ -20,7 +20,7 @@ import ua.foxminded.universitycms.service.StudentService;
 @Controller
 @RequestMapping("/students")
 @RequiredArgsConstructor
-public class StudentController {	
+public class StudentController {
 	private final StudentService studentService;
 	private final StudentMapper studentMapper;
 

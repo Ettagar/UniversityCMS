@@ -18,14 +18,14 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class CourseDto {
 	private Long courseId;
-	
+
 	@NonNull
 	private String courseName;
-	
+
 	@NonNull
 	private String courseDescription;
-	
+
 	private List<TeacherDto> teachers;
-	
+
 	private List<StudentDto> students;
 }

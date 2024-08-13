@@ -28,13 +28,13 @@ class StudentControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private StudentMapper studentMapper;
-	
+
 	@MockBean
 	private StudentService studentService;
-	
+
 
 	private StudentTestData studentTestData;
 
@@ -43,7 +43,7 @@ class StudentControllerTest {
 		studentTestData = new StudentTestData();
 		studentTestData.setUp();
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testListStudents() throws Exception {
@@ -55,7 +55,7 @@ class StudentControllerTest {
 				.andExpect(model().attributeExists("students"))
 				.andExpect(model().attribute("students", studentMapper.toDto(studentTestData.students)));
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testViewStudent() throws Exception {
@@ -67,7 +67,7 @@ class StudentControllerTest {
 				.andExpect(model().attributeExists("student"))
 				.andExpect(model().attribute("student", studentTestData.students.get(0)));
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testViewStudentNotFound() throws Exception {

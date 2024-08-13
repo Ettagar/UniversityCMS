@@ -24,7 +24,7 @@ public class UserService {
 	public void addUser(User user) {
 		userRepository.save(user);
 	}
-	
+
 	@Transactional
     public User addUser(String username, String password, String roleName) throws ServiceException {
         Role role = roleRepository.findByName(roleName);
@@ -36,18 +36,18 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.addRole(role);
         user.setEnabled(true);
-        
+
         return userRepository.save(user);
     }
-	
+
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
-	
+
 	public User findById(Long id) throws ServiceException {
 		return userRepository.findById(id).orElseThrow(() -> new ServiceException("User not found"));
 	}
-	
+
 	@Transactional
 	public void updateUser(Long id, User user, List<Long> roleIds) throws ServiceException {
 	    User userToUpdate = userRepository.findById(id).orElseThrow(() -> new ServiceException("User not found"));

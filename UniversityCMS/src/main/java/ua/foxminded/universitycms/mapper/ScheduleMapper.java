@@ -15,11 +15,11 @@ public class ScheduleMapper {
 	private final TeacherMapper teacherMapper;
 	private final CourseMapper courseMapper;
 	private final ScheduleService scheduleService;
-	
+
 	public ScheduleDto toDto(Schedule schedule) {
 		return new ScheduleDto(
-				schedule.getScheduleId(), 				
-				courseMapper.toDto(schedule.getCourse()),				
+				schedule.getScheduleId(),
+				courseMapper.toDto(schedule.getCourse()),
 				teacherMapper.toDto(schedule.getTeacher()),
 				schedule.getClassroom(),
 				schedule.getLessonStart(),
@@ -27,9 +27,9 @@ public class ScheduleMapper {
 				schedule.getLessonType(),
 				schedule.getStudents().stream()
 					.map(studentMapper::toDto)
-					.toList());				
+					.toList());
 	}
-	
+
 	public Schedule toModel(ScheduleDto scheduleDto) throws ServiceException {
 		return scheduleService.findById(scheduleDto.getScheduleId());
 	}

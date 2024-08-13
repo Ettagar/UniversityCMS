@@ -13,7 +13,7 @@ public class CourseTestData {
 		course1.setCourseId(1L);
 		course1.setCourseName("Course 1");
 		course1.setCourseDescription("Description 1");
-		
+
 		Course course2 = new Course();
 		course2.setCourseId(2L);
 		course2.setCourseName("Course 2");

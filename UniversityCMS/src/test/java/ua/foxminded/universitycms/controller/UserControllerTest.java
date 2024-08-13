@@ -41,7 +41,7 @@ class UserControllerTest {
     void setup() {
         personTestData = new PersonTestData();
         personTestData.setUp();
-        
+
         userTestData = new UserTestData();
         userTestData.setUp(personTestData);
     }

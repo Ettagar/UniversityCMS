@@ -26,19 +26,19 @@ public class CourseMapper {
 
 	   public CourseDto toDto(Course course) {
 	        List<TeacherDto> teachers = course.getTeachers().stream()
-	                .map(teacherMapper::toDto)     
+	                .map(teacherMapper::toDto)
 	                .sorted(Comparator.comparing(TeacherDto::getUserId, Comparator.nullsLast(Comparator.naturalOrder())))
 	                .collect(Collectors.toList());
 
 	        List<StudentDto> students = course.getStudents().stream()
-	                .map(studentMapper::toDto)	           
+	                .map(studentMapper::toDto)
 	                .sorted(Comparator.comparing(StudentDto::getUserId, Comparator.nullsLast(Comparator.naturalOrder())))
 	                .collect(Collectors.toList());
 
 	        return new CourseDto(course.getCourseId(), course.getCourseName(), course.getCourseDescription(), teachers,
 	                students);
 	    }
-    
+
 	public List<CourseDto> toDto(List<Course> courses) {
 		return courses.stream()
 				.map(this::toDto)

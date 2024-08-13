@@ -20,11 +20,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	@Query("SELECT s FROM Schedule s WHERE s.teacher.id = :teacherId AND s.lessonStart BETWEEN :start AND :end")
 	Set<Schedule> findByTeacherIdAndLessonStartBetween(@Param("teacherId") Long teacherId,
 			@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-	
+
 	 @Query("SELECT s FROM Schedule s WHERE s.classroom.id = :classroomId AND s.lessonStart BETWEEN :start AND :end")
-	 Set<Schedule> findByClassroomIdAndLessonStartBetween(@Param("classroomId") Long classroomId, 
+	 Set<Schedule> findByClassroomIdAndLessonStartBetween(@Param("classroomId") Long classroomId,
 			 @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-	 
+
 	 @Query("SELECT s FROM Schedule s WHERE s.lessonStart BETWEEN :start AND :end")
 	 Set<Schedule> findAllByLessonStartBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

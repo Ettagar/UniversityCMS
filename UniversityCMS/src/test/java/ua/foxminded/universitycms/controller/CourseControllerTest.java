@@ -31,22 +31,22 @@ class CourseControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private CourseMapper courseMapper;
-	
+
 	@MockBean
 	private CourseService courseService;
-	
+
 	@MockBean
 	private StudentService studentService;
-	
+
 	@MockBean
 	private StudentMapper studentMapper;
-	
+
 	@MockBean
 	private TeacherService teacherService;
-	
+
 	@MockBean
 	private TeacherMapper teacherMapper;
 
@@ -55,9 +55,9 @@ class CourseControllerTest {
 	@BeforeEach
 	void setup() {
 		courseTestData = new CourseTestData();
-		courseTestData.setUp();	    
+		courseTestData.setUp();
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testListCourses() throws Exception {
@@ -69,7 +69,7 @@ class CourseControllerTest {
 				.andExpect(model().attributeExists("courses"))
 				.andExpect(model().attribute("courses", courseMapper.toDto(courseTestData.courses)));
 	}
-	
+
 	@WithMockUser(username = "spring", roles = {"USER"})
 	@Test
 	void testViewCourse() throws Exception {

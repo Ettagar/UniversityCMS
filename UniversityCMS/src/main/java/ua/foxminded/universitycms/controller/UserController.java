@@ -26,7 +26,7 @@ import ua.foxminded.universitycms.service.UserService;
 public class UserController {
 	private final UserService userService;
 	private final RoleService roleService;
-	
+
 	@GetMapping
 	public String listUsers(Model model) {
 		List<User> users = userService.findAll();
@@ -34,7 +34,7 @@ public class UserController {
 		model.addAttribute("users", users);
 		return ("users/users");
 	}
-	
+
 	@GetMapping("/{id}")
 	public String viewUser(@PathVariable Long id, Model model, HttpServletResponse response) throws ServiceException {
 		try {
@@ -45,9 +45,9 @@ public class UserController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             model.addAttribute("errorMessage", e.getMessage());
             return "error/404";
-		}		
+		}
 	}
-	
+
 	@GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) throws ServiceException {
         User user = userService.findById(id);
@@ -65,7 +65,7 @@ public class UserController {
         userService.updateUser(id, user, roles);
         return "redirect:/users";
     }
-    
+
     @GetMapping("/user-create")
     public String showCreateForm(Model model) {
     	User user = new User();
