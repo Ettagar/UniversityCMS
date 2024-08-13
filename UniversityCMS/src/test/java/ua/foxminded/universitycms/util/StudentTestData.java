@@ -6,12 +6,12 @@ import java.util.List;
 import ua.foxminded.universitycms.model.Group;
 import ua.foxminded.universitycms.model.Student;
 
-public class StudentTestData {
-	public List<Student> students;
-
+public class StudentTestData {	
 	private CourseTestData courseTestData = new CourseTestData();
 	private PersonTestData personTestData = new PersonTestData();
-
+	
+	public List<Student> students;
+	
 	public void setUp() {
 		courseTestData.setUp();
 		personTestData.setUp();
@@ -41,7 +41,6 @@ public class StudentTestData {
 		student3.setPerson(personTestData.persons.get(2));
 
 		students = Arrays.asList(student1, student2, student3);
-
-		students.forEach(student -> student.setCourses(courseTestData.courses));
+		students.forEach(student -> student.setCourses(courseTestData.courses));	
 	}
 }

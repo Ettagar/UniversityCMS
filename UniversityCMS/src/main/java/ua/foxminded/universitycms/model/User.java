@@ -55,4 +55,8 @@ public class User {
 		roles.remove(role);
 		role.getUsers().remove(this);
 	}
+
+	public void clearRoles() {
+		roles.clear();
+    }
 }

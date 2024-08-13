@@ -8,7 +8,7 @@ import ua.foxminded.universitycms.model.Person;
 public class PersonTestData {
 	public List<Person> persons;
 
-	void setUp() {
+	public void setUp() {
 		Person person1 = new Person();
 		person1.setPersonId(1L);
 		person1.setFirstName("John");

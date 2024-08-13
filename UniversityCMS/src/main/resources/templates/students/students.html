@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{main}">
+      layout:decorate="~{layouts/main-layout}">
 <head>
     <title>Students List</title>
 </head>
@@ -12,6 +12,7 @@
         <table class="table table-bordered mt-3">
             <thead>
             <tr>
+            	<th>User ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Courses</th>
@@ -21,14 +22,15 @@
             </thead>
             <tbody>
             <tr th:each="student : ${students}">
-                <td th:text="${student.person.firstName}"></td>
-                <td th:text="${student.person.lastName}"></td>
+            	<td th:text="${student.userId}"></td>
+                <td th:text="${student.firstName}"></td>
+                <td th:text="${student.lastName}"></td>
                 <td>
                     <ul>
-                        <li th:each="course : ${student.courses}" th:text="${course.courseName}"></li>
+                       <li th:each="course : ${student.courses}" th:text="${course}"></li>
                     </ul>
                 </td>
-                <td th:text="${student.group.groupName}"></td>
+                <td th:text="${student.groupName}"></td>
                 <td>
                     <a th:href="@{/students/{id}(id=${student.userId})}" class="btn btn-primary">View</a>
                 </td>

@@ -5,10 +5,10 @@ import java.util.List;
 
 import ua.foxminded.universitycms.model.Teacher;
 
-public class TeacherTestData {
-	public List<Teacher> teachers;
-
+public class TeacherTestData {	
 	private PersonTestData personTestData = new PersonTestData();
+	
+	public List<Teacher> teachers;
 
 	public void setUp() {
 		personTestData.setUp();

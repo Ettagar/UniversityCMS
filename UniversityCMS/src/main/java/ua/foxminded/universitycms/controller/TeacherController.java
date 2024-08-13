@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.mapper.TeacherMapper;
 import ua.foxminded.universitycms.model.Teacher;
+import ua.foxminded.universitycms.model.dto.TeacherDto;
 import ua.foxminded.universitycms.service.TeacherService;
 
 @Controller
@@ -19,10 +22,12 @@ import ua.foxminded.universitycms.service.TeacherService;
 @RequiredArgsConstructor
 public class TeacherController {
 	private final TeacherService teacherService;
+	private final TeacherMapper teacherMapper;
 
 	@GetMapping
 	public String listTeachers(Model model) {
-		List<Teacher> teachers = teacherService.findAll();
+		List<TeacherDto> teachers = teacherMapper.toDto(teacherService.findAll());
+		teachers.sort(Comparator.comparing(TeacherDto::getUserId));
 		model.addAttribute("teachers", teachers);
 		return ("teachers/teachers");
 	}

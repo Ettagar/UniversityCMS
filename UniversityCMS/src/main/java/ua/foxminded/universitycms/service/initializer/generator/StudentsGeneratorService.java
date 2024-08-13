@@ -66,6 +66,7 @@ public class StudentsGeneratorService {
 			student.setUsername(person.getEmail());
 			student.setPassword(toolsService.generateRandomPassword());
 			student.addRole(roleRepository.findByName("STUDENT"));
+			student.addRole(roleRepository.findByName("USER"));
 			student.setGroup(groupRepository.findByName("NONE"));
 			enrollToRandomCourses(student);
 			students.add(student);

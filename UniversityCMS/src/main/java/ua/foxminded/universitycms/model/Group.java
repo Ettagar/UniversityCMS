@@ -13,10 +13,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "groups")
 public class Group {
@@ -24,7 +29,8 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "group_id")
 	private Long groupId;
-
+	
+	@NonNull
 	@Column(name = "group_name")
 	private String groupName;
 

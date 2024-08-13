@@ -1,6 +1,7 @@
 package ua.foxminded.universitycms.repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT COUNT(u) = 0 FROM User u")
 	boolean checkIfEmptyTable();
+
+	Optional<User> findByUsername(String username);
+
+	@Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username")
+	Optional<User> findByUsernameWithRoles(@Param("username") String username);
 }

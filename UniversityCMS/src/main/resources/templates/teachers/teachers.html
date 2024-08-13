@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{main}">
+      layout:decorate="~{layouts/main-layout}">
 <head>
     <title>Teachers List</title>
 </head>
@@ -12,6 +12,7 @@
         <table class="table table-bordered mt-3">
             <thead>
             <tr>
+            	<th>User ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Courses</th>
@@ -20,11 +21,12 @@
             </thead>
             <tbody>
             <tr th:each="teacher : ${teachers}">
-                <td th:text="${teacher.person.firstName}"></td>
-                <td th:text="${teacher.person.lastName}"></td>
+            	<td th:text="${teacher.userId}"></td>
+                <td th:text="${teacher.firstName}"></td>
+                <td th:text="${teacher.lastName}"></td>
                 <td>
                     <ul>
-                        <li th:each="course : ${teacher.courses}" th:text="${course.courseName}"></li>
+                        <li th:each="course : ${teacher.courses}" th:text="${course}"></li>
                     </ul>
                 </td>
                 <td>

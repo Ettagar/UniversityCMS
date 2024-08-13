@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>Create Course</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <h1 class="mt-5">Create Course</h1>
+        <a class="btn btn-secondary mb-3" th:href="@{/courses}">Back to course list</a>
+        <form th:action="@{/courses/course-create}" th:object="${course}" method="post">
+        
+            <div class="mb-3">
+                <label for="courseName" class="form-label">Course Name</label>
+                <input type="text" class="form-control" id="courseName" th:field="*{courseName}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="courseDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="courseDescription" th:field="*{courseDescription}" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

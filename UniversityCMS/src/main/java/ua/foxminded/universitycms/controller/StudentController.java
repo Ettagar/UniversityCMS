@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,19 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.model.Student;
+import ua.foxminded.universitycms.model.dto.StudentDto;
 import ua.foxminded.universitycms.service.StudentService;
 
 @Controller
 @RequestMapping("/students")
 @RequiredArgsConstructor
-public class StudentController {
-
+public class StudentController {	
 	private final StudentService studentService;
+	private final StudentMapper studentMapper;
 
 	@GetMapping
 	public String listStudents(Model model) {
-		List<Student> students = studentService.findAll();
+		List<StudentDto> students = studentMapper.toDto(studentService.findAll());
+        students.sort(Comparator.comparing(StudentDto::getUserId));
 		model.addAttribute("students", students);
 		return ("students/students");
 	}
@@ -40,5 +44,4 @@ public class StudentController {
 			return ("error/404");
 		}
 	}
-
 }

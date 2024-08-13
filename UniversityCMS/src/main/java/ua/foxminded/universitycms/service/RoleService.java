@@ -1,5 +1,7 @@
 package ua.foxminded.universitycms.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,9 @@ public class RoleService {
 		} catch (IllegalArgumentException e) {
 			throw new ServiceException("Role_ID cannot be NULL");
 		}
+	}
+
+	public List<Role> findAll() {
+		return roleRepository.findAll();
 	}
 }

@@ -58,6 +58,7 @@ public class TeachersGeneratorService {
 			teacher.setUsername(person.getEmail());
 			teacher.setPassword(toolsService.generateRandomPassword());
 			teacher.addRole(roleRepository.findByName("TEACHER"));
+			teacher.addRole(roleRepository.findByName("USER"));
 			assignRandomCourses(teacher);
 			teachers.add(teacher);
 			log.info("Teacher {} {} was generated", person.getFirstName(), person.getLastName());

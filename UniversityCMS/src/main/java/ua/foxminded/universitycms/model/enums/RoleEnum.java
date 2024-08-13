@@ -10,7 +10,10 @@ import ua.foxminded.universitycms.model.Role;
 @Getter
 @AllArgsConstructor
 public enum RoleEnum {
-	ADMIN("ADMIN", "Administrator"), GUEST("GUEST", "Guest"), STUDENT("STUDENT", "Student"),
+	ADMIN("ADMIN", "Administrator"), 
+	GUEST("GUEST", "Guest"), 
+	USER("USER", "User"), 
+	STUDENT("STUDENT", "Student"),
 	TEACHER("TEACHER", "Teacher");
 
 	private final String name;

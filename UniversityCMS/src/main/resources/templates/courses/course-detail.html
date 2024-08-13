@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{main}">
+	layout:decorate="~{layouts/main-layout}">
 <head>
-<title>Course Details</title>
+	<title>Course Details</title>
 </head>
 <body>
 	<main layout:fragment="content">
@@ -11,23 +11,22 @@
 			<h1 class="mt-5" th:text="${course.courseName}">Course Name</h1>
 			<p class="lead" th:text="${course.courseDescription}">Course
 				Description</p>
-			<button class="btn btn-secondary mb-3"
-				onclick="window.history.back()">Back</button>
+			<a class="btn btn-secondary mb-3" th:href="@{/courses}">Back</a>
 			<h2 class="mt-4">Enrolled Students</h2>
 			<table class="table table-bordered mt-3">
 				<thead>
 					<tr>
+						<th>User ID</th>
 						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Email</th>
+						<th>Last Name</th>						
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="student : ${course.students}">
-						<td th:text="${student.person.firstName}"></td>
-						<td th:text="${student.person.lastName}"></td>
-						<td th:text="${student.person.email}"></td>
+						<td th:text="${student.userId}"></td>
+						<td th:text="${student.firstName}"></td>
+						<td th:text="${student.lastName}"></td>
 						<td><a th:href="@{/students/{id}(id=${student.userId})}"
 							class="btn btn-primary">View</a></td>
 					</tr>
@@ -38,25 +37,24 @@
 			<table class="table table-bordered mt-3">
 				<thead>
 					<tr>
+						<th>User ID</th>
 						<th>First Name</th>
 						<th>Last Name</th>
-						<th>Email</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="teacher : ${course.teachers}">
-						<td th:text="${teacher.person.firstName}"></td>
-						<td th:text="${teacher.person.lastName}"></td>
-						<td th:text="${teacher.person.email}"></td>
+						<td th:text="${teacher.userId}"></td>
+						<td th:text="${teacher.firstName}"></td>
+						<td th:text="${teacher.lastName}"></td>
 						<td><a
 							th:href="@{/teachers/{id}(id=${teacher.userId}, returnUrl=${returnUrl})}"
 							class="btn btn-primary">View</a></td>
 					</tr>
 				</tbody>
 			</table>
-			<button class="btn btn-secondary mb-3"
-				onclick="window.history.back()">Back</button>
+			<a class="btn btn-secondary mb-3" th:href="@{/courses}">Back</a>
 		</div>
 	</main>
 </body>

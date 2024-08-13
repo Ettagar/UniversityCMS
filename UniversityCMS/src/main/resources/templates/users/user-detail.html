@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>View User</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <h1 class="mt-5">
+            <span th:if="${user.person != null}" th:text="${user.person.firstName} + ' ' + ${user.person.lastName}">First Name Last Name</span>
+            <span th:unless="${user.person != null}">No Name Available</span>
+        </h1>
+        <button class="btn btn-secondary mb-3" onclick="window.history.back()">Back</button>
+        <a class="btn btn-primary mb-3" th:href="@{/users/edit/{id}(id=${user.userId})}">Edit</a>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Username</h6>
+                <p class="card-text" th:text="${user.username}">Username</p>
+                
+                <h6 class="card-subtitle mb-2 text-muted">Password</h6>
+                <p class="card-text" th:text="${user.password}">Password</p>
+                
+                <div th:if="${user.person != null}">
+                    <h6 class="card-subtitle mb-2 text-muted">Date of Birth</h6>
+                    <p class="card-text" th:text="${#temporals.format(user.person.dateOfBirth, 'yyyy-MM-dd')}">Date of Birth</p>
+                    
+                    <h6 class="card-subtitle mb-2 text-muted">Email</h6>
+                    <p class="card-text" th:text="${user.person.email}">Email</p>
+                    
+                    <h6 class="card-subtitle mb-2 text-muted">Phone Number</h6>
+                    <p class="card-text" th:text="${user.person.phoneNumber}">Phone Number</p>
+                </div>
+                <div th:unless="${user.person != null}">
+                    <p>No personal information available</p>
+                </div>
+                
+                <h6 class="card-subtitle mb-2 text-muted">Roles</h6>
+                <ul>
+                    <li th:each="role : ${user.roles}" th:text="${role.name}">Role Name</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

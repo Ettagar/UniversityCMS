@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>Create Schedule - University CMS</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container mt-4">
+    <h2>Create Schedule</h2>
+
+    <div th:if="${successMessage}">
+        <div class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+    </div>
+
+    <div th:if="${errorMessage}">
+        <div class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+    </div>
+
+    <form th:action="@{/schedules/schedule-create}" th:object="${schedule}" method="post">
+        <div class="mb-3">
+            <label for="course" class="form-label">Course</label>
+            <select class="form-select" id="course" th:field="*{course.courseId}" required>
+                <option value="" selected disabled>Select a course</option>
+                <option th:each="course : ${courses}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="teacher" class="form-label">Teacher</label>
+            <select class="form-select" id="teacher" th:field="*{teacher.userId}" required>
+                <option value="" selected disabled>Select a teacher</option>
+                <!-- Teacher options will be dynamically populated by JavaScript -->
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="classroom" class="form-label">Classroom</label>
+            <select class="form-select" id="classroom" th:field="*{classroom.classroomId}" required>
+                <option th:each="classroom : ${classrooms}" th:value="${classroom.classroomId}" th:text="${classroom.number}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="lessonType" class="form-label">Lesson Type</label>
+            <select class="form-select" id="lessonType" th:field="*{lessonType.lessonTypeId}" required>
+                <option th:each="lessonType : ${lessonTypes}" th:value="${lessonType.lessonTypeId}" th:text="${lessonType.name}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="lessonStart" class="form-label">Start Time</label>
+            <input type="datetime-local" class="form-control" id="lessonStart" th:field="*{lessonStart}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="lessonDuration" class="form-label">Lesson Duration</label>
+            <div>
+                <button type="button" class="btn btn-outline-primary" onclick="setLessonDuration(30)">30 min</button>
+                <button type="button" class="btn btn-outline-primary" onclick="setLessonDuration(45)">45 min</button>
+                <button type="button" class="btn btn-outline-primary" onclick="setLessonDuration(60)">60 min</button>
+                <button type="button" class="btn btn-outline-primary" onclick="setLessonDuration(90)">90 min</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="lessonEnd" class="form-label">End Time</label>
+            <input type="datetime-local" class="form-control" id="lessonEnd" th:field="*{lessonEnd}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Schedule</button>
+        <a th:href="@{/schedules}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+document.getElementById('course').addEventListener('change', function() {
+    var courseId = this.value;
+    fetch('/schedules/course/' + courseId + '/teachers')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            var teacherSelect = document.getElementById('teacher');
+            teacherSelect.innerHTML = '';
+            if (data.length === 0) {
+                var option = document.createElement('option');
+                option.text = 'No teachers available';
+                option.disabled = true;
+                option.selected = true;
+                teacherSelect.appendChild(option);
+            } else {
+                data.forEach(function(teacher) {
+                    var option = document.createElement('option');
+                    option.value = teacher.userId;
+                    option.text = teacher.person.firstName + ' ' + teacher.person.lastName + ' (' + teacher.username + ')';
+                    teacherSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching teachers:', error);
+        });
+});
+
+function setLessonDuration(minutes) {
+    const startInput = document.getElementById('lessonStart');
+    const endInput = document.getElementById('lessonEnd');
+    const startTime = new Date(startInput.value);
+    if (isNaN(startTime.getTime())) {
+        alert('Please select a valid start time first.');
+        return;
+    }
+    const endTime = new Date(startTime.getTime() + minutes * 60000);
+    endInput.value = endTime.toISOString().slice(0, 16); // Format as yyyy-MM-ddTHH:mm
+}
+</script>
+</body>
+</html>

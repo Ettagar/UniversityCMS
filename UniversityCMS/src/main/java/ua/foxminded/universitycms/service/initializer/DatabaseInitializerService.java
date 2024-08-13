@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.universitycms.service.initializer.generator.ClassroomGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.CoursesGeneratorService;
+import ua.foxminded.universitycms.service.initializer.generator.DefaultUsersGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.GroupsGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.PersonsGeneratorService;
 import ua.foxminded.universitycms.service.initializer.generator.StudentsGeneratorService;
@@ -25,6 +26,7 @@ public class DatabaseInitializerService {
 	private final RoleInitService roleInitService;
 	private final ClassroomGeneratorService classroomGeneratorService;
 	private final LessonTypeInitService lessonTypeInitService;
+	private final DefaultUsersGeneratorService defaultUsersGeneratorService;
 
 	private static final String ANSI_RESET = "\u001B[0m";
 	private static final String ANSI_GREEN = "\u001B[32m";
@@ -32,16 +34,20 @@ public class DatabaseInitializerService {
 	public void run() {
 		try {
 			roleInitService.init();
+			defaultUsersGeneratorService.generate();
 			personsGeneratorService.generate();
 			groupsGeneratorService.generate();
 			coursesGeneratorService.generate();
 			teachersGeneratorService.generate();
 			studentsGeneratorService.generate();
-			classroomGeneratorService.generate();
+			classroomGeneratorService.generate();			
 			lessonTypeInitService.init();
 
 			System.out.println(ANSI_GREEN + "Database check and generation completed");
 			System.out.println("Open http://localhost:8081/ in your browser to see the application" + ANSI_RESET);
+			System.out.println("Default admin Login: admin, Password: admin");
+			System.out.println("Default teacher Login: teacher, Password: teacher");
+			System.out.println("Default student Login: student, Password: student");
 		} catch (Exception e) {
 			log.error("Database initialization failed", e);
 		}

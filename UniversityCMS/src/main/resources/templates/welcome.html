@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{main}">
+      layout:decorate="~{layouts/main-layout}">
 <head>
     <title>Welcome to University CMS</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="jumbotron">
+    <div class="jumbotron text-center">
+        <img th:src="@{/images/logo.png}" alt="University CMS Logo" style="height: 100px; margin-bottom: 20px;">
         <h1 class="display-4">Welcome to University CMS!</h1>
         <p class="lead">This is a simple content management system for managing university-related information.</p>
         <hr class="my-4">
-        <p>Use the navigation bar to access different sections of the CMS.</p>
+        <form th:action="@{/login}" method="get">
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        </form>
     </div>
 </main>
 </body>

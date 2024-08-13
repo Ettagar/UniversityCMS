@@ -10,5 +10,5 @@ import ua.foxminded.universitycms.model.Teacher;
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
 	@Query("SELECT COUNT(t) = 0 FROM Teacher t")
-	boolean checkIfEmptyTable();
+	boolean isEmptyTable();
 }

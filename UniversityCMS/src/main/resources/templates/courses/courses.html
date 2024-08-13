@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{main}">
+      layout:decorate="~{layouts/main-layout}">
 <head>
     <title>Courses List</title>
 </head>
@@ -9,12 +9,14 @@
 <main layout:fragment="content">
     <div class="container">
         <h1 class="mt-5">Courses List</h1>
+         	<a class="btn btn-success mb-3" th:href="@{/courses/course-create}">Add New Course</a>
         <table class="table table-bordered mt-3">
             <thead>
                 <tr>
                     <th>Course Name</th>
                     <th>Description</th>
-                    <th>Students count</th>
+                    <th>Students</th>
+                    <th>Teachers</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -23,8 +25,10 @@
                     <td th:text="${course.courseName}"></td>
                     <td th:text="${course.courseDescription}"></td>
                     <td th:text="${#lists.size(course.students)}"></td>
+                    <td th:text="${#lists.size(course.teachers)}"></td>
                     <td>
                         <a th:href="@{/courses/{id}(id=${course.courseId})}" class="btn btn-primary">View</a>
+                        <a th:href="@{/courses/edit/{id}(id=${course.courseId})}" class="btn btn-secondary">Edit</a>
                     </td>
                 </tr>
             </tbody>

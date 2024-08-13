@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>Users List</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <h1 class="mt-5">Users List</h1>
+        	<a class="btn btn-success mb-3" th:href="@{/users/user-create}">Add New User</a>
+        <table class="table table-bordered mt-3">
+            <thead>
+            <tr>
+            	<th>User ID</th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Roles</th>
+                <th>Enabled</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+            	<td th:text="${user.userId}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.person != null ? user.person.firstName : 'N/A'}"></td>
+                <td th:text="${user.person != null ? user.person.lastName : 'N/A'}"></td>
+                <td>
+                    <ul>
+                        <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+                    </ul>
+                </td>
+                <td th:text="${user.enabled ? 'Yes' : 'No'}"></td>
+                <td>
+                    <a th:href="@{/users/{id}(id=${user.userId})}" class="btn btn-primary">View</a>
+                    <a th:href="@{/users/edit/{id}(id=${user.userId})}" class="btn btn-secondary">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
