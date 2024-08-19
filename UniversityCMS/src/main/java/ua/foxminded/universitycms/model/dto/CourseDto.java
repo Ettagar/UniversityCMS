@@ -2,30 +2,21 @@ package ua.foxminded.universitycms.model.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+public record CourseDto(
+	Long courseId,
+	String courseName,
+	String courseDescription,
+	List<TeacherDto> teachers,
+	List<StudentDto> students
+) {
 
-@Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@RequiredArgsConstructor
-public class CourseDto {
-	private Long courseId;
-
-	@NonNull
-	private String courseName;
-
-	@NonNull
-	private String courseDescription;
-
-	private List<TeacherDto> teachers;
-
-	private List<StudentDto> students;
+	public static CourseDto createEmpty() {
+		return new CourseDto(
+			null, // courseId
+			null, // courseName
+			null, // courseDescription
+			List.of(), // teachers
+			List.of()	// students
+		);
+	}
 }

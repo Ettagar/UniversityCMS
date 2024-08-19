@@ -27,7 +27,7 @@ public class StudentController {
 	@GetMapping
 	public String listStudents(Model model) {
 		List<StudentDto> students = studentMapper.toDto(studentService.findAll());
-        students.sort(Comparator.comparing(StudentDto::getUserId));
+        students.sort(Comparator.comparing(StudentDto::userId));
 		model.addAttribute("students", students);
 		return ("students/students");
 	}

@@ -17,16 +17,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto" sec:authorize="isAuthenticated()">
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" th:href="@{/students}">Students</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" th:href="@{/teachers}">Teachers</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/courses}">Courses</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Courses
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
+                        <li sec:authorize="hasRole('ROLE_ADMIN')">
+                        	<a class="dropdown-item" th:href="@{/courses}">All Courses</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('ROLE_TEACHER', 'ROLE_STUDENT')">
+                            <a class="dropdown-item" th:href="@{/courses/courses-user}">My Courses</a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" th:href="@{/groups}">Groups</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">

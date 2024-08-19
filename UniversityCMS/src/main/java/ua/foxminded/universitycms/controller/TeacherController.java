@@ -27,7 +27,7 @@ public class TeacherController {
 	@GetMapping
 	public String listTeachers(Model model) {
 		List<TeacherDto> teachers = teacherMapper.toDto(teacherService.findAll());
-		teachers.sort(Comparator.comparing(TeacherDto::getUserId));
+		teachers.sort(Comparator.comparing(TeacherDto::userId));
 		model.addAttribute("teachers", teachers);
 		return ("teachers/teachers");
 	}

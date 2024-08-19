@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main-layout}">
+<head>
+    <title>My Courses</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <h1 class="mt-5">My Courses</h1>
+
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="course : ${courses}">
+                    <td th:text="${course.courseName}"></td>
+                    <td th:text="${course.courseDescription}"></td>
+                    <td>
+                        <a th:href="@{'/courses/' + ${course.courseId}}" class="btn btn-info">Info</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button class="btn btn-secondary mb-3" onclick="window.history.back()">Back</button>
+        <div th:if="${#authorization.expression('hasRole(''ROLE_STUDENT'')')}">
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                Add Course
+            </button>
+
+            <!-- Add Course Modal -->
+            <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCourseModalLabel">Add Course</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{enroll-course}" method="post">
+                                <!-- List of courses not enrolled by this student -->
+                                <div class="mb-3">
+                                    <label for="courseSelect" class="form-label">Select Course</label>
+                                    <select class="form-select" id="courseSelect" name="courseId" required>
+                                        <option th:each="course : ${unenrolledCourses}" th:value="${course.courseId}" th:text="${course.courseName} + ' - ' + ${course.courseDescription}"></option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enroll</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

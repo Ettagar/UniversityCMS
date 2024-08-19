@@ -36,11 +36,11 @@ public class GroupMapper {
 	}
 
 	public Group toModel(GroupDto groupDto) throws ServiceException {
-		if (groupDto.getGroupId() != null) {
-			Optional<Group> existingGroup = Optional.ofNullable(groupService.findById(groupDto.getGroupId()));
+		if (groupDto.groupId() != null) {
+			Optional<Group> existingGroup = Optional.ofNullable(groupService.findById(groupDto.groupId()));
 			if (existingGroup.isPresent()) {
 				Group group = existingGroup.get();
-				group.setGroupName(groupDto.getGroupName());
+				group.setGroupName(groupDto.groupName());
 				return group;
 			}
 		}
@@ -48,7 +48,7 @@ public class GroupMapper {
 	}
 
 	private Group createNewGroup(GroupDto groupDto) {
-		return new Group(groupDto.getGroupName());
+		return new Group(groupDto.groupName());
 	}
 
 	public List<Group> toModel(List<GroupDto> groupsDto) {

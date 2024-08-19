@@ -9,29 +9,33 @@
 	<main layout:fragment="content">
 		<div class="container">
 			<h1 class="mt-5" th:text="${course.courseName}">Course Name</h1>
-			<p class="lead" th:text="${course.courseDescription}">Course
-				Description</p>
-			<a class="btn btn-secondary mb-3" th:href="@{/courses}">Back</a>
-			<h2 class="mt-4">Enrolled Students</h2>
-			<table class="table table-bordered mt-3">
-				<thead>
-					<tr>
-						<th>User ID</th>
-						<th>First Name</th>
-						<th>Last Name</th>						
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="student : ${course.students}">
-						<td th:text="${student.userId}"></td>
-						<td th:text="${student.firstName}"></td>
-						<td th:text="${student.lastName}"></td>
-						<td><a th:href="@{/students/{id}(id=${student.userId})}"
-							class="btn btn-primary">View</a></td>
-					</tr>
-				</tbody>
-			</table>
+			<p class="lead" th:text="${course.courseDescription}">Course Description</p>
+			<a class="btn btn-secondary mb-3" onclick="window.history.back()">Back</a>
+			
+			<div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_TEACHER'')')}">
+				<h2 class="mt-4">Enrolled Students</h2>
+				<table class="table table-bordered mt-3">
+					<thead>
+						<tr>
+							<th>User ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>						
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="student : ${course.students}">
+							<td th:text="${student.userId}"></td>
+							<td th:text="${student.firstName}"></td>
+							<td th:text="${student.lastName}"></td>
+							<td>
+								<a th:href="@{/students/{id}(id=${student.userId})}" 
+								class="btn btn-primary">View</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
 			<h2 class="mt-4">Assigned Teachers</h2>
 			<table class="table table-bordered mt-3">
@@ -48,13 +52,15 @@
 						<td th:text="${teacher.userId}"></td>
 						<td th:text="${teacher.firstName}"></td>
 						<td th:text="${teacher.lastName}"></td>
-						<td><a
-							th:href="@{/teachers/{id}(id=${teacher.userId}, returnUrl=${returnUrl})}"
-							class="btn btn-primary">View</a></td>
+						<td>
+							<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" 
+							th:href="@{/teachers/{id}(id=${teacher.userId}, returnUrl=${returnUrl})}" 
+							class="btn btn-primary">View</a>
+						</td>
 					</tr>
 				</tbody>
 			</table>
-			<a class="btn btn-secondary mb-3" th:href="@{/courses}">Back</a>
+			<a class="btn btn-secondary mb-3" onclick="window.history.back()">Back</a>
 		</div>
 	</main>
 </body>

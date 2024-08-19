@@ -31,6 +31,6 @@ public class ScheduleMapper {
 	}
 
 	public Schedule toModel(ScheduleDto scheduleDto) throws ServiceException {
-		return scheduleService.findById(scheduleDto.getScheduleId());
+		return scheduleService.findById(scheduleDto.scheduleId());
 	}
 }

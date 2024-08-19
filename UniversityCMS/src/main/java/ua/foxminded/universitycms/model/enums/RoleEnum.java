@@ -14,7 +14,8 @@ public enum RoleEnum {
 	GUEST("GUEST", "Guest"),
 	USER("USER", "User"),
 	STUDENT("STUDENT", "Student"),
-	TEACHER("TEACHER", "Teacher");
+	TEACHER("TEACHER", "Teacher"),
+	REGISTRAR("REGISTRAR","Registrar");
 
 	private final String name;
 	private final String description;

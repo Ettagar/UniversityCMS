@@ -34,7 +34,6 @@ public class DatabaseInitializerService {
 	public void run() {
 		try {
 			roleInitService.init();
-			defaultUsersGeneratorService.generate();
 			personsGeneratorService.generate();
 			groupsGeneratorService.generate();
 			coursesGeneratorService.generate();
@@ -42,12 +41,11 @@ public class DatabaseInitializerService {
 			studentsGeneratorService.generate();
 			classroomGeneratorService.generate();
 			lessonTypeInitService.init();
+			defaultUsersGeneratorService.generate();
 
 			System.out.println(ANSI_GREEN + "Database check and generation completed");
 			System.out.println("Open http://localhost:8081/ in your browser to see the application" + ANSI_RESET);
-			System.out.println("Default admin Login: admin, Password: admin");
-			System.out.println("Default teacher Login: teacher, Password: teacher");
-			System.out.println("Default student Login: student, Password: student");
+			defaultUsersGeneratorService.printDefaultCredentials();
 		} catch (Exception e) {
 			log.error("Database initialization failed", e);
 		}

@@ -68,7 +68,7 @@ public class ScheduleController {
         List<Classroom> classrooms = classroomService.findAll();
         List<LessonType> lessonTypes = lessonTypeService.findAll();
 
-        model.addAttribute("schedule", new ScheduleDto());
+        model.addAttribute("schedule", ScheduleDto.createEmpty());
         model.addAttribute("courses", courses);
         model.addAttribute("teachers", List.of());
         model.addAttribute("classrooms", classrooms);

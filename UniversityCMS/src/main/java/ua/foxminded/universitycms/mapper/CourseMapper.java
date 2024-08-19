@@ -27,12 +27,12 @@ public class CourseMapper {
 	public CourseDto toDto(Course course) {
 		List<TeacherDto> teachers = course.getTeachers().stream()
 				.map(teacherMapper::toDto)
-				.sorted(Comparator.comparing(TeacherDto::getUserId, Comparator.nullsLast(Comparator.naturalOrder())))
+				.sorted(Comparator.comparing(TeacherDto::userId, Comparator.nullsLast(Comparator.naturalOrder())))
 				.collect(Collectors.toList());
 
 		List<StudentDto> students = course.getStudents().stream()
 				.map(studentMapper::toDto)
-				.sorted(Comparator.comparing(StudentDto::getUserId, Comparator.nullsLast(Comparator.naturalOrder())))
+				.sorted(Comparator.comparing(StudentDto::userId, Comparator.nullsLast(Comparator.naturalOrder())))
 				.collect(Collectors.toList());
 
 		return new CourseDto(course.getCourseId(), course.getCourseName(), course.getCourseDescription(), teachers,
@@ -46,12 +46,12 @@ public class CourseMapper {
 	}
 
 	public Course toModel(CourseDto courseDto) throws ServiceException {
-	    if (courseDto.getCourseId() != null) {
-	        Optional<Course> existingCourse = Optional.ofNullable(courseService.findById(courseDto.getCourseId()));
+	    if (courseDto.courseId() != null) {
+	        Optional<Course> existingCourse = Optional.ofNullable(courseService.findById(courseDto.courseId()));
 	        if (existingCourse.isPresent()) {
 	            Course course = existingCourse.get();
-	            course.setCourseName(courseDto.getCourseName());
-	            course.setCourseDescription(courseDto.getCourseDescription());
+	            course.setCourseName(courseDto.courseName());
+	            course.setCourseDescription(courseDto.courseDescription());
 	            return course;
 	        }
 	    }
@@ -60,8 +60,8 @@ public class CourseMapper {
 
 	private Course createNewCourse(CourseDto courseDto) {
 	    return new Course(
-	            courseDto.getCourseName(),
-	            courseDto.getCourseDescription()
+	            courseDto.courseName(),
+	            courseDto.courseDescription()
 	    );
 	}
 }

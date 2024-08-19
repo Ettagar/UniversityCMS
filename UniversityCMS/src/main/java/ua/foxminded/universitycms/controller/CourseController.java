@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.controller;
 
+import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,12 +20,15 @@ import ua.foxminded.universitycms.mapper.CourseMapper;
 import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
 import ua.foxminded.universitycms.model.Course;
+import ua.foxminded.universitycms.model.Student;
+import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.model.dto.CourseDto;
 import ua.foxminded.universitycms.model.dto.StudentDto;
 import ua.foxminded.universitycms.model.dto.TeacherDto;
 import ua.foxminded.universitycms.service.CourseService;
 import ua.foxminded.universitycms.service.StudentService;
 import ua.foxminded.universitycms.service.TeacherService;
+import ua.foxminded.universitycms.service.UserService;
 
 @Controller
 @RequestMapping("/courses")
@@ -34,14 +38,16 @@ public class CourseController {
     private final CourseService courseService;
     private final StudentService studentService;
     private final TeacherService teacherService;
+    private final UserService userService;
     private final TeacherMapper teacherMapper;
     private final StudentMapper studentMapper;
     private final CourseMapper courseMapper;
+    private final UserTools userTools;
 
     @GetMapping
     public String listCourses(Model model) {
         List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
-        courses.sort(Comparator.comparing(CourseDto::getCourseId));
+        courses.sort(Comparator.comparing(CourseDto::courseId));
         model.addAttribute("courses", courses);
         return "courses/courses";
     }
@@ -69,17 +75,39 @@ public class CourseController {
             .map(studentMapper::toDto)
             .toList();
         List<TeacherDto> unassignedTeachers = allTeachers.stream()
-            .filter(teacher -> !course.getTeachers().contains(teacher))
-            .sorted((s1, s2) -> s1.getUserId().compareTo(s2.getUserId()))
+            .filter(teacher -> !course.teachers().contains(teacher))
+            .sorted((s1, s2) -> s1.userId().compareTo(s2.userId()))
             .toList();
         List<StudentDto> unenrolledStudents = allStudents.stream()
-            .filter(student -> !course.getStudents().contains(student))
-            .sorted((s1, s2) -> s1.getUserId().compareTo(s2.getUserId()))
+            .filter(student -> !course.students().contains(student))
+            .sorted((s1, s2) -> s1.userId().compareTo(s2.userId()))
             .toList();
         model.addAttribute("course", course);
         model.addAttribute("unassignedTeachers", unassignedTeachers);
         model.addAttribute("unenrolledStudents", unenrolledStudents);
         return "courses/course-edit";
+    }
+
+    @PostMapping("/enroll/{courseId}")
+    public String enrollInCourse(@PathVariable Long courseId, Principal principal) throws ServiceException {
+        User loggedInUser = userService.findByUsername(principal.getName());
+
+        if (loggedInUser instanceof Student) {
+            courseService.addStudentToCourse(courseId, loggedInUser.getUserId());
+        }
+
+        return "redirect:/courses/courses-user";
+    }
+
+    @PostMapping("/unenroll/{courseId}")
+    public String unenrollFromCourse(@PathVariable Long courseId, Principal principal) throws ServiceException {
+        User loggedInUser = userService.findByUsername(principal.getName());
+
+        if (loggedInUser instanceof Student) {
+            courseService.removeStudentFromCourse(courseId, loggedInUser.getUserId());
+        }
+
+        return "redirect:/courses/courses-user";
     }
 
     @PostMapping("/edit/{id}")
@@ -116,7 +144,7 @@ public class CourseController {
 
     @GetMapping("/course-create")
     public String showCreateForm(Model model) {
-        model.addAttribute("course", new CourseDto());
+        model.addAttribute("course", CourseDto.createEmpty());
         return "courses/course-create";
     }
 
@@ -125,5 +153,22 @@ public class CourseController {
         Course course = courseMapper.toModel(courseDto);
         courseService.addCourse(course);
         return "redirect:/courses";
+    }
+
+    @GetMapping("/courses-user")
+    public String viewMyCourses(Model model) throws ServiceException {
+        User loggedInUser = userTools.getLoggedInUser();
+        List<CourseDto> courses = userTools.assignedCourses(loggedInUser);
+        List<CourseDto> unenrolledCourses = userTools.getNotAssignedCourses(loggedInUser);
+        model.addAttribute("courses", courses);
+        model.addAttribute("unenrolledCourses", unenrolledCourses);
+        return "courses/courses-user";
+    }
+
+    @PostMapping("/enroll-course")
+    public String enrollCourse(@RequestParam Long courseId) throws ServiceException {
+        User loggedInUser = userTools.getLoggedInUser();
+        courseService.addStudentToCourse(courseId, loggedInUser.getUserId());
+        return "redirect:/courses/courses-user";
     }
 }

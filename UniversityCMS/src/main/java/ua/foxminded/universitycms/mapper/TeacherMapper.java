@@ -35,6 +35,6 @@ public class TeacherMapper {
     }
 
     public Teacher toModel(TeacherDto teacherDto) throws ServiceException {
-        return teacherService.findById(teacherDto.getUserId());
+        return teacherService.findById(teacherDto.userId());
     }
 }

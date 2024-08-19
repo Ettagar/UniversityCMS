@@ -45,4 +45,8 @@ public class StudentService {
 	public List<Student> findAll() {
 		return studentRepository.findAll();
 	}
+
+	public List<Course> findCoursesByStudent(Student student) {
+		 return student.getCourses();
+	}
 }

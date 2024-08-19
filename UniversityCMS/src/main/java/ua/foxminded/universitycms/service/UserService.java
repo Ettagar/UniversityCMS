@@ -25,27 +25,16 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	@Transactional
-    public User addUser(String username, String password, String roleName) throws ServiceException {
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
-            throw new ServiceException("Role not found");
-        }
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.addRole(role);
-        user.setEnabled(true);
-
-        return userRepository.save(user);
-    }
-
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
 
 	public User findById(Long id) throws ServiceException {
 		return userRepository.findById(id).orElseThrow(() -> new ServiceException("User not found"));
+	}
+
+	public User findByUsername(String name) throws ServiceException {
+		return userRepository.findByUsername(name).orElseThrow(() -> new ServiceException("User not found"));
 	}
 
 	@Transactional

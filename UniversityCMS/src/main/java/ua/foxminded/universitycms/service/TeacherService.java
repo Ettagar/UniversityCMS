@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Course;
@@ -30,6 +31,16 @@ public class TeacherService {
 	}
 
 	public Teacher findById(Long id) throws ServiceException {
-		return teacherRepository.findById(id).orElseThrow(() -> new ServiceException("Teacher not found"));
+		return teacherRepository.findById(id)
+				.orElseThrow(() -> new ServiceException("Teacher not found"));
+	}
+
+	public List<Course> findCoursesByTeacher(Teacher teacher) {
+		return teacher.getCourses();
+	}
+
+	@Transactional
+	public void addTeacher(Teacher teacher) {
+		teacherRepository.save(teacher);
 	}
 }

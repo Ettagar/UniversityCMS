@@ -34,6 +34,6 @@ public class StudentMapper {
 	}
 
 	public Student toModel(StudentDto studentDto, StudentService studentService) throws ServiceException {
-		return studentService.findById(studentDto.getUserId());
+		return studentService.findById(studentDto.userId());
 	}
 }
