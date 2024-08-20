@@ -31,7 +31,7 @@ public class DefaultUsersGeneratorService {
     private final RoleService roleService;
     private final GroupService groupService;
     private final CourseService courseService;
-
+    
     @Transactional
     public void generate() throws ServiceException {
         log.info("Creating default users...");
@@ -39,37 +39,8 @@ public class DefaultUsersGeneratorService {
 
         for (DefaultUserCredentials credentials : DefaultUserCredentials.values()) {
             try {
-                User user;
-                String role = credentials.getRoleName();
-                Person person = new Person();
-                person.setFirstName(role);
-                person.setLastName(role);
-                if ("STUDENT".equals(role)) {
-                    user = new Student();
-                } else if ("TEACHER".equals(role)) {
-                    user = new Teacher();
-                } else {
-                    user = new User();
-                }
-
-                user.setPerson(person);
-                user.setUsername(credentials.getUsername());
-                user.setPassword(passwordEncoder.encode(user.getUsername()));
-                user.addRole(roleService.getRoleByName(role));
-                user.setEnabled(true);
-
-                // Set specific parameters before saving to DB
-                if (user instanceof Student) {
-                	studentService.addStudent((Student) user);
-                	Group group = groupService.findById(1L);
-                	group.addStudent((Student) user);
-                } else if (user instanceof Teacher) {
-                    teacherService.addTeacher((Teacher) user);
-                    courseService.addTeacherToCourse(1L, (Teacher) user);
-                } else {
-                    userService.addUser(user);
-                }
-
+                User user = createUser(credentials);
+                assignRoleAndSaveUser(user, credentials.getRoleName());
             } catch (Exception e) {
                 log.error("Failed to create user with username: {}", credentials.getUsername(), e);
                 throw new ServiceException("Failed to create default user", e);
@@ -77,6 +48,52 @@ public class DefaultUsersGeneratorService {
         }
 
         System.out.println("Default users were created and added to DB");
+    }
+
+    private User createUser(DefaultUserCredentials credentials) {
+        User user = instantiateUserBasedOnRole(credentials.getRoleName());
+        Person person = new Person();
+        person.setFirstName(credentials.getRoleName());
+        person.setLastName(credentials.getRoleName());
+        user.setPerson(person);
+        user.setUsername(credentials.getUsername());
+        user.setPassword(passwordEncoder.encode(credentials.getUsername()));
+        user.setEnabled(true);
+        return user;
+    }
+
+    private User instantiateUserBasedOnRole(String role) {
+        switch (role) {
+            case "STUDENT":
+                return new Student();
+            case "TEACHER":
+                return new Teacher();
+            default:
+                return new User();
+        }
+    }
+
+    private void assignRoleAndSaveUser(User user, String role) throws ServiceException {
+        user.addRole(roleService.getRoleByName(role));
+
+        if (user instanceof Student) {
+            saveStudent((Student) user);
+        } else if (user instanceof Teacher) {
+            saveTeacher((Teacher) user);
+        } else {
+            userService.addUser(user);
+        }
+    }
+
+    private void saveStudent(Student student) throws ServiceException {
+        studentService.addStudent(student);
+        Group group = groupService.findById(1L);
+        group.addStudent(student);
+    }
+
+    private void saveTeacher(Teacher teacher) throws ServiceException {
+        teacherService.addTeacher(teacher);
+        courseService.addTeacherToCourse(1L, teacher);
     }
 
     public void printDefaultCredentials() {

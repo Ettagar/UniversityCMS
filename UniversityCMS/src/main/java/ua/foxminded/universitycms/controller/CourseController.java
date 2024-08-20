@@ -20,12 +20,12 @@ import ua.foxminded.universitycms.mapper.CourseMapper;
 import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
 import ua.foxminded.universitycms.model.Course;
-import ua.foxminded.universitycms.model.Student;
 import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.model.dto.CourseDto;
 import ua.foxminded.universitycms.model.dto.StudentDto;
 import ua.foxminded.universitycms.model.dto.TeacherDto;
 import ua.foxminded.universitycms.service.CourseService;
+import ua.foxminded.universitycms.service.RoleService;
 import ua.foxminded.universitycms.service.StudentService;
 import ua.foxminded.universitycms.service.TeacherService;
 import ua.foxminded.universitycms.service.UserService;
@@ -39,6 +39,7 @@ public class CourseController {
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final UserService userService;
+    private final RoleService roleService;
     private final TeacherMapper teacherMapper;
     private final StudentMapper studentMapper;
     private final CourseMapper courseMapper;
@@ -76,11 +77,11 @@ public class CourseController {
             .toList();
         List<TeacherDto> unassignedTeachers = allTeachers.stream()
             .filter(teacher -> !course.teachers().contains(teacher))
-            .sorted((s1, s2) -> s1.userId().compareTo(s2.userId()))
+            .sorted(Comparator.comparing(TeacherDto::userId))
             .toList();
         List<StudentDto> unenrolledStudents = allStudents.stream()
             .filter(student -> !course.students().contains(student))
-            .sorted((s1, s2) -> s1.userId().compareTo(s2.userId()))
+            .sorted(Comparator.comparing(StudentDto::userId))
             .toList();
         model.addAttribute("course", course);
         model.addAttribute("unassignedTeachers", unassignedTeachers);
@@ -92,7 +93,7 @@ public class CourseController {
     public String enrollInCourse(@PathVariable Long courseId, Principal principal) throws ServiceException {
         User loggedInUser = userService.findByUsername(principal.getName());
 
-        if (loggedInUser instanceof Student) {
+        if (loggedInUser.getRoles().contains(roleService.getRoleByName("STUDENT"))) {
             courseService.addStudentToCourse(courseId, loggedInUser.getUserId());
         }
 
@@ -103,7 +104,7 @@ public class CourseController {
     public String unenrollFromCourse(@PathVariable Long courseId, Principal principal) throws ServiceException {
         User loggedInUser = userService.findByUsername(principal.getName());
 
-        if (loggedInUser instanceof Student) {
+        if (loggedInUser.getRoles().contains(roleService.getRoleByName("STUDENT"))) {
             courseService.removeStudentFromCourse(courseId, loggedInUser.getUserId());
         }
 
@@ -144,7 +145,7 @@ public class CourseController {
 
     @GetMapping("/course-create")
     public String showCreateForm(Model model) {
-        model.addAttribute("course", CourseDto.createEmpty());
+       model.addAttribute("course", CourseDto.createEmpty());
         return "courses/course-create";
     }
 
