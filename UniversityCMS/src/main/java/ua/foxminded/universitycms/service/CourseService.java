@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Course;
@@ -20,10 +20,12 @@ public class CourseService {
     private final TeacherService teacherService;
     private final StudentService studentService;
 
+    @Transactional(readOnly = true)
     public List<Course> findAll() {
         return courseRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Course findById(Long id) throws ServiceException {
         return courseRepository.findById(id).orElseThrow(() -> new ServiceException("Course not found"));
     }
@@ -60,6 +62,7 @@ public class CourseService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Set<Student> getEnrolledStudents(Long courseId) throws ServiceException {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new ServiceException("Course not found"));
         return course.getStudents();

@@ -3,8 +3,8 @@ package ua.foxminded.universitycms.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Course;
@@ -18,6 +18,7 @@ public class TeacherService {
 	private final TeacherRepository teacherRepository;
 	private final CourseRepository courseRepository;
 
+	@Transactional(readOnly = true)
 	public List<Course> getAvailableCourses(Long teacherId) throws ServiceException {
 		Teacher teacher = teacherRepository.findById(teacherId)
 				.orElseThrow(() -> new ServiceException("Teacher not found"));
@@ -26,15 +27,18 @@ public class TeacherService {
 		return courses;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Teacher> findAll() {
 		return teacherRepository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Teacher findById(Long id) throws ServiceException {
 		return teacherRepository.findById(id)
 				.orElseThrow(() -> new ServiceException("Teacher not found"));
 	}
 
+	@Transactional(readOnly = true)
 	public List<Course> findCoursesByTeacher(Teacher teacher) {
 		return teacher.getCourses();
 	}

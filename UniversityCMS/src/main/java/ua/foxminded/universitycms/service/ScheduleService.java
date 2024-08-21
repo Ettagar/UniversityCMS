@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Classroom;
@@ -66,6 +66,7 @@ public class ScheduleService {
 	    return scheduleRepository.save(schedule);
 	}
 
+	@Transactional(readOnly = true)
 	public Set<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
         Set<Schedule> schedules = new HashSet<>(scheduleRepository.findAllByLessonStartBetween(startDate, endDate));
 

@@ -31,7 +31,7 @@ public class DefaultUsersGeneratorService {
     private final RoleService roleService;
     private final GroupService groupService;
     private final CourseService courseService;
-    
+
     @Transactional
     public void generate() throws ServiceException {
         log.info("Creating default users...");

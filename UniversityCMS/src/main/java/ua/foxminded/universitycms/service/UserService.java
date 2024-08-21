@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Role;
@@ -25,14 +25,17 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	@Transactional(readOnly = true)
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public User findById(Long id) throws ServiceException {
 		return userRepository.findById(id).orElseThrow(() -> new ServiceException("User not found"));
 	}
 
+	@Transactional(readOnly = true)
 	public User findByUsername(String name) throws ServiceException {
 		return userRepository.findByUsername(name).orElseThrow(() -> new ServiceException("User not found"));
 	}
