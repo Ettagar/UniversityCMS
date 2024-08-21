@@ -20,7 +20,7 @@
                 <textarea class="form-control" id="courseDescription" th:field="*{courseDescription}" rows="3" required></textarea>
             </div>
 
-            <h3>Assigned Teachers</h3>
+         	<h3 th:text="'Assigned Teachers (' + ${#lists.size(course.teachers)} + ')'">Assigned Teachers</h3>
             <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
@@ -47,7 +47,7 @@
             </table>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeacherModal">Add Teacher</button>
 
-            <h3>Enrolled Students</h3>
+            <h3 th:text="'Enrolled Students (' + ${#lists.size(course.students)} + ')'">Enrolled Students</h3>
             <table class="table table-bordered mt-3">
                 <thead>
                     <tr>

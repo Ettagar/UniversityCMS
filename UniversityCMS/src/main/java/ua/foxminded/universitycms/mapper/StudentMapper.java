@@ -22,6 +22,7 @@ public class StudentMapper {
 				student.getPerson().getFirstName(),
 				student.getPerson().getLastName(),
                 student.getGroup().getGroupName(),
+                student.getPerson().getEmail(),
 				student.getCourses().stream()
                     .map(Course::getCourseName)
                     .toList());

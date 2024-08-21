@@ -44,7 +44,8 @@
 						<th>User ID</th>
 						<th>First Name</th>
 						<th>Last Name</th>
-						<th>Actions</th>
+						<th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+							Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -52,9 +53,8 @@
 						<td th:text="${teacher.userId}"></td>
 						<td th:text="${teacher.firstName}"></td>
 						<td th:text="${teacher.lastName}"></td>
-						<td>
-							<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" 
-							th:href="@{/teachers/{id}(id=${teacher.userId}, returnUrl=${returnUrl})}" 
+						<td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+							<a th:href="@{/teachers/{id}(id=${teacher.userId}, returnUrl=${returnUrl})}" 
 							class="btn btn-primary">View</a>
 						</td>
 					</tr>

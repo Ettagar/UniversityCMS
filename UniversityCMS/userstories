@@ -22,8 +22,8 @@ User can select a course to view details
 User can enroll in the selected course
 System updates the CourseEnrollment with the student's enrollment
 
-Admin can add a new course flow:
-Given user is logged on as Admin
+Admin and Registrar can add a new course flow:
+Given user is logged on as Admin or Registrar
 User can see and navigate to Manage Courses menu
 User can click on Add New Course
 User can fill in the course details (courseName, courseDescription, etc.)
@@ -50,3 +50,13 @@ Student can view their schedule flow:
 Given user is logged on as Student
 User can see and navigate to My Schedule menu
 User should see their own schedule according to the selected date/range filter
+
+Registrar can view and edit groups members:
+Given user is logged on as Registrar
+User can see and navigate to Groups\All Groups menu
+User can modify groups members(students)
+
+Student can view their group members:
+Given user is logged on as Student
+User can see and navigate to My Group menu
+User can see students within his group

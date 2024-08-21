@@ -27,7 +27,8 @@
                     <td th:text="${#lists.size(course.students)}"></td>
                     <td th:text="${#lists.size(course.teachers)}"></td>
                     <td>
-                        <a th:href="@{/courses/{id}(id=${course.courseId})}" class="btn btn-primary">View</a>
+                        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                        	th:href="@{/courses/{id}(id=${course.courseId})}" class="btn btn-primary">View</a>
                         <a th:href="@{/courses/edit/{id}(id=${course.courseId})}" class="btn btn-secondary">Edit</a>
                     </td>
                 </tr>

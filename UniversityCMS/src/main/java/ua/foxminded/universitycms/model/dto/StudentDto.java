@@ -7,6 +7,7 @@ public record StudentDto (
 	String firstName,
 	String lastName,
 	String groupName,
+	String email,
 	List<String> courses
 ) {
 }
