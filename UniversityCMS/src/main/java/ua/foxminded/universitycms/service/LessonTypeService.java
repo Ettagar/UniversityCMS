@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.LessonType;
 import ua.foxminded.universitycms.repository.LessonTypeRepository;
 
@@ -18,4 +19,10 @@ public class LessonTypeService {
     public List<LessonType> findAll() {
         return lessonTypeRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+    public LessonType findById(Long lessonTypeId) throws ServiceException {
+		return lessonTypeRepository.findById(lessonTypeId)
+				.orElseThrow(() -> new ServiceException("Classrom not found"));
+	}
 }

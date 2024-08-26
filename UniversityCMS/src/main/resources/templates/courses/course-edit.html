@@ -21,9 +21,9 @@
             </div>
 
          	<h3 th:text="'Assigned Teachers (' + ${#lists.size(course.teachers)} + ')'">Assigned Teachers</h3>
-            <table class="table table-bordered mt-3">
+            <table class="table table-hover table-bordered mt-3">
                 <thead>
-                    <tr>
+                    <tr class="table-light">
                     	<th>User ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
@@ -48,9 +48,9 @@
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeacherModal">Add Teacher</button>
 
             <h3 th:text="'Enrolled Students (' + ${#lists.size(course.students)} + ')'">Enrolled Students</h3>
-            <table class="table table-bordered mt-3">
+            <table class="table table-hover table-bordered mt-3">
                 <thead>
-                    <tr>
+                    <tr class="table-light">
                     	<th>User ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>

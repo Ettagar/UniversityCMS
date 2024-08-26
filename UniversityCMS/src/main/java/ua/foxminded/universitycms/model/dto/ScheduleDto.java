@@ -20,12 +20,12 @@ public record ScheduleDto(
 	public static ScheduleDto createEmpty() {
 		return new ScheduleDto(
 			null,  // scheduleId
-			null,  // course
-			null,  // teacher
-			null,  // classroom
+			CourseDto.createEmpty(),  // course
+			TeacherDto.createEmpty(),  // teacher
+			new Classroom(),  // classroom
 			null,  // lessonStart
 			null,  // lessonEnd
-			null,  // lessonType
+			new LessonType(),  // lessonType
 			List.of()  // students
 		);
 	}

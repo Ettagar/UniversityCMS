@@ -1,7 +1,8 @@
 package ua.foxminded.universitycms.service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -9,66 +10,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
+import ua.foxminded.universitycms.mapper.ClassroomMapper;
 import ua.foxminded.universitycms.model.Classroom;
-import ua.foxminded.universitycms.model.Course;
-import ua.foxminded.universitycms.model.LessonType;
 import ua.foxminded.universitycms.model.Schedule;
-import ua.foxminded.universitycms.model.Student;
-import ua.foxminded.universitycms.model.Teacher;
+import ua.foxminded.universitycms.model.dto.ClassroomDto;
+import ua.foxminded.universitycms.model.dto.ScheduleDto;
 import ua.foxminded.universitycms.repository.ClassroomRepository;
-import ua.foxminded.universitycms.repository.CourseRepository;
-import ua.foxminded.universitycms.repository.LessonTypeRepository;
 import ua.foxminded.universitycms.repository.ScheduleRepository;
-import ua.foxminded.universitycms.repository.TeacherRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
 	private final ScheduleRepository scheduleRepository;
-	private final CourseRepository courseRepository;
-	private final TeacherRepository teacherRepository;
 	private final ClassroomRepository classroomRepository;
-	private final LessonTypeRepository lessonTypeRepository;
-
-
-	public Schedule createSchedule(Schedule schedule) throws ServiceException {
-		return createSchedule(
-				schedule.getCourse().getCourseId(),
-				schedule.getTeacher().getUserId(),
-				schedule.getClassroom().getClassroomId(),
-				schedule.getLessonType().getLessonTypeId(),
-				schedule.getLessonStart(),
-				schedule.getLessonEnd());
-	}
-
+	private final ClassroomMapper classroomMapper;
+	
 	@Transactional
-	public Schedule createSchedule(Long courseId, Long teacherId, Long classroomId, Long lessonTypeId,
-	                               LocalDateTime start, LocalDateTime end) throws ServiceException {
-	    Course course = courseRepository.findById(courseId)
-	            .orElseThrow(() -> new ServiceException("Course not found"));
-	    Teacher teacher = teacherRepository.findById(teacherId)
-	            .orElseThrow(() -> new ServiceException("Teacher not found"));
-	    Classroom classroom = classroomRepository.findById(classroomId)
-	            .orElseThrow(() -> new ServiceException("Classroom not found"));
-	    LessonType lessonType = lessonTypeRepository.findById(lessonTypeId)
-	            .orElseThrow(() -> new ServiceException("LessonType not found"));
-
-	    Set<Student> students = course.getStudents();
-
-	    Schedule schedule = new Schedule();
-	    schedule.setCourse(course);
-	    schedule.setTeacher(teacher);
-	    schedule.setClassroom(classroom);
-	    schedule.setLessonStart(start);
-	    schedule.setLessonEnd(end);
-	    schedule.setLessonType(lessonType);
-	    schedule.setStudents(students);
-	    return scheduleRepository.save(schedule);
+	public void addSchedule(Schedule schedule) {
+		 scheduleRepository.save(schedule);		
 	}
 
 	@Transactional(readOnly = true)
-	public Set<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
-        Set<Schedule> schedules = new HashSet<>(scheduleRepository.findAllByLessonStartBetween(startDate, endDate));
+	public List<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAllByLessonStartBetween(startDate, endDate));
 
         if (teacherId != null) {
             schedules.retainAll(scheduleRepository.findByTeacherIdAndLessonStartBetween(teacherId, startDate, endDate));
@@ -102,4 +66,10 @@ public class ScheduleService {
 		return scheduleRepository.findById(scheduleId)
 				.orElseThrow(() -> new ServiceException("Schedule not found"));
 	}
+	
+	 @Transactional(readOnly = true)
+	    public List<ClassroomDto> getAllClassroomsWithOccupancy(List<ScheduleDto> schedules) {
+	        List<Classroom> classrooms = classroomRepository.findAll();
+	        return classroomMapper.toDto(classrooms, schedules);
+	    }
 }

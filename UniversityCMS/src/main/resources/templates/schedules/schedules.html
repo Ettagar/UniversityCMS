@@ -58,25 +58,31 @@
             <a class="btn btn-success" th:href="@{/schedules/schedule-create}">Create Schedule</a>
         </div>
 
-        <table class="table table-striped">
+        <table class="table table-hover table-bordered mt-3">
             <thead>
-            <tr>
+            <tr class="table-light">
                 <th>Course</th>
                 <th>Teacher</th>
                 <th>Classroom</th>
                 <th>Lesson Type</th>
                 <th>Start Time</th>
                 <th>End Time</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="schedule : ${schedules}">
                 <td th:text="${schedule.course.courseName}"></td>
-                <td th:text="${schedule.teacher.person.firstName} + ' ' + ${schedule.teacher.person.lastName}"></td>
+                <td th:text="${schedule.teacher.firstName} + ' ' + ${schedule.teacher.lastName}"></td>
                 <td th:text="${schedule.classroom.number}"></td>
                 <td th:text="${schedule.lessonType.name}"></td>
-                <td th:text="${#dates.format(schedule.lessonStart.toLocalDateTime(), 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${#dates.format(schedule.lessonEnd.toLocalDateTime(), 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(schedule.lessonStart, 'yyyy-MM-dd HH:mm')}"></td>
+				<td th:text="${#temporals.format(schedule.lessonEnd, 'yyyy-MM-dd HH:mm')}"></td>
+				<td>
+                	<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                    	th:href="@{/schedules/{id}(id=${schedule.scheduleId})}" class="btn btn-primary">View</a>
+                	<a th:href="@{/scheduless/edit/{id}(id=${schedule.scheduleId})}" class="btn btn-secondary">Edit</a>
+                </td>
             </tr>
             </tbody>
         </table>

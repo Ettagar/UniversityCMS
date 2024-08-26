@@ -41,7 +41,7 @@
                         Groups
                     </a>
                         <ul class="dropdown-menu" aria-labelledby="groupsDropdown">
-                        <li sec:authorize="hasAnyRole('ROLE_REGISTRAR', 'ROLE_ADMIN')">
+                        <li sec:authorize="hasAnyRole('ROLE_REGISTRAR', 'ROLE_ADMIN', 'ROLE_TEACHER')">
                         	<a class="dropdown-item" th:href="@{/groups}">All Groups</a>
                         </li>
                         <li sec:authorize="hasAnyRole('ROLE_STUDENT')">

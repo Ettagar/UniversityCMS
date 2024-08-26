@@ -1,7 +1,6 @@
 package ua.foxminded.universitycms.service;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,12 +62,12 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public Set<Student> getEnrolledStudents(Long courseId) throws ServiceException {
+    public List<Student> getEnrolledStudents(Long courseId) throws ServiceException {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new ServiceException("Course not found"));
         return course.getStudents();
     }
 
-    public Set<Teacher> getAssignedTeachers(Long courseId) throws ServiceException {
+    public List<Teacher> getAssignedTeachers(Long courseId) throws ServiceException {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new ServiceException("Course not found"));
         return course.getTeachers();
     }

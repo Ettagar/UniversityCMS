@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.model.Classroom;
 import ua.foxminded.universitycms.repository.ClassroomRepository;
 
@@ -18,4 +19,10 @@ public class ClassroomService {
     public List<Classroom> findAll() {
         return classroomRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+	public Classroom findById(Long classroomId) throws ServiceException {
+		return classroomRepository.findById(classroomId)
+				.orElseThrow(() -> new ServiceException("Classrom not found"));
+	}
 }

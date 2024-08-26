@@ -1,8 +1,8 @@
 package ua.foxminded.universitycms.model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,5 +54,5 @@ public class Schedule {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
 			CascadeType.REFRESH })
 	@JoinTable(name = "schedule_student", joinColumns = @JoinColumn(name = "schedule_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-	private Set<Student> students = new HashSet<>();
+	private List<Student> students = new ArrayList<>();
 }

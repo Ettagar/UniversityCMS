@@ -151,8 +151,7 @@ public class CourseController {
 
     @PostMapping("/course-create")
     public String saveCourse(@ModelAttribute("course") CourseDto courseDto) throws ServiceException {
-        Course course = courseMapper.toModel(courseDto);
-        courseService.addCourse(course);
+        courseService.addCourse(courseMapper.toModel(courseDto));
         return "redirect:/courses";
     }
 

@@ -8,4 +8,11 @@ public record TeacherDto (
     String lastName,
     List<String> courses
 ) {
+	public static TeacherDto createEmpty() {
+		return new TeacherDto(
+				null,	//userId
+				"",		//firstName
+				"", 	//lastName
+				List.of());		//courses
+	}	
 }

@@ -3,10 +3,7 @@ package ua.foxminded.universitycms.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.universitycms.exception.ServiceException;
@@ -28,7 +26,7 @@ import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
 import ua.foxminded.universitycms.model.Classroom;
 import ua.foxminded.universitycms.model.LessonType;
-import ua.foxminded.universitycms.model.Schedule;
+import ua.foxminded.universitycms.model.dto.ClassroomDto;
 import ua.foxminded.universitycms.model.dto.CourseDto;
 import ua.foxminded.universitycms.model.dto.ScheduleDto;
 import ua.foxminded.universitycms.model.dto.StudentDto;
@@ -61,10 +59,7 @@ public class ScheduleController {
 
     @GetMapping("/schedule-create")
     public String showCreateForm(Model model) {
-        List<CourseDto> courses = courseService.findAll()
-            .stream()
-            .map(courseMapper::toDto)
-            .toList();
+        List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
         List<Classroom> classrooms = classroomService.findAll();
         List<LessonType> lessonTypes = lessonTypeService.findAll();
 
@@ -78,23 +73,11 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedule-create")
-    public String createSchedule(@ModelAttribute ScheduleDto scheduleDto, Model model) {
-        try {
-            Schedule createdSchedule = scheduleService.createSchedule(
-               scheduleMapper.toModel(scheduleDto)
-            );
-
-            model.addAttribute("successMessage", "Schedule created successfully");
-            model.addAttribute("schedule", createdSchedule);
-        } catch (ServiceException e) {
-            log.error(e.getMessage(), e);
-            model.addAttribute("errorMessage", e.getMessage());
-            return "schedules/schedule-create";
-        }
-
-        return "redirect:/schedules";
+    public String createSchedule(@ModelAttribute("schedule") ScheduleDto scheduleDto) throws ServiceException {
+    	scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));
+    	return "redirect:/schedules";
     }
-
+    
     @GetMapping
     public String listSchedules(@RequestParam(required = false) Long teacherId,
                                 @RequestParam(required = false) Long studentId,
@@ -103,23 +86,19 @@ public class ScheduleController {
                                 @RequestParam(required = false) String endDate,
                                 Model model) {
 
-        LocalDateTime start = (startDate != null && !startDate.isEmpty()) ? LocalDateTime.parse(startDate, formatter) : LocalDateTime.now().minusMonths(1);
-        LocalDateTime end = (endDate != null && !endDate.isEmpty()) ? LocalDateTime.parse(endDate, formatter) : LocalDateTime.now().plusMonths(1);
+        LocalDateTime start = (startDate != null && !startDate.isEmpty()) 
+        			? LocalDateTime.parse(startDate, formatter) : LocalDateTime.now().minusMonths(1);
+        LocalDateTime end = (endDate != null && !endDate.isEmpty()) 
+        			? LocalDateTime.parse(endDate, formatter) : LocalDateTime.now().plusMonths(1);
 
-        Set<ScheduleDto> schedules = scheduleService.findSchedules(teacherId, studentId, classroomId, start, end)
-            .stream()
-            .map(scheduleMapper::toDto)
-            .collect(Collectors.toSet());
-        List<TeacherDto> teachers = teacherService.findAll()
-            .stream()
-            .map(teacherMapper::toDto)
-            .toList();
-        List<StudentDto> students = studentService.findAll()
-            .stream()
-            .map(studentMapper::toDto)
-            .toList();
-        List<Classroom> classrooms = classroomService.findAll();
-
+        List<ScheduleDto> schedules = scheduleMapper.toDto(
+        		scheduleService.findSchedules(teacherId, studentId, classroomId, start, end));
+        List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
+        List<TeacherDto> teachers = teacherMapper.toDto(teacherService.findAll());
+        List<StudentDto> students = studentMapper.toDto(studentService.findAll());
+        List<Classroom> classrooms = classroomService.findAll();	
+        
+        model.addAttribute("courses", courses);
         model.addAttribute("schedules", schedules);
         model.addAttribute("teachers", teachers);
         model.addAttribute("students", students);
@@ -132,22 +111,35 @@ public class ScheduleController {
 
         return "schedules/schedules";
     }
-
-    @GetMapping("schedules/course/{courseId}/teachers")
-    @ResponseBody
-    public ResponseEntity<Set<TeacherDto>> getTeachersByCourse(@PathVariable Long courseId) {
-        Set<TeacherDto> teacherDtos;
+    
+    @GetMapping("/{id}")
+    public String viewSchedule(@PathVariable Long id, Model model, HttpServletResponse response) throws ServiceException {
         try {
-            teacherDtos = courseService.getAssignedTeachers(courseId)
-                .stream()
-                .map(teacherMapper::toDto)
-                .collect(Collectors.toSet());
+        	ScheduleDto schedule = scheduleMapper.toDto(scheduleService.findById(id));
+            model.addAttribute("schedule", schedule);
+            return "schedules/schedule-detail";
         } catch (ServiceException e) {
-            log.error("Error fetching teachers for courseId: {}", courseId, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error/404";
         }
-
-        return ResponseEntity.ok(teacherDtos);
+    }
+    
+    @GetMapping("/course/{courseId}/teachers")
+    @ResponseBody
+    public ResponseEntity<List<TeacherDto>> getTeachersByCourse(@PathVariable Long courseId) throws ServiceException {
+        List<TeacherDto>  teachers = teacherMapper.toDto(courseService.getAssignedTeachers(courseId));
+        return ResponseEntity.ok(teachers);
+    }
+    
+    @GetMapping("/getClassrooms")
+    public String getClassrooms(@RequestParam("startDate") LocalDateTime startDate,
+                                @RequestParam("endDate") LocalDateTime endDate,
+                                Model model) {
+        List<ScheduleDto> schedules = scheduleMapper.toDto(scheduleService.findSchedules(null, null, null, startDate, endDate));
+        List<ClassroomDto> classroom = scheduleService.getAllClassroomsWithOccupancy(schedules);
+        model.addAttribute("classrooms", classroom);
+        return "your-template";
     }
 
     @ExceptionHandler(Exception.class)
