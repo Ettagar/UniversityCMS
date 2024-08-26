@@ -74,7 +74,7 @@ public class GroupController {
 	
 	@PostMapping("/changeGroup")
     public String changeStudentGroup(@RequestParam("studentId") Long studentId, @RequestParam("groupId") Long groupId, 
-                                     Model model) {
+                                     Model model,  HttpServletResponse response) {
         try {
             Student student = studentService.findById(studentId);
             Group newGroup = groupService.findById(groupId);
@@ -85,6 +85,7 @@ public class GroupController {
             return "redirect:/groups/" + newGroup.getGroupId();
         } catch (ServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return "error/404";
         }
     }

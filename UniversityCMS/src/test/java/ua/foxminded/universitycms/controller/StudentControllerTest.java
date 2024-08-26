@@ -35,7 +35,6 @@ class StudentControllerTest {
 	@MockBean
 	private StudentService studentService;
 
-
 	private StudentTestData studentTestData;
 
 	@BeforeEach

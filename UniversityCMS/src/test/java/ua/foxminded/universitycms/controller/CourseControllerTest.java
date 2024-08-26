@@ -20,8 +20,10 @@ import ua.foxminded.universitycms.mapper.CourseMapper;
 import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
 import ua.foxminded.universitycms.service.CourseService;
+import ua.foxminded.universitycms.service.RoleService;
 import ua.foxminded.universitycms.service.StudentService;
 import ua.foxminded.universitycms.service.TeacherService;
+import ua.foxminded.universitycms.service.UserService;
 import ua.foxminded.universitycms.util.CourseTestData;
 
 @ActiveProfiles("test")
@@ -49,6 +51,15 @@ class CourseControllerTest {
 
 	@MockBean
 	private TeacherMapper teacherMapper;
+	
+	@MockBean
+	private UserService userService;
+	
+	@MockBean
+	private RoleService roleService;
+	
+	@MockBean
+	private UserTools userTools;
 
 	private CourseTestData courseTestData;
 
@@ -70,7 +81,7 @@ class CourseControllerTest {
 				.andExpect(model().attribute("courses", courseMapper.toDto(courseTestData.courses)));
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"})
+	@WithMockUser(username = "spring", roles = {"USER"}	)
 	@Test
 	void testViewCourse() throws Exception {
 		when(courseService.findById(1L)).thenReturn(courseTestData.courses.get(0));
