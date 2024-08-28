@@ -51,13 +51,13 @@ class CourseControllerTest {
 
 	@MockBean
 	private TeacherMapper teacherMapper;
-	
+
 	@MockBean
 	private UserService userService;
-	
+
 	@MockBean
 	private RoleService roleService;
-	
+
 	@MockBean
 	private UserTools userTools;
 

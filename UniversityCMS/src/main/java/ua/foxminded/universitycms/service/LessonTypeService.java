@@ -19,7 +19,7 @@ public class LessonTypeService {
     public List<LessonType> findAll() {
         return lessonTypeRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public LessonType findById(Long lessonTypeId) throws ServiceException {
 		return lessonTypeRepository.findById(lessonTypeId)

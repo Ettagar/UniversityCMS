@@ -14,5 +14,5 @@ public record TeacherDto (
 				"",		//firstName
 				"", 	//lastName
 				List.of());		//courses
-	}	
+	}
 }

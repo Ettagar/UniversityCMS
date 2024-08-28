@@ -19,7 +19,7 @@ public class ClassroomService {
     public List<Classroom> findAll() {
         return classroomRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
 	public Classroom findById(Long classroomId) throws ServiceException {
 		return classroomRepository.findById(classroomId)

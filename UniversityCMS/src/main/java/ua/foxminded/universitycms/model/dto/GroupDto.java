@@ -7,4 +7,12 @@ public record GroupDto (
 	String groupName,
 	List<StudentDto> students
 ) {
+
+	public static GroupDto createEmpty() {
+		return new GroupDto(
+			null, // groupId
+			null, // groupName
+			List.of()	// students
+		);
+	}
 }

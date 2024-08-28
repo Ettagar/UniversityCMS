@@ -77,7 +77,7 @@ public class ScheduleController {
     	scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));
     	return "redirect:/schedules";
     }
-    
+
     @GetMapping
     public String listSchedules(@RequestParam(required = false) Long teacherId,
                                 @RequestParam(required = false) Long studentId,
@@ -86,9 +86,9 @@ public class ScheduleController {
                                 @RequestParam(required = false) String endDate,
                                 Model model) {
 
-        LocalDateTime start = (startDate != null && !startDate.isEmpty()) 
+        LocalDateTime start = (startDate != null && !startDate.isEmpty())
         			? LocalDateTime.parse(startDate, formatter) : LocalDateTime.now().minusMonths(1);
-        LocalDateTime end = (endDate != null && !endDate.isEmpty()) 
+        LocalDateTime end = (endDate != null && !endDate.isEmpty())
         			? LocalDateTime.parse(endDate, formatter) : LocalDateTime.now().plusMonths(1);
 
         List<ScheduleDto> schedules = scheduleMapper.toDto(
@@ -96,8 +96,8 @@ public class ScheduleController {
         List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
         List<TeacherDto> teachers = teacherMapper.toDto(teacherService.findAll());
         List<StudentDto> students = studentMapper.toDto(studentService.findAll());
-        List<Classroom> classrooms = classroomService.findAll();	
-        
+        List<Classroom> classrooms = classroomService.findAll();
+
         model.addAttribute("courses", courses);
         model.addAttribute("schedules", schedules);
         model.addAttribute("teachers", teachers);
@@ -111,7 +111,7 @@ public class ScheduleController {
 
         return "schedules/schedules";
     }
-    
+
     @GetMapping("/{id}")
     public String viewSchedule(@PathVariable Long id, Model model, HttpServletResponse response) throws ServiceException {
         try {
@@ -124,14 +124,14 @@ public class ScheduleController {
             return "error/404";
         }
     }
-    
+
     @GetMapping("/course/{courseId}/teachers")
     @ResponseBody
     public ResponseEntity<List<TeacherDto>> getTeachersByCourse(@PathVariable Long courseId) throws ServiceException {
         List<TeacherDto>  teachers = teacherMapper.toDto(courseService.getAssignedTeachers(courseId));
         return ResponseEntity.ok(teachers);
     }
-    
+
     @GetMapping("/getClassrooms")
     public String getClassrooms(@RequestParam("startDate") LocalDateTime startDate,
                                 @RequestParam("endDate") LocalDateTime endDate,

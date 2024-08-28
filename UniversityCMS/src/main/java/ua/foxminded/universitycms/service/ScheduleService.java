@@ -24,10 +24,10 @@ public class ScheduleService {
 	private final ScheduleRepository scheduleRepository;
 	private final ClassroomRepository classroomRepository;
 	private final ClassroomMapper classroomMapper;
-	
+
 	@Transactional
 	public void addSchedule(Schedule schedule) {
-		 scheduleRepository.save(schedule);		
+		 scheduleRepository.save(schedule);
 	}
 
 	@Transactional(readOnly = true)
@@ -66,7 +66,7 @@ public class ScheduleService {
 		return scheduleRepository.findById(scheduleId)
 				.orElseThrow(() -> new ServiceException("Schedule not found"));
 	}
-	
+
 	 @Transactional(readOnly = true)
 	    public List<ClassroomDto> getAllClassroomsWithOccupancy(List<ScheduleDto> schedules) {
 	        List<Classroom> classrooms = classroomRepository.findAll();

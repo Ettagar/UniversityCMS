@@ -25,7 +25,7 @@ public class ScheduleMapper {
 	private final ScheduleService scheduleService;
 	private final CourseService courseService;
 	private final TeacherService teacherService;
-	
+
 	@Transactional(readOnly = true)
 	public ScheduleDto toDto(Schedule schedule) {
 		return new ScheduleDto(
@@ -40,7 +40,7 @@ public class ScheduleMapper {
 					.map(studentMapper::toDto)
 					.toList());
 	}
-	
+
 	@Transactional(readOnly = true)
     public Schedule toModel(ScheduleDto scheduleDto) throws ServiceException {
         Schedule schedule;
@@ -49,7 +49,7 @@ public class ScheduleMapper {
             schedule = scheduleService.findById(scheduleDto.scheduleId());
             return schedule;
         }
-        
+
         schedule = new Schedule();
         Course course = courseService.findById(scheduleDto.course().courseId());
         schedule.setCourse(course);

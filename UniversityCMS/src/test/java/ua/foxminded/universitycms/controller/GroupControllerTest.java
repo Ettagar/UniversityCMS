@@ -54,18 +54,18 @@ class GroupControllerTest {
 
     @Autowired
     private GroupMapper groupMapper;
-    
+
     private UserTestData userTestData = new UserTestData();
     private PersonTestData personTestData = new PersonTestData();
     private GroupTestData groupTestData = new GroupTestData();
     private StudentTestData studentTestData = new StudentTestData();
-    
+
     @BeforeEach
     void setup() {
     	personTestData.setUp();
     	userTestData.setUp(personTestData);
 		groupTestData.setUp();
-		studentTestData.setUp();		
+		studentTestData.setUp();
     }
 
     @WithMockUser(username = "spring", roles = {"USER"})

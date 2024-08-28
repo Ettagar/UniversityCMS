@@ -15,7 +15,7 @@ import ua.foxminded.universitycms.service.ClassroomService;
 @Component
 @RequiredArgsConstructor
 public class ClassroomMapper {
-	
+
 	private final ClassroomService classroomService;
 
     public ClassroomDto toDto(Classroom classroom, List<ScheduleDto> schedules) {

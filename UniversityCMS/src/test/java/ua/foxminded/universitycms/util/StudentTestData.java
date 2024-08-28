@@ -9,7 +9,7 @@ public class StudentTestData {
 	private CourseTestData courseTestData = new CourseTestData();
 	private PersonTestData personTestData = new PersonTestData();
 	private GroupTestData groupTestData = new GroupTestData();
-	
+
 	public List<Student> students;
 
 	public void setUp() {

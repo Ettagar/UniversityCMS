@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +15,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.mapper.GroupMapper;
+import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.model.Group;
 import ua.foxminded.universitycms.model.Student;
 import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.model.dto.GroupDto;
+import ua.foxminded.universitycms.model.dto.StudentDto;
 import ua.foxminded.universitycms.service.GroupService;
 import ua.foxminded.universitycms.service.RoleService;
 import ua.foxminded.universitycms.service.StudentService;
@@ -26,11 +29,12 @@ import ua.foxminded.universitycms.service.StudentService;
 @RequestMapping("/groups")
 @RequiredArgsConstructor
 public class GroupController {
-	
+
 	private final StudentService studentService;
 	private final GroupService groupService;
     private final RoleService roleService;
     private final GroupMapper groupMapper;
+    private final StudentMapper studentMapper;
     private final UserTools userTools;
 
 	@GetMapping
@@ -42,7 +46,10 @@ public class GroupController {
 
 	@GetMapping("/{id}")
 	public String viewGroup(@PathVariable Long id, Model model, HttpServletResponse response) {
+
 		try {
+			List <StudentDto> ungroupedStudents = studentMapper.toDto(groupService.findById(1L).getStudents());
+			model.addAttribute("ungroupedStudents", ungroupedStudents);
 			GroupDto group = groupMapper.toDto(groupService.findById(id));
 			model.addAttribute("group", group);
 			List<Group> groups = groupService.findAll();
@@ -54,7 +61,7 @@ public class GroupController {
 			return ("error/404");
 		}
 	}
-	
+
 	@GetMapping("/my-group")
 	public String viewMyGroup(Model model) throws ServiceException {
 	    User loggedInUser = userTools.getLoggedInUser();
@@ -71,9 +78,9 @@ public class GroupController {
 	        return "error/unauthorized";
 	    }
 	}
-	
+
 	@PostMapping("/changeGroup")
-    public String changeStudentGroup(@RequestParam("studentId") Long studentId, @RequestParam("groupId") Long groupId, 
+    public String changeStudentGroup(@RequestParam("studentId") Long studentId, @RequestParam("groupId") Long groupId,
                                      Model model,  HttpServletResponse response) {
         try {
             Student student = studentService.findById(studentId);
@@ -81,7 +88,7 @@ public class GroupController {
 
             student.setGroup(newGroup);
             studentService.addStudent(student);
-            
+
             return "redirect:/groups/" + newGroup.getGroupId();
         } catch (ServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -89,4 +96,16 @@ public class GroupController {
             return "error/404";
         }
     }
+
+	@GetMapping("/group-create")
+	public String createGroup(Model model) {
+	    model.addAttribute("group", GroupDto.createEmpty());
+	    return "groups/group-create";
+	}
+
+	@PostMapping("/group-create")
+	public String saveGroup(@ModelAttribute("group") GroupDto groupDto) throws ServiceException {
+		groupService.addGroup(groupMapper.toModel(groupDto));
+		return "redirect:/groups";
+	}
 }
