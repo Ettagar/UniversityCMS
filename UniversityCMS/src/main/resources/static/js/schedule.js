@@ -15,24 +15,26 @@ document.getElementById('course').addEventListener('change',
 				return response.json();
 			})
 			.then(data => {
-				var teacherSelect = document.getElementById('teacher');
+				const teacherSelect = document.getElementById('teacher');
 				teacherSelect.innerHTML = '';
 				if (data.length === 0) {
-					var option = document.createElement('option');
+					const option = document.createElement('option');
 					option.text = 'No teachers available';
 					option.disabled = true;
 					option.selected = true;
 					teacherSelect.appendChild(option);
 				} else {
 					data.forEach(function(teacher) {
-						var option = document.createElement('option');
+						const option = document.createElement('option');
 						option.value = teacher.userId;
 						if (!teacher.available) {
-							option.text = teacher.userId + " | " + teacher.firstName + ' ' + teacher.lastName + ' (BUSY)';
+							option.text = teacher.userId + " | " 
+								+ teacher.firstName + ' ' + teacher.lastName + ' (BUSY)';
 							option.style.color = 'gray';
 							option.disabled = true;
 						} else {
-							option.text = teacher.userId + " | " + teacher.firstName + ' ' + teacher.lastName;
+							option.text = teacher.userId + " | " 
+								+ teacher.firstName + ' ' + teacher.lastName;
 						}
 						teacherSelect.appendChild(option);
 					});
@@ -56,7 +58,7 @@ function setLessonDuration(minutes) {
 	const endTime = new Date(startTime.getTime() + minutes * 60000);
 
 	const offset = startTime.getTimezoneOffset() * 60000;
-	const localEndTime = new Date(endTime.getTime() - offset); 
+	const localEndTime = new Date(endTime.getTime() - offset);
 
 	endInput.value = localEndTime.toISOString().slice(0, 16);
 	endInput.dispatchEvent(new Event('change'));
@@ -77,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			fetchClassrooms(startTime.value, endTime.value);
 		} else {
 			classroom.disabled = true;
-			createButton.disabled = true; 
+			createButton.disabled = true;
 		}
 	}
 
@@ -85,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	endTime.addEventListener('change', checkTimeFields);
 
 	function fetchClassrooms(startDate, endDate) {
-		
+
 		fetch(`/schedules/getClassrooms?startDate=${startDate}&endDate=${endDate}`)
 			.then(response => response.json())
 			.then(classrooms => {
@@ -113,7 +115,8 @@ document.addEventListener('DOMContentLoaded', function() {
 					${cls.teacher.lastName}, ${formatDate(cls.startTime)} 
 					to ${formatDate(cls.endTime)}`;
 				option.classList.add('text-danger');
-				option.disabled = true; 
+				option.disabled = true;
+			} else {
 				option.textContent = `${cls.number} - Available`;
 			}
 
@@ -124,8 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function validateForm() {
-		const allFieldsValid = startTime.value && endTime.value 
-			&& teacherSelect.value && !teacherSelect.disabled 
+		const allFieldsValid = startTime.value && endTime.value
+			&& teacherSelect.value && !teacherSelect.disabled
 			&& classroom.value && !classroom.disabled;
 		createButton.disabled = !allFieldsValid;
 	}

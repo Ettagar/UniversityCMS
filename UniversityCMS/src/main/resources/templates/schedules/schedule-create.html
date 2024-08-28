@@ -71,7 +71,8 @@
 						</select>
 					</div>
 					<div class="col-md-3">
-						<label for="classroom" class="form-label">Classroom</label> <select
+						<label for="classroom" class="form-label">Classroom</label> 
+						<select
 							class="form-select" id="classroom"
 							th:field="*{classroom.classroomId}" required>
 							<option th:each="classroom : ${classrooms}"

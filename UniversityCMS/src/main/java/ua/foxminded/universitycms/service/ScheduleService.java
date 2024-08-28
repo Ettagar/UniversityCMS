@@ -72,11 +72,4 @@ public class ScheduleService {
 	        List<Classroom> classrooms = classroomRepository.findAll();
 	        return classroomMapper.toDto(classrooms, schedules);
 	    }
-
-	@Transactional(readOnly = true)
-	public boolean isTeacherAvailable(Long teacherId, LocalDateTime startDate, LocalDateTime endDate) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
