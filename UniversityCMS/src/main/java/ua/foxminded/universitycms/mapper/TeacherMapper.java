@@ -24,7 +24,8 @@ public class TeacherMapper {
             teacher.getPerson().getLastName(),
 			teacher.getCourses().stream()
 				.map(Course::getCourseName)
-				.toList()
+				.toList(),
+			true
         );
     }
 

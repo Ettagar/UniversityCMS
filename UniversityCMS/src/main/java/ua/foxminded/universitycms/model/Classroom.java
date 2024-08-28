@@ -20,7 +20,7 @@ public class Classroom {
 	private Long classroomId;
 
 	@Column(name = "floor")
-	private int floor;
+	private Integer floor;
 
 	@Column(name = "number")
 	private String number;

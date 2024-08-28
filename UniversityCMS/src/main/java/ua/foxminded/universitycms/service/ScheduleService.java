@@ -32,16 +32,16 @@ public class ScheduleService {
 
 	@Transactional(readOnly = true)
 	public List<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
-        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAllByLessonStartBetween(startDate, endDate));
+        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAllByLessonBetween(startDate, endDate));
 
         if (teacherId != null) {
-            schedules.retainAll(scheduleRepository.findByTeacherIdAndLessonStartBetween(teacherId, startDate, endDate));
+            schedules.retainAll(scheduleRepository.findByTeacherIdAndLessonBetween(teacherId, startDate, endDate));
         }
         if (studentId != null) {
-            schedules.retainAll(scheduleRepository.findByStudentIdAndLessonStartBetween(studentId, startDate, endDate));
+            schedules.retainAll(scheduleRepository.findByStudentIdAndLessonBetween(studentId, startDate, endDate));
         }
         if (classroomId != null) {
-            schedules.retainAll(scheduleRepository.findByClassroomIdAndLessonStartBetween(classroomId, startDate, endDate));
+            schedules.retainAll(scheduleRepository.findByClassroomIdAndLessonBetween(classroomId, startDate, endDate));
         }
 
         return schedules;
@@ -55,11 +55,11 @@ public class ScheduleService {
 	}
 
 	public Set<Schedule> findSchedulesByStudent(Long studentId, LocalDateTime start, LocalDateTime end) {
-		return scheduleRepository.findByStudentIdAndLessonStartBetween(studentId, start, end);
+		return scheduleRepository.findByStudentIdAndLessonBetween(studentId, start, end);
 	}
 
 	public Set<Schedule> findSchedulesByTeacher(Long teacherId, LocalDateTime start, LocalDateTime end) {
-		return scheduleRepository.findByTeacherIdAndLessonStartBetween(teacherId, start, end);
+		return scheduleRepository.findByTeacherIdAndLessonBetween(teacherId, start, end);
 	}
 
 	public Schedule findById(Long scheduleId) throws ServiceException {
@@ -72,4 +72,11 @@ public class ScheduleService {
 	        List<Classroom> classrooms = classroomRepository.findAll();
 	        return classroomMapper.toDto(classrooms, schedules);
 	    }
+
+	@Transactional(readOnly = true)
+	public boolean isTeacherAvailable(Long teacherId, LocalDateTime startDate, LocalDateTime endDate) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -3,17 +3,20 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/main-layout}">
 <head>
-	<title>Group Details</title>
+<title>Group Details</title>
 </head>
 <body>
 	<main layout:fragment="content">
 		<div class="container">
 			<h1 class="mt-5" th:text="${group.groupName}">Group Name</h1>
-			<button class="btn btn-secondary mb-3"
-				onclick="window.history.back()">Back</button>	
-			<h2 class="mt-4" th:text="|Participants Students (${#lists.size(group.students)})|"></h2>
-			<a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal"
-   				th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'')')}">Add Student</a>
+			<a class="btn btn-secondary mb-3" th:href="@{/groups}">Back to
+				groups list</a>
+			<h2 class="mt-4"
+				th:text="|Participants Students (${#lists.size(group.students)})|"></h2>
+			<a href="#" class="btn btn-primary" data-bs-toggle="modal"
+				data-bs-target="#addStudentModal"
+				th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'')')}">Add
+				Student</a>
 
 			<table class="table table-hover table-bordered mt-3">
 				<thead>
@@ -41,9 +44,7 @@
 							<button type="button" class="btn btn-primary"
 								data-bs-toggle="modal"
 								th:data-bs-target="'#changeGroupModal' + ${student.userId}">
-								Change Group</button> 
-								
-								<!--Change group Modal -->
+								Change Group</button> <!--Change group Modal -->
 							<div th:id="'changeGroupModal' + ${student.userId}"
 								class="modal fade" tabindex="-1" role="dialog"
 								aria-labelledby="changeGroupModalLabel" aria-hidden="true">
@@ -83,33 +84,39 @@
 				</tbody>
 			</table>
 
-			<button class="btn btn-secondary mb-3"
-				onclick="window.history.back()">Back</button>
+			<a class="btn btn-secondary mb-3" th:href="@{/groups}">Back to
+				groups list</a>
 		</div>
-		
+
 		<!-- Add Student Modal -->
-    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form th:action="@{/groups/changeGroup}" method="post">
-                        <input type="hidden" name="groupId" th:value="${group.groupId}" />
-                        <div class="mb-3">
-                            <label for="studentSelect" class="form-label">Select Student</label>
-                            <select class="form-select" id="studentSelect" name="studentId">
-                                <option th:each="student : ${ungroupedStudents}" th:value="${student.userId}" th:text="${student.userId} + ' | ' + ${student.firstName} + ' ' + ${student.lastName} + ' | ' + ${student.groupName}"></option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Student</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="modal fade" id="addStudentModal" tabindex="-1"
+			aria-labelledby="addStudentModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form th:action="@{/groups/changeGroup}" method="post">
+							<input type="hidden" name="groupId" th:value="${group.groupId}" />
+							<div class="mb-3">
+								<label for="studentSelect" class="form-label">Select
+									Student</label> <select class="form-select" id="studentSelect"
+									name="studentId">
+									<option th:each="student : ${ungroupedStudents}"
+										th:value="${student.userId}"
+										th:text="${student.userId} + ' | ' + ${student.firstName} + ' ' + ${student.lastName} + ' | ' + ${student.groupName}"></option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary">Add
+								Student</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</main>
 </body>
 </html>

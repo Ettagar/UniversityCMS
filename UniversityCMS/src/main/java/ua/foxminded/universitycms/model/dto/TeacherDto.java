@@ -6,13 +6,15 @@ public record TeacherDto (
     Long userId,
     String firstName,
     String lastName,
-    List<String> courses
+    List<String> courses,
+    Boolean available
 ) {
 	public static TeacherDto createEmpty() {
 		return new TeacherDto(
 				null,	//userId
 				"",		//firstName
 				"", 	//lastName
-				List.of());		//courses
+				List.of(),	//courses
+				null);
 	}
 }

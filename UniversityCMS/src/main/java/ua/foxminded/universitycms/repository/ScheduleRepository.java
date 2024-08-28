@@ -13,18 +13,25 @@ import ua.foxminded.universitycms.model.Schedule;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-	@Query("SELECT s FROM Schedule s JOIN s.students st WHERE st.id = :studentId AND s.lessonStart BETWEEN :start AND :end")
-	Set<Schedule> findByStudentIdAndLessonStartBetween(@Param("studentId") Long studentId,
-			@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT s FROM Schedule s JOIN s.students st WHERE st.id = :studentId " +
+           "AND s.lessonStart < :end AND s.lessonEnd > :start")
+    Set<Schedule> findByStudentIdAndLessonBetween(@Param("studentId") Long studentId,
+                                                  @Param("start") LocalDateTime start,
+                                                  @Param("end") LocalDateTime end);
 
-	@Query("SELECT s FROM Schedule s WHERE s.teacher.id = :teacherId AND s.lessonStart BETWEEN :start AND :end")
-	Set<Schedule> findByTeacherIdAndLessonStartBetween(@Param("teacherId") Long teacherId,
-			@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT s FROM Schedule s WHERE s.teacher.id = :teacherId " +
+           "AND s.lessonStart < :end AND s.lessonEnd > :start")
+    Set<Schedule> findByTeacherIdAndLessonBetween(@Param("teacherId") Long teacherId,
+                                                  @Param("start") LocalDateTime start,
+                                                  @Param("end") LocalDateTime end);
 
-	 @Query("SELECT s FROM Schedule s WHERE s.classroom.id = :classroomId AND s.lessonStart BETWEEN :start AND :end")
-	 Set<Schedule> findByClassroomIdAndLessonStartBetween(@Param("classroomId") Long classroomId,
-			 @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT s FROM Schedule s WHERE s.classroom.id = :classroomId " +
+           "AND s.lessonStart < :end AND s.lessonEnd > :start")
+    Set<Schedule> findByClassroomIdAndLessonBetween(@Param("classroomId") Long classroomId,
+                                                    @Param("start") LocalDateTime start,
+                                                    @Param("end") LocalDateTime end);
 
-	 @Query("SELECT s FROM Schedule s WHERE s.lessonStart BETWEEN :start AND :end")
-	 Set<Schedule> findAllByLessonStartBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("SELECT s FROM Schedule s WHERE s.lessonStart < :end AND s.lessonEnd > :start")
+    Set<Schedule> findAllByLessonBetween(@Param("start") LocalDateTime start,
+                                         @Param("end") LocalDateTime end);
 }

@@ -20,9 +20,9 @@ public class ClassroomMapper {
 
     public ClassroomDto toDto(Classroom classroom, List<ScheduleDto> schedules) {
         return schedules.stream()
-            .filter(schedule -> schedule.classroom().getNumber().equals(classroom.getClassroomId()))
+            .filter(schedule -> schedule.classroom().getClassroomId().equals(classroom.getClassroomId()))
             .findFirst()
-            .map(schedule -> new ClassroomDto(
+            	.map(schedule -> new ClassroomDto(
                 classroom.getClassroomId(),
                 classroom.getNumber(),
                 classroom.getFloor(),

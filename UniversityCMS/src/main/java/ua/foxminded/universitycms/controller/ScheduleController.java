@@ -60,13 +60,12 @@ public class ScheduleController {
     @GetMapping("/schedule-create")
     public String showCreateForm(Model model) {
         List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
-        List<Classroom> classrooms = classroomService.findAll();
         List<LessonType> lessonTypes = lessonTypeService.findAll();
 
         model.addAttribute("schedule", ScheduleDto.createEmpty());
         model.addAttribute("courses", courses);
         model.addAttribute("teachers", List.of());
-        model.addAttribute("classrooms", classrooms);
+        model.addAttribute("classrooms", List.of());
         model.addAttribute("lessonTypes", lessonTypes);
 
         return "schedules/schedule-create";
@@ -117,34 +116,57 @@ public class ScheduleController {
         try {
         	ScheduleDto schedule = scheduleMapper.toDto(scheduleService.findById(id));
             model.addAttribute("schedule", schedule);
+
             return "schedules/schedule-detail";
         } catch (ServiceException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             model.addAttribute("errorMessage", e.getMessage());
+
             return "error/404";
         }
     }
 
     @GetMapping("/course/{courseId}/teachers")
     @ResponseBody
-    public ResponseEntity<List<TeacherDto>> getTeachersByCourse(@PathVariable Long courseId) throws ServiceException {
-        List<TeacherDto>  teachers = teacherMapper.toDto(courseService.getAssignedTeachers(courseId));
-        return ResponseEntity.ok(teachers);
+    public ResponseEntity<List<TeacherDto>> getTeachersByCourse(
+            @PathVariable Long courseId,
+            @RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate) throws ServiceException {
+
+        List<TeacherDto> teachers = teacherMapper.toDto(courseService.getAssignedTeachers(courseId));
+        List<TeacherDto> checkedTeachers = teachers.stream()
+                .map(teacher -> {
+                    boolean isAvailable = scheduleService.findSchedulesByTeacher(teacher.userId(), startDate, endDate)
+                    		.isEmpty();
+                    return new TeacherDto(
+                            teacher.userId(),
+                            teacher.firstName(),
+                            teacher.lastName(),
+                            teacher.courses(),
+                            isAvailable
+                    );
+                })
+                .toList();
+
+        return ResponseEntity.ok(checkedTeachers);
     }
 
     @GetMapping("/getClassrooms")
-    public String getClassrooms(@RequestParam("startDate") LocalDateTime startDate,
-                                @RequestParam("endDate") LocalDateTime endDate,
-                                Model model) {
+    @ResponseBody
+    public ResponseEntity<List<ClassroomDto>> getClassrooms(
+    		@RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate) {
+
         List<ScheduleDto> schedules = scheduleMapper.toDto(scheduleService.findSchedules(null, null, null, startDate, endDate));
-        List<ClassroomDto> classroom = scheduleService.getAllClassroomsWithOccupancy(schedules);
-        model.addAttribute("classrooms", classroom);
-        return "your-template";
+        List<ClassroomDto> classrooms = scheduleService.getAllClassroomsWithOccupancy(schedules);
+
+        return ResponseEntity.ok(classrooms);
     }
 
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
         model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
+
         return "error";
     }
 }
