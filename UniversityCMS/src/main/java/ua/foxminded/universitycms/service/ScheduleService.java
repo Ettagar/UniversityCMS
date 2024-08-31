@@ -1,10 +1,10 @@
 package ua.foxminded.universitycms.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,21 +31,46 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Schedule> findSchedules(Long teacherId, Long studentId, Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
-        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAllByLessonBetween(startDate, endDate));
+	public List<Schedule> findSchedules(Long courseId, Long teacherId, Long studentId, 
+			Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
+	    Specification<Schedule> spec = Specification.where(null);
 
-        if (teacherId != null) {
-            schedules.retainAll(scheduleRepository.findByTeacherIdAndLessonBetween(teacherId, startDate, endDate));
-        }
-        if (studentId != null) {
-            schedules.retainAll(scheduleRepository.findByStudentIdAndLessonBetween(studentId, startDate, endDate));
-        }
-        if (classroomId != null) {
-            schedules.retainAll(scheduleRepository.findByClassroomIdAndLessonBetween(classroomId, startDate, endDate));
-        }
+	    // Add date range filter
+	    if (startDate != null && endDate != null) {
+	        spec = spec.and((root, query, criteriaBuilder) -> 
+	            criteriaBuilder.and(
+	                criteriaBuilder.lessThan(root.get("lessonEnd"), endDate),
+	                criteriaBuilder.greaterThan(root.get("lessonStart"), startDate)
+	            )
+	        );
+	    }
 
-        return schedules;
-    }
+	    // Add course filter
+	    if (courseId != null) {
+	        spec = spec.and((root, query, criteriaBuilder) -> 
+	            criteriaBuilder.equal(root.get("course").get("id"), courseId));
+	    }
+
+	    // Add teacher filter
+	    if (teacherId != null) {
+	        spec = spec.and((root, query, criteriaBuilder) -> 
+	            criteriaBuilder.equal(root.get("teacher").get("id"), teacherId));
+	    }
+
+	    // Add student filter
+	    if (studentId != null) {
+	        spec = spec.and((root, query, criteriaBuilder) -> 
+	            criteriaBuilder.equal(root.join("students").get("id"), studentId));
+	    }
+
+	    // Add classroom filter
+	    if (classroomId != null) {
+	        spec = spec.and((root, query, criteriaBuilder) -> 
+	            criteriaBuilder.equal(root.get("classroom").get("id"), classroomId));
+	    }
+
+	    return scheduleRepository.findAll(spec);
+	}
 
 	@Transactional
 	public void deleteSchedule(Long scheduleId) throws ServiceException {
@@ -72,4 +97,8 @@ public class ScheduleService {
 	        List<Classroom> classrooms = classroomRepository.findAll();
 	        return classroomMapper.toDto(classrooms, schedules);
 	    }
+
+	public List<Schedule> findAll() {
+		return scheduleRepository.findAll();
+	}
 }

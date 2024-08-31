@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.model.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public record CourseDto(
@@ -15,8 +16,8 @@ public record CourseDto(
 			null, // courseId
 			null, // courseName
 			null, // courseDescription
-			List.of(), // teachers
-			List.of()	// students
+			Collections.emptyList(), // teachers
+			Collections.emptyList()	// students
 		);
 	}
 }

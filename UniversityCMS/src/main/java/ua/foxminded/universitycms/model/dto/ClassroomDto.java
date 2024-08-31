@@ -6,24 +6,23 @@ public record ClassroomDto(
 	    Long classroomId,
 	    String number,
 	    Integer floor,
-	    boolean occupied,
 	    String courseName,
 	    TeacherDto teacher,
 	    LocalDateTime startTime,
-	    LocalDateTime endTime
+	    LocalDateTime endTime,
+	    boolean occupied
 	) {
 
 	public static ClassroomDto createEmpty() {
 		return new ClassroomDto(
 				null,  // classroomId
 				null,  // number
-				null,  // floor
-				false,  // occupied
+				null,  // floor				
 				null,  // courseName
 				TeacherDto.createEmpty(),  // teacher
 				null,  // startTime
-				null  // endTime
-			);
+				null,  // endTime
+				false  // occupied
+		);
 	}
 }
-

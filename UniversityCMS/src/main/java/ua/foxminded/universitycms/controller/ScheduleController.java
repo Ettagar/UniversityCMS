@@ -1,7 +1,6 @@
 package ua.foxminded.universitycms.controller;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -22,20 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.mapper.CourseMapper;
 import ua.foxminded.universitycms.mapper.ScheduleMapper;
-import ua.foxminded.universitycms.mapper.StudentMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
-import ua.foxminded.universitycms.model.Classroom;
-import ua.foxminded.universitycms.model.LessonType;
 import ua.foxminded.universitycms.model.dto.ClassroomDto;
-import ua.foxminded.universitycms.model.dto.CourseDto;
 import ua.foxminded.universitycms.model.dto.ScheduleDto;
-import ua.foxminded.universitycms.model.dto.StudentDto;
 import ua.foxminded.universitycms.model.dto.TeacherDto;
-import ua.foxminded.universitycms.service.ClassroomService;
 import ua.foxminded.universitycms.service.CourseService;
 import ua.foxminded.universitycms.service.LessonTypeService;
 import ua.foxminded.universitycms.service.ScheduleService;
-import ua.foxminded.universitycms.service.StudentService;
 import ua.foxminded.universitycms.service.TeacherService;
 
 @Slf4j
@@ -45,29 +37,19 @@ import ua.foxminded.universitycms.service.TeacherService;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final CourseService courseService;
-    private final TeacherService teacherService;
-    private final StudentService studentService;
-    private final ClassroomService classroomService;
     private final LessonTypeService lessonTypeService;
+    private final TeacherService teacherService;
+    private final CourseService courseService;
     private final TeacherMapper teacherMapper;
-    private final StudentMapper studentMapper;
     private final ScheduleMapper scheduleMapper;
     private final CourseMapper courseMapper;
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private final ScheduleTools scheduleTools;
 
     @GetMapping("/schedule-create")
     public String showCreateForm(Model model) {
-        List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
-        List<LessonType> lessonTypes = lessonTypeService.findAll();
-
-        model.addAttribute("schedule", ScheduleDto.createEmpty());
-        model.addAttribute("courses", courses);
-        model.addAttribute("teachers", List.of());
-        model.addAttribute("classrooms", List.of());
-        model.addAttribute("lessonTypes", lessonTypes);
-
+    	
+    	model.addAttribute("schedule", ScheduleDto.createEmpty());
+    	model.addAttribute("lessonTypes", lessonTypeService.findAll());
         return "schedules/schedule-create";
     }
 
@@ -76,9 +58,34 @@ public class ScheduleController {
     	scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));
     	return "redirect:/schedules";
     }
+    
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long id, Model model) throws ServiceException {
+        ScheduleDto schedule = scheduleMapper.toDto(scheduleService.findById(id));
+     
+        List<ClassroomDto> classrooms = scheduleTools.getClassroomsDropdownData(
+        		schedule.lessonStart(),
+        		schedule.lessonEnd(), 
+        		schedule.scheduleId());
+        
+        model.addAttribute("lessonTypes", lessonTypeService.findAll());
+        model.addAttribute("classrooms", classrooms);        
+        model.addAttribute("courses", courseMapper.toDto(courseService.findAll()));
+    	model.addAttribute("teachers", teacherMapper.toDto(teacherService.findAll()));
+    	model.addAttribute("schedule", schedule);
+        return "schedules/schedule-create";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateSchedule(@PathVariable("id") Long id, @ModelAttribute("schedule") ScheduleDto scheduleDto) throws ServiceException {
+        scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));       
+        
+        return "redirect:/schedules";
+    }
 
     @GetMapping
-    public String listSchedules(@RequestParam(required = false) Long teacherId,
+    public String listSchedules(@RequestParam(required = false) Long courseId,
+    							@RequestParam(required = false) Long teacherId,
                                 @RequestParam(required = false) Long studentId,
                                 @RequestParam(required = false) Long classroomId,
                                 @RequestParam(required = false) String startDate,
@@ -86,24 +93,18 @@ public class ScheduleController {
                                 Model model) {
 
         LocalDateTime start = (startDate != null && !startDate.isEmpty())
-        			? LocalDateTime.parse(startDate, formatter) : LocalDateTime.now().minusMonths(1);
+        			? scheduleTools.formatFromDatetimeLocal(startDate) : LocalDateTime.now().minusMonths(1);
         LocalDateTime end = (endDate != null && !endDate.isEmpty())
-        			? LocalDateTime.parse(endDate, formatter) : LocalDateTime.now().plusMonths(1);
+        			? scheduleTools.formatFromDatetimeLocal(endDate) : LocalDateTime.now().plusMonths(1);
 
         List<ScheduleDto> schedules = scheduleMapper.toDto(
-        		scheduleService.findSchedules(teacherId, studentId, classroomId, start, end));
-        List<CourseDto> courses = courseMapper.toDto(courseService.findAll());
-        List<TeacherDto> teachers = teacherMapper.toDto(teacherService.findAll());
-        List<StudentDto> students = studentMapper.toDto(studentService.findAll());
-        List<Classroom> classrooms = classroomService.findAll();
-
-        model.addAttribute("courses", courses);
+        		scheduleService.findSchedules(courseId, teacherId, studentId, classroomId, start, end));
+        
+        scheduleTools.getAllDefaultDropdownData(model);
         model.addAttribute("schedules", schedules);
-        model.addAttribute("teachers", teachers);
-        model.addAttribute("students", students);
-        model.addAttribute("classrooms", classrooms);
-        model.addAttribute("startDate", start.format(formatter));
-        model.addAttribute("endDate", end.format(formatter));
+        model.addAttribute("startDate", start);
+        model.addAttribute("endDate", end);
+        model.addAttribute("selectedCourseId", courseId);
         model.addAttribute("selectedTeacherId", teacherId);
         model.addAttribute("selectedStudentId", studentId);
         model.addAttribute("selectedClassroomId", classroomId);
@@ -133,40 +134,23 @@ public class ScheduleController {
             @RequestParam("startDate") LocalDateTime startDate,
             @RequestParam("endDate") LocalDateTime endDate) throws ServiceException {
 
-        List<TeacherDto> teachers = teacherMapper.toDto(courseService.getAssignedTeachers(courseId));
-        List<TeacherDto> checkedTeachers = teachers.stream()
-                .map(teacher -> {
-                    boolean isAvailable = scheduleService.findSchedulesByTeacher(teacher.userId(), startDate, endDate)
-                    		.isEmpty();
-                    return new TeacherDto(
-                            teacher.userId(),
-                            teacher.firstName(),
-                            teacher.lastName(),
-                            teacher.courses(),
-                            isAvailable
-                    );
-                })
-                .toList();
-
-        return ResponseEntity.ok(checkedTeachers);
+        return ResponseEntity.ok(scheduleTools.getTeachersDropdownData(startDate, endDate, courseId));
     }
 
     @GetMapping("/getClassrooms")
     @ResponseBody
     public ResponseEntity<List<ClassroomDto>> getClassrooms(
     		@RequestParam("startDate") LocalDateTime startDate,
-            @RequestParam("endDate") LocalDateTime endDate) {
+            @RequestParam("endDate") LocalDateTime endDate,
+            @RequestParam("scheduleId") Long scheduleId) {
 
-        List<ScheduleDto> schedules = scheduleMapper.toDto(scheduleService.findSchedules(null, null, null, startDate, endDate));
-        List<ClassroomDto> classrooms = scheduleService.getAllClassroomsWithOccupancy(schedules);
-
-        return ResponseEntity.ok(classrooms);
+        return ResponseEntity.ok(scheduleTools.getClassroomsDropdownData(startDate, endDate, scheduleId));
     }
-
+       
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
         model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
 
         return "error";
-    }
+    } 
 }

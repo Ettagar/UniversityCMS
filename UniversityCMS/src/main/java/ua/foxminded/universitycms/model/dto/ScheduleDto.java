@@ -1,6 +1,7 @@
 package ua.foxminded.universitycms.model.dto;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import ua.foxminded.universitycms.model.Classroom;
@@ -26,7 +27,7 @@ public record ScheduleDto(
 			null,  // lessonStart
 			null,  // lessonEnd
 			new LessonType(),  // lessonType
-			List.of()  // students
+			Collections.emptyList()  // students
 		);
 	}
 }

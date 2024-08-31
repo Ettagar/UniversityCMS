@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -51,6 +52,9 @@ class GroupControllerTest {
 
     @MockBean
     private UserTools userTools;
+    
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private GroupMapper groupMapper;
@@ -68,7 +72,7 @@ class GroupControllerTest {
 		studentTestData.setUp();
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testListGroups() throws Exception {
         when(groupService.findAll()).thenReturn(groupTestData.groups);
@@ -80,7 +84,7 @@ class GroupControllerTest {
                 .andExpect(model().attribute("groups", groupTestData.groups));
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testViewGroup() throws Exception {
         when(groupService.findById(1L)).thenReturn(groupTestData.groups.get(0));
@@ -93,7 +97,7 @@ class GroupControllerTest {
                 .andExpect(model().attribute("group", groupDto));
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testViewGroupNotFound() throws Exception {
         when(groupService.findById(1L)).thenThrow(new ServiceException("Group not found"));
@@ -123,9 +127,7 @@ class GroupControllerTest {
         when(userTools.getLoggedInUser()).thenReturn(loggedInUser);
 
         mockMvc.perform(get("/groups/my-group"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("error/unauthorized"))
-                .andExpect(model().attributeExists("errorMessage"));
+                .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "spring", roles = {"ADMIN"})

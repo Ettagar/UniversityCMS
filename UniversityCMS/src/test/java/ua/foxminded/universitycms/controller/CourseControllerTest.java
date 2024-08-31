@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,6 +61,9 @@ class CourseControllerTest {
 
 	@MockBean
 	private UserTools userTools;
+	
+	@MockBean
+    private UserDetailsService userDetailsService;
 
 	private CourseTestData courseTestData;
 
@@ -69,7 +73,7 @@ class CourseControllerTest {
 		courseTestData.setUp();
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"})
+	@WithMockUser(username = "spring", roles = {"ADMIN"})
 	@Test
 	void testListCourses() throws Exception {
 		when(courseService.findAll()).thenReturn(courseTestData.courses);
@@ -81,7 +85,7 @@ class CourseControllerTest {
 				.andExpect(model().attribute("courses", courseMapper.toDto(courseTestData.courses)));
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"}	)
+	@WithMockUser(username = "spring", roles = {"ADMIN"}	)
 	@Test
 	void testViewCourse() throws Exception {
 		when(courseService.findById(1L)).thenReturn(courseTestData.courses.get(0));

@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.model.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public record TeacherDto (
@@ -12,9 +13,10 @@ public record TeacherDto (
 	public static TeacherDto createEmpty() {
 		return new TeacherDto(
 				null,	//userId
-				"",		//firstName
-				"", 	//lastName
-				List.of(),	//courses
-				null);
+				null,	//firstName
+				null, 	//lastName
+				Collections.emptyList(),	//courses
+				null	//available
+		);
 	}
 }

@@ -25,22 +25,22 @@ public class ClassroomMapper {
             	.map(schedule -> new ClassroomDto(
                 classroom.getClassroomId(),
                 classroom.getNumber(),
-                classroom.getFloor(),
-                true, // mark as occupied
+                classroom.getFloor(),              
                 schedule.course().courseName(),
                 schedule.teacher(),
                 schedule.lessonStart(),
-                schedule.lessonEnd()
+                schedule.lessonEnd(),
+                true // mark as occupied
             ))
             .orElseGet(() -> new ClassroomDto(
                 classroom.getClassroomId(),
                 classroom.getNumber(),
-                classroom.getFloor(),
-                false, // default to not occupied
+                classroom.getFloor(),               
                 null,  // no course name
                 null,  // no teacher
                 null,  // no start time
-                null   // no end time
+                null,  // no end time
+                false // default to not occupied
             ));
     }
 

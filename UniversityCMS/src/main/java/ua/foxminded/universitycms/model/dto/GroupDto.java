@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.model.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public record GroupDto (
@@ -12,7 +13,7 @@ public record GroupDto (
 		return new GroupDto(
 			null, // groupId
 			null, // groupName
-			List.of()	// students
+			Collections.emptyList()	// students
 		);
 	}
 }

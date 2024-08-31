@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +34,9 @@ class UserControllerTest {
 
     @MockBean
     private RoleService roleService;
+    
+    @MockBean
+    private UserDetailsService userDetailsService;
 
     private UserTestData userTestData;
     private PersonTestData personTestData;
@@ -46,7 +50,7 @@ class UserControllerTest {
         userTestData.setUp(personTestData);
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testListUsers() throws Exception {
         when(userService.findAll()).thenReturn(userTestData.users);
@@ -58,7 +62,7 @@ class UserControllerTest {
                 .andExpect(model().attribute("users", userTestData.users));
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testViewUser() throws Exception {
         when(userService.findById(1L)).thenReturn(userTestData.users.get(0));
@@ -70,7 +74,7 @@ class UserControllerTest {
                 .andExpect(model().attribute("user", userTestData.users.get(0)));
     }
 
-    @WithMockUser(username = "spring", roles = {"USER"})
+    @WithMockUser(username = "spring", roles = {"ADMIN"})
     @Test
     void testViewUserNotFound() throws Exception {
         when(userService.findById(4L)).thenThrow(new ServiceException("User not found"));

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +35,9 @@ class StudentControllerTest {
 
 	@MockBean
 	private StudentService studentService;
+	
+	@MockBean
+    private UserDetailsService userDetailsService;
 
 	private StudentTestData studentTestData;
 
@@ -43,7 +47,7 @@ class StudentControllerTest {
 		studentTestData.setUp();
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"})
+	@WithMockUser(username = "spring", roles = {"ADMIN"})
 	@Test
 	void testListStudents() throws Exception {
 		when(studentService.findAll()).thenReturn(studentTestData.students);
@@ -55,7 +59,7 @@ class StudentControllerTest {
 				.andExpect(model().attribute("students", studentMapper.toDto(studentTestData.students)));
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"})
+	@WithMockUser(username = "spring", roles = {"ADMIN"})
 	@Test
 	void testViewStudent() throws Exception {
 		when(studentService.findById(1L)).thenReturn(studentTestData.students.get(0));
@@ -67,7 +71,7 @@ class StudentControllerTest {
 				.andExpect(model().attribute("student", studentTestData.students.get(0)));
 	}
 
-	@WithMockUser(username = "spring", roles = {"USER"})
+	@WithMockUser(username = "spring", roles = {"ADMIN"})
 	@Test
 	void testViewStudentNotFound() throws Exception {
 		when(studentService.findById(1L)).thenThrow(new ServiceException("Student not found"));

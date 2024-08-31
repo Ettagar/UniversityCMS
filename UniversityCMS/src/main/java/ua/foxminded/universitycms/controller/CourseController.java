@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -170,5 +172,12 @@ public class CourseController {
         User loggedInUser = userTools.getLoggedInUser();
         courseService.addStudentToCourse(courseId, loggedInUser.getUserId());
         return "redirect:/courses/courses-user";
+    }
+    
+    @GetMapping("/get-courses-list")
+    @ResponseBody
+    public ResponseEntity<List<CourseDto>> getCoursesNames() {
+        List<CourseDto> simpleCourses = courseMapper.toDto(courseService.findAll());
+        return ResponseEntity.ok(simpleCourses);
     }
 }
