@@ -22,11 +22,14 @@ import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.mapper.CourseMapper;
 import ua.foxminded.universitycms.mapper.ScheduleMapper;
 import ua.foxminded.universitycms.mapper.TeacherMapper;
+import ua.foxminded.universitycms.model.Role;
+import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.model.dto.ClassroomDto;
 import ua.foxminded.universitycms.model.dto.ScheduleDto;
 import ua.foxminded.universitycms.model.dto.TeacherDto;
 import ua.foxminded.universitycms.service.CourseService;
 import ua.foxminded.universitycms.service.LessonTypeService;
+import ua.foxminded.universitycms.service.RoleService;
 import ua.foxminded.universitycms.service.ScheduleService;
 import ua.foxminded.universitycms.service.TeacherService;
 
@@ -40,14 +43,16 @@ public class ScheduleController {
     private final LessonTypeService lessonTypeService;
     private final TeacherService teacherService;
     private final CourseService courseService;
+    private final RoleService roleService;
     private final TeacherMapper teacherMapper;
     private final ScheduleMapper scheduleMapper;
     private final CourseMapper courseMapper;
     private final ScheduleTools scheduleTools;
+    private final UserTools userTools;
 
     @GetMapping("/schedule-create")
     public String showCreateForm(Model model) {
-    	
+
     	model.addAttribute("schedule", ScheduleDto.createEmpty());
     	model.addAttribute("lessonTypes", lessonTypeService.findAll());
         return "schedules/schedule-create";
@@ -58,18 +63,18 @@ public class ScheduleController {
     	scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));
     	return "redirect:/schedules";
     }
-    
+
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) throws ServiceException {
         ScheduleDto schedule = scheduleMapper.toDto(scheduleService.findById(id));
-     
+
         List<ClassroomDto> classrooms = scheduleTools.getClassroomsDropdownData(
         		schedule.lessonStart(),
-        		schedule.lessonEnd(), 
+        		schedule.lessonEnd(),
         		schedule.scheduleId());
-        
+
         model.addAttribute("lessonTypes", lessonTypeService.findAll());
-        model.addAttribute("classrooms", classrooms);        
+        model.addAttribute("classrooms", classrooms);
         model.addAttribute("courses", courseMapper.toDto(courseService.findAll()));
     	model.addAttribute("teachers", teacherMapper.toDto(teacherService.findAll()));
     	model.addAttribute("schedule", schedule);
@@ -78,8 +83,8 @@ public class ScheduleController {
 
     @PostMapping("/edit/{id}")
     public String updateSchedule(@PathVariable("id") Long id, @ModelAttribute("schedule") ScheduleDto scheduleDto) throws ServiceException {
-        scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));       
-        
+        scheduleService.addSchedule(scheduleMapper.toModel(scheduleDto));
+
         return "redirect:/schedules";
     }
 
@@ -93,13 +98,15 @@ public class ScheduleController {
                                 Model model) {
 
         LocalDateTime start = (startDate != null && !startDate.isEmpty())
-        			? scheduleTools.formatFromDatetimeLocal(startDate) : LocalDateTime.now().minusMonths(1);
+        			? scheduleTools.formatFromDatetimeLocal(startDate)
+        			: LocalDateTime.now().minusMonths(1);
         LocalDateTime end = (endDate != null && !endDate.isEmpty())
-        			? scheduleTools.formatFromDatetimeLocal(endDate) : LocalDateTime.now().plusMonths(1);
+        			? scheduleTools.formatFromDatetimeLocal(endDate)
+        			: LocalDateTime.now().plusMonths(1);
 
         List<ScheduleDto> schedules = scheduleMapper.toDto(
         		scheduleService.findSchedules(courseId, teacherId, studentId, classroomId, start, end));
-        
+
         scheduleTools.getAllDefaultDropdownData(model);
         model.addAttribute("schedules", schedules);
         model.addAttribute("startDate", start);
@@ -110,6 +117,20 @@ public class ScheduleController {
         model.addAttribute("selectedClassroomId", classroomId);
 
         return "schedules/schedules";
+    }
+
+    @GetMapping("/my-schedule")
+    public String listMySchedules(Model model) throws ServiceException {
+    	User loggedInUser = userTools.getLoggedInUser();
+        Role roleStudent = roleService.getRoleByName("STUDENT");
+        Role roleTeacher = roleService.getRoleByName("TEACHER");
+
+        if (loggedInUser.getRoles().contains(roleStudent)) {
+        	return listSchedules(null, null, loggedInUser.getUserId(), null, null, null, model);
+        } else if (loggedInUser.getRoles().contains(roleTeacher)) {
+        	return listSchedules(null, loggedInUser.getUserId(), null, null, null, null, model);
+        }
+        return "redirect:/schedules";
     }
 
     @GetMapping("/{id}")
@@ -123,6 +144,17 @@ public class ScheduleController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             model.addAttribute("errorMessage", e.getMessage());
 
+            return "error/404";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteSchedule(@PathVariable("id") Long id) {
+        try {
+            scheduleService.deleteSchedule(id);
+            return "redirect:/schedules";
+        } catch (ServiceException e) {
+            log.error("Failed to delete schedule with id {}: {}", id, e.getMessage());
             return "error/404";
         }
     }
@@ -146,11 +178,11 @@ public class ScheduleController {
 
         return ResponseEntity.ok(scheduleTools.getClassroomsDropdownData(startDate, endDate, scheduleId));
     }
-       
+
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
         model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
 
         return "error";
-    } 
+    }
 }

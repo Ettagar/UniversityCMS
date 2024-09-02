@@ -63,7 +63,7 @@ public class GroupController {
 	}
 
 	@GetMapping("/my-group")
-	public String viewMyGroup(Model model) throws ServiceException {
+	public String viewMyGroup(Model model,  HttpServletResponse response) throws ServiceException {
 	    User loggedInUser = userTools.getLoggedInUser();
 	    if (loggedInUser.getRoles().contains(roleService.getRoleByName("STUDENT"))) {
 	        Student student = (Student) loggedInUser;
@@ -74,6 +74,7 @@ public class GroupController {
 	            return "error/no-group-assigned";
 	        }
 	    } else {
+	    	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 	        model.addAttribute("errorMessage", "You are not authorized to view this page. Maybe you are not a student?");
 	        return "error/unauthorized";
 	    }
@@ -107,5 +108,32 @@ public class GroupController {
 	public String saveGroup(@ModelAttribute("group") GroupDto groupDto) throws ServiceException {
 		groupService.addGroup(groupMapper.toModel(groupDto));
 		return "redirect:/groups";
+	}
+
+	@PostMapping("/delete/{id}")
+	public String deleteGroup(@PathVariable Long id, Model model, HttpServletResponse response) {
+	    try {
+	        Group groupToDelete = groupService.findById(id);
+	        Group defaultGroup = groupService.findById(1L);
+
+	        if (groupToDelete.equals(defaultGroup)) {
+	            model.addAttribute("errorMessage", "The default group 'NONE' cannot be deleted.");
+	            return "redirect:/groups";
+	        }
+
+	        List<Student> studentsInGroup = groupToDelete.getStudents();
+	        for (Student student : studentsInGroup) {
+	            student.setGroup(defaultGroup);
+	            studentService.addStudent(student);
+	        }
+
+	        groupService.deleteGroup(id);
+
+	        return "redirect:/groups";
+	    } catch (ServiceException e) {
+	        model.addAttribute("errorMessage", e.getMessage());
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return "error/404";
+	    }
 	}
 }

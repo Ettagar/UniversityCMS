@@ -61,7 +61,7 @@ class CourseControllerTest {
 
 	@MockBean
 	private UserTools userTools;
-	
+
 	@MockBean
     private UserDetailsService userDetailsService;
 

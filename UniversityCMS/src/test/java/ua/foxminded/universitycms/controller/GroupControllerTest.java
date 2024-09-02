@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.foxminded.universitycms.exception.ServiceException;
 import ua.foxminded.universitycms.mapper.GroupMapper;
 import ua.foxminded.universitycms.mapper.StudentMapper;
+import ua.foxminded.universitycms.model.Student;
 import ua.foxminded.universitycms.model.User;
 import ua.foxminded.universitycms.model.dto.GroupDto;
 import ua.foxminded.universitycms.service.GroupService;
@@ -52,7 +53,7 @@ class GroupControllerTest {
 
     @MockBean
     private UserTools userTools;
-    
+
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -110,14 +111,14 @@ class GroupControllerTest {
     @WithMockUser(username = "spring", roles = {"STUDENT"})
     @Test
     void testViewMyGroup() throws Exception {
-        when(userTools.getLoggedInUser()).thenReturn(studentTestData.students.get(0));
-        when(roleService.getRoleByName("STUDENT")).thenReturn(userTestData.users.get(2)
-        		.getRoles().iterator().next());
-
+    	Student student = studentTestData.students.get(0);
+        when(userTools.getLoggedInUser()).thenReturn(student);
+        when(roleService.getRoleByName("STUDENT")).thenReturn(
+        			student.getRoles().iterator().next());
         mockMvc.perform(get("/groups/my-group"))
-                .andExpect(status().is2xxSuccessful());
+        	.andExpect(status().is3xxRedirection())
+        	.andExpect(redirectedUrl("/groups/" + student.getGroup().getGroupId()));
     }
-
 
     @WithMockUser(username = "spring", roles = {"USER"})
     @Test

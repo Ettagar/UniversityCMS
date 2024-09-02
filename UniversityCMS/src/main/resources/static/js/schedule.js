@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function updateTeacherOptions(data) {
 		teacherSelect.innerHTML = '';
-		const selectedTeacherId = teacherSelect.dataset.selected;
+		  const selectedTeacherId = teacherSelect.dataset.selected;
 
 		if (data.length === 0) {
 			addOption(teacherSelect, 'No teachers available', '', true, false);
@@ -109,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
 		data.forEach(teacher => {
-			const value = String(teacher.userId);
-			const isAssignedToCurrentSchedule = value === String(selectedTeacherId);
+			const value = teacher.userId;
+			const isAssignedToCurrentSchedule = value === selectedTeacherId;
 			const isAvailable = isAssignedToCurrentSchedule || teacher.available;
 			const text = `${teacher.userId} | ${teacher.firstName} ${teacher.lastName}`;
 			const displayText = isAvailable ? text : `${text} (BUSY)`;

@@ -33,7 +33,7 @@ class TeacherControllerTest {
 
 	@MockBean
 	private TeacherMapper teacherMapper;
-	
+
 	@MockBean
     private UserDetailsService userDetailsService;
 

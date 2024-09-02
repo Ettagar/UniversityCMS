@@ -62,7 +62,7 @@
 								<a class="dropdown-item" th:href="@{/schedules}">All Schedules</a>
 							</li>
 							<li sec:authorize="hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')">
-								<a class="dropdown-item" th:href="@{/schedules/schedule-user}">My
+								<a class="dropdown-item" th:href="@{/schedules/my-schedule}">My
 									Schedule</a>
 							</li>
 						</ul></li>

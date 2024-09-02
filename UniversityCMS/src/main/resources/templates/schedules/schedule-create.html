@@ -14,6 +14,12 @@
             Create Schedule
         </h1>
         <a class="btn btn-secondary mb-3" th:href="@{/schedules}">Back to schedule list</a>
+        <a class="btn btn-danger mb-3 float-end"
+				data-bs-toggle="modal" data-bs-target="#deleteScheduleModal"
+				th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') 
+					or hasRole(''ROLE_REGISTRAR'')') and schedule.scheduleId != null}">
+				Delete	schedule
+		</a>
         <form th:action="${schedule.scheduleId} == null ? @{/schedules/schedule-create} : @{/schedules/edit/{id}(id=${schedule.scheduleId})}"
               th:object="${schedule}" method="post">
             <input type="hidden" th:field="*{scheduleId}"/>
@@ -81,7 +87,26 @@
             <a th:href="@{/schedules}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
-
+	
+	<!-- Delete Schedule Modal -->
+    <div class="modal fade" id="deleteScheduleModal" tabindex="-1" aria-labelledby="deleteScheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteScheduleModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this schedule?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a th:href="@{/schedules/delete/{id}(id=${schedule.scheduleId})}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
     <script th:inline="javascript">
         const scheduleId = /*[[${schedule.scheduleId} ?: 0]]*/ 0;
         const selectedCourseId = /*[[${schedule.course.courseId}]]*/ '';

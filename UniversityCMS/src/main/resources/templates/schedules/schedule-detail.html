@@ -34,7 +34,7 @@
 			</table>
 			<a class="btn btn-secondary mb-3" onclick="window.history.back()">Back</a>
 			
-			<div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_TEACHER'')')}">
+			<div>
 				<h2 class="mt-4">Enrolled Students</h2>
 				<table class="table table-hover table-bordered mt-3">
 					<thead>
@@ -43,7 +43,7 @@
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Group</th>					
-							<th>Actions</th>
+							<th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_TEACHER'')')}">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -52,7 +52,7 @@
 							<td th:text="${student.firstName}"></td>
 							<td th:text="${student.lastName}"></td>
 							<td th:text="${student.groupName}"></td>
-							<td>
+							<td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_TEACHER'')')}">
 								<a th:href="@{/students/{id}(id=${student.userId})}" 
 								class="btn btn-primary">View</a>
 							</td>

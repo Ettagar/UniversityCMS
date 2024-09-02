@@ -42,9 +42,9 @@ public class ScheduleMapper {
 	@Transactional(readOnly = true)
     public Schedule toModel(ScheduleDto scheduleDto) throws ServiceException {
 		Course course = courseService.findById(scheduleDto.course().courseId());
-		
+
 		Schedule schedule = new Schedule();
-        schedule.setScheduleId(scheduleDto.scheduleId());       
+        schedule.setScheduleId(scheduleDto.scheduleId());
         schedule.setCourse(course);
         schedule.setTeacher(teacherService.findById(scheduleDto.teacher().userId()));
         schedule.setClassroom(scheduleDto.classroom());
@@ -52,7 +52,7 @@ public class ScheduleMapper {
         schedule.setLessonEnd(scheduleDto.lessonEnd());
         schedule.setLessonType(scheduleDto.lessonType());
         schedule.setStudents(new ArrayList<>(course.getStudents()));
-        
+
         return schedule;
     }
 

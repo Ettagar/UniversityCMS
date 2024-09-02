@@ -2,7 +2,9 @@ package ua.foxminded.universitycms.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,41 +33,36 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Schedule> findSchedules(Long courseId, Long teacherId, Long studentId, 
+	public List<Schedule> findSchedules(Long courseId, Long teacherId, Long studentId,
 			Long classroomId, LocalDateTime startDate, LocalDateTime endDate) {
 	    Specification<Schedule> spec = Specification.where(null);
-
 	    // Add date range filter
 	    if (startDate != null && endDate != null) {
-	        spec = spec.and((root, query, criteriaBuilder) -> 
+	        spec = spec.and((root, query, criteriaBuilder) ->
 	            criteriaBuilder.and(
-	                criteriaBuilder.lessThan(root.get("lessonEnd"), endDate),
-	                criteriaBuilder.greaterThan(root.get("lessonStart"), startDate)
+	            		criteriaBuilder.lessThan(root.get("lessonStart"), endDate), // Start before the new schedule's end
+	            		criteriaBuilder.greaterThan(root.get("lessonEnd"), startDate) // End after the new schedule's start
 	            )
 	        );
 	    }
-
 	    // Add course filter
 	    if (courseId != null) {
-	        spec = spec.and((root, query, criteriaBuilder) -> 
+	        spec = spec.and((root, query, criteriaBuilder) ->
 	            criteriaBuilder.equal(root.get("course").get("id"), courseId));
 	    }
-
 	    // Add teacher filter
 	    if (teacherId != null) {
-	        spec = spec.and((root, query, criteriaBuilder) -> 
+	        spec = spec.and((root, query, criteriaBuilder) ->
 	            criteriaBuilder.equal(root.get("teacher").get("id"), teacherId));
 	    }
-
 	    // Add student filter
 	    if (studentId != null) {
-	        spec = spec.and((root, query, criteriaBuilder) -> 
+	        spec = spec.and((root, query, criteriaBuilder) ->
 	            criteriaBuilder.equal(root.join("students").get("id"), studentId));
 	    }
-
 	    // Add classroom filter
 	    if (classroomId != null) {
-	        spec = spec.and((root, query, criteriaBuilder) -> 
+	        spec = spec.and((root, query, criteriaBuilder) ->
 	            criteriaBuilder.equal(root.get("classroom").get("id"), classroomId));
 	    }
 
@@ -95,7 +92,9 @@ public class ScheduleService {
 	 @Transactional(readOnly = true)
 	    public List<ClassroomDto> getAllClassroomsWithOccupancy(List<ScheduleDto> schedules) {
 	        List<Classroom> classrooms = classroomRepository.findAll();
-	        return classroomMapper.toDto(classrooms, schedules);
+	        Map<Long, ScheduleDto> scheduleMap = schedules.stream()
+	                .collect(Collectors.toMap(schedule -> schedule.classroom().getClassroomId(), schedule -> schedule));
+	        return classroomMapper.toDto(classrooms, scheduleMap);
 	    }
 
 	public List<Schedule> findAll() {

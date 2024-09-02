@@ -173,7 +173,7 @@ public class CourseController {
         courseService.addStudentToCourse(courseId, loggedInUser.getUserId());
         return "redirect:/courses/courses-user";
     }
-    
+
     @GetMapping("/get-courses-list")
     @ResponseBody
     public ResponseEntity<List<CourseDto>> getCoursesNames() {

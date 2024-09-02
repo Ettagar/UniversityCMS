@@ -17,7 +17,7 @@ public record ClassroomDto(
 		return new ClassroomDto(
 				null,  // classroomId
 				null,  // number
-				null,  // floor				
+				null,  // floor
 				null,  // courseName
 				TeacherDto.createEmpty(),  // teacher
 				null,  // startTime

@@ -1,5 +1,6 @@
 package ua.foxminded.universitycms.mapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +23,9 @@ public class TeacherMapper {
             teacher.getUserId(),
             teacher.getPerson().getFirstName(),
             teacher.getPerson().getLastName(),
-			teacher.getCourses().stream()
+			teacher.getCourses() != null ? teacher.getCourses().stream()
 				.map(Course::getCourseName)
-				.toList(),
+				.collect(Collectors.toList()) : Collections.emptyList(),
 			true
         );
     }

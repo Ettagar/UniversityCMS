@@ -34,7 +34,7 @@ class UserControllerTest {
 
     @MockBean
     private RoleService roleService;
-    
+
     @MockBean
     private UserDetailsService userDetailsService;
 

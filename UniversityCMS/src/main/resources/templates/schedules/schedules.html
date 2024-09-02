@@ -11,7 +11,9 @@
         <h2>Schedule</h2>
         <form th:action="@{/schedules}" method="get" class="mb-4">
             <div class="row">
-            
+            	 <input type="hidden" name="studentId" th:if="${selectedStudentId != null}" th:value="${selectedStudentId}">
+       			 <input type="hidden" name="teacherId" th:if="${selectedTeacherId != null}" th:value="${selectedTeacherId}">
+            	
             	 <div class="col-md-3">
                     <label for="course" class="form-label">Course</label>
                     <select class="form-select" id="course" name="courseId">
@@ -22,7 +24,8 @@
                     </select>
                 </div>
                 
-                <div class="col-md-3">
+                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'') or hasRole(''ROLE_STUDENT'')')}" 
+                	class="col-md-3">
                     <label for="teacher" class="form-label">Teacher</label>
                     <select class="form-select" id="teacher" name="teacherId">
                         <option value="">All Teachers</option>
@@ -32,7 +35,8 @@
                     </select>
                 </div>
                 
-                <div class="col-md-3">
+                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'') or hasRole(''ROLE_TEACHER'')')}" 
+                	class="col-md-3">
                     <label for="student" class="form-label">Student</label>
                     <select class="form-select" id="student" name="studentId">
                         <option value="">All Students</option>
@@ -52,13 +56,13 @@
                     </select>
                 </div>
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3">
                     <label for="startDate" class="form-label">Start Date</label>
                     <input type="datetime-local" class="form-control" id="startDate" name="startDate"
                            th:value="${startDate}">
                 </div>
                 
-                <div class="col-md-3 mt-3">
+                <div class="col-md-3">
                     <label for="endDate" class="form-label">End Date</label>
                     <input type="datetime-local" class="form-control" id="endDate" name="endDate"
                            th:value="${endDate}">
@@ -71,7 +75,8 @@
         </form>
 
         <div class="mb-3">
-            <a class="btn btn-success" th:href="@{/schedules/schedule-create}">Create Schedule</a>
+            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'')')}"
+           		th:href="@{/schedules/schedule-create}" class="btn btn-success">Create Schedule</a>
         </div>
 
         <table class="table table-hover table-bordered mt-3">
@@ -95,9 +100,9 @@
                 <td th:text="${#temporals.format(schedule.lessonStart, 'yyyy-MM-dd HH:mm')}"></td>
 				<td th:text="${#temporals.format(schedule.lessonEnd, 'yyyy-MM-dd HH:mm')}"></td>
 				<td>
-                	<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                    	th:href="@{/schedules/{id}(id=${schedule.scheduleId})}" class="btn btn-primary">View</a>
-                	<a th:href="@{/schedules/edit/{id}(id=${schedule.scheduleId})}" class="btn btn-secondary">Edit</a>
+                	<a th:href="@{/schedules/{id}(id=${schedule.scheduleId})}" class="btn btn-primary">View</a>
+                	<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_REGISTRAR'')')}"
+                		th:href="@{/schedules/edit/{id}(id=${schedule.scheduleId})}" class="btn btn-secondary">Edit</a>
                 </td>
             </tr>
             </tbody>
