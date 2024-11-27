@@ -33,9 +33,8 @@
 ### Additional Tools
 - PostgreSQL
 - Maven
-- Docker & Docker Compose
+- Docker
 - Flyway
 - JUnit, Mockito, Testcontainers
-- OpenAPI
 
 ---
